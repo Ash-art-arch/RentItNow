@@ -4,7 +4,7 @@ import Rent from "../assets/rent.svg"
 export const HeroSection = () => {
   return (
     <div className='w-screen h-[100vh] bg-center bg-no-repeat bg-cover relative pt-12 flex items-center flex-col text-white font-[Petrona]' style={{backgroundImage:`url(${heroImage})`}}>
-       <div className="w-full h-full bg-no-repeat absolute left-[11%] top-[18%] z-10" style={{backgroundImage:`url(${Rent})`}}></div>
+       <div className="w-30 h-30 bg-no-repeat absolute left-[11%] top-[18%] z-10" style={{backgroundImage:`url(${Rent})`}}></div>
         <div className='w-screen h-[100vh] top-0 bg-[#24242477] absolute '>
         </div>
         <div className='z-10 flex items-center flex-col '>
