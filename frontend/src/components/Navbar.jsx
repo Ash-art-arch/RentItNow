@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
@@ -8,10 +9,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex justify-between items-center px-10 py-4 text-white" style={{ backgroundColor: "rgba(0, 0, 0, 0.85)" }}>
-      <div className="text-2xl font-bold">RentIt</div>
+    <nav className="flex justify-between items-center px-6 md:px-10 py-4 text-white bg-transparent absolute top-0 z-50 w-full">
+      <div className="text-2xl font-bold">RentItNow</div>
 
-      <div className="space-x-6">
+      {/* Desktop Links */}
+      <div className="space-x-6 hidden md:flex">
         <a href="/" className="hover:text-gray-300">Home</a>
         <a href="#services" className="hover:text-gray-300">Services</a>
         <a href="#contact" className="hover:text-gray-300">Contact</a>
@@ -21,7 +23,7 @@ const Navbar = () => {
         {showSearch && (
           <input
             type="text"
-            className="border border-gray-300 rounded-3xl px-4 py-1 "
+            className="border border-gray-300 rounded-3xl px-4 py-1 w-32 sm:w-48 md:w-auto text-black"
             placeholder="Search"
           />
         )}
@@ -31,14 +33,16 @@ const Navbar = () => {
           className="w-5 h-5 cursor-pointer"
           onClick={toggleSearch}
         />
-        <img
+       <Link to={"/cart"}>
+       <img
           src="./src/assets/Navbar/Cart.png"
           alt="Cart"
           className="w-6 h-6"
         />
+       </Link> 
       </div>
     </nav>
   );
 };
 
-export default Navbar
+export default Navbar;

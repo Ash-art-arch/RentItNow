@@ -1,27 +1,33 @@
-import React from 'react'
-import Button from '../components/Button'
-import Card from '../components/Card'
+import React from 'react';
+import Button from '../components/Button';
+import Card from '../components/Card';
 
 const TopSection = () => {
-  const firstStyle={
-    border:"1px solid rgba(0,0,0,0.5)",
-    padding:"1.2rem",
-    borderRadius:"1.2rem"
-  }
-  return (
-    <div className='w-full h-[80vh] p-20 font-[Outfit] select-none '>
-       <div className='flex w-full justify-between'>
-       <h1 className='text-[2.42rem] font-bold'>Top category</h1> 
-       <Button text={"All Categories"} style={firstStyle}/>
-       </div> 
-       <div className='text-xl w-[45%] mt-8 color-[rgba(0,0,0,0.59)]'>
-       Our top course categories include Technology & Software Development, Business & Entrepreneurship, Data Science & Analytics, Creative Arts & Design, and Personal Development & Well-Being.
-       </div>
-       <div className='mt-20'>
-        <Card/>
-       </div>
-    </div>
-  )
-}
+  const firstStyle = {
+    border: "1px solid rgba(0,0,0,0.5)",
+    padding: "1.2rem",
+    borderRadius: "1.2rem",
+    cursor: "pointer",
+  };
 
-export default TopSection
+  return (
+    <div className="w-full py-10 px-4 md:px-20 font-[Outfit] select-none">
+      <div className="flex w-full items-center justify-between">
+        <h1 className="text-xl md:text-3xl font-bold">Top Categories</h1>
+        <Button text={"All Categories"} style={firstStyle} />
+      </div>
+
+      <p className="text-sm md:text-xl w-full md:w-1/2 mt-8 text-[rgba(0,0,0,0.59)]">
+        Explore our top rental categories, including Cameras & Photography, Electronics & Gadgets, Home Appliances, Furniture, and Vehicles to meet all your needs with flexibility and affordability.
+      </p>
+
+      <div className="mt-10 md:mt-20 flex flex-wrap gap-10 justify-center">
+        <Card />
+        <Card />
+        <Card />
+      </div>
+    </div>
+  );
+};
+
+export default TopSection;
