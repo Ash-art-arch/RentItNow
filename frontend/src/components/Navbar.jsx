@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-
+import searchIcon from '../assets/Navbar/search.png';
+import cartIcon from '../assets/Navbar/Cart.png';
 const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
-
+ 
   const toggleSearch = () => {
     setShowSearch(!showSearch);
   };
@@ -26,13 +27,13 @@ const Navbar = () => {
           />
         )}
         <img
-          src="./src/assets/Navbar/search.png"
+          src={searchIcon}
           alt="search"
           className="w-5 h-5 cursor-pointer"
           onClick={toggleSearch}
         />
         <img
-          src="./src/assets/Navbar/Cart.png"
+          src={cartIcon}
           alt="Cart"
           className="w-6 h-6"
         />
