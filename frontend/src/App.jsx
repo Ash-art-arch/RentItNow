@@ -12,14 +12,14 @@ import Login from './components/Login'
 
 
 import Cart from './pages/Cart'
-import PaymentPage from './pages/PaymentPage'
-import ProductPage from './pages/ProductPage'
-import CategoriesPage from './pages/CategoriesPAge'
+
 import Login from './components/Login'
 import SignupUser  from './components/SignupUser'
 
 
 
+import CategoriesPAge from './pages/CategoriesPAge'
+import PaymentPage from './pages/PaymentPage'
 
 function App() {
   const [count, setCount] = useState(0)

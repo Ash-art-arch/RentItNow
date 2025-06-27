@@ -3,6 +3,8 @@ import searchIcon from '../assets/Navbar/search.png';
 import cartIcon from '../assets/Navbar/Cart.png';
 import { Link } from 'react-router-dom';
 
+import searchIcon from '../assets/Navbar/search.png';
+import cartIcon from '../assets/Navbar/Cart.png';
 const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
  
@@ -35,6 +37,7 @@ const Navbar = () => {
           className="w-5 h-5 cursor-pointer"
           onClick={toggleSearch}
         />
+<<<<<<< HEAD
 <Link to="/cart">
   <img
     src={cartIcon}
@@ -47,6 +50,17 @@ const Navbar = () => {
 </div>
       
 
+=======
+
+<Link to={"/cart"}>
+        <img
+          src={cartIcon}
+          alt="Cart"
+          className="w-6 h-6"
+        />
+       </Link> 
+      </div>
+>>>>>>> 5172a9c ( Cart and payment)
     </nav>
   );
 };
