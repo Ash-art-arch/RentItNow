@@ -94,7 +94,7 @@ const Payment = () => {
                     )}
                   
                     <h2 className="text-xl font-bold mt-12" onClick={( ) => setState(2)}>02. PAYMENT</h2>
-                        {State === 2 && (
+                        {State === 2 && submit && (
   <>
     <div className="mt-4 space-y-6">
       <div>
