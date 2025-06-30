@@ -20,6 +20,7 @@ import SignupUser  from './components/SignupUser'
 
 import CategoriesPAge from './pages/CategoriesPAge'
 import PaymentPage from './pages/PaymentPage'
+import ProductPage from './pages/ProductPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -37,7 +38,7 @@ function App() {
 <Route path='/cart' element={<Cart />} />
 <Route path='/cart/payment' element={<PaymentPage />} />
 <Route path='/productpage' element={<ProductPage />} />
-<Route path='/categories' element={<CategoriesPage />} />
+<Route path='/categories' element={<CategoriesPAge />} />
 <Route path='/login' element={<Login/>} />
 <Route path='/signupUser' element={<SignupUser/>} />
 
