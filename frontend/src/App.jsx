@@ -6,6 +6,7 @@ import {Routes,Route} from "react-router-dom"
 import LandingPage from './pages/LandingPage'
 import Cart from './pages/Cart'
 import PaymentPage from './pages/PaymentPage'
+import ProductPage from './pages/ProductPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,6 +17,7 @@ function App() {
       <Route path='/' element={<LandingPage/>}/>
       <Route path='/Cart' element={<Cart/>}/>
       <Route path='/Cart/Payment' element={<PaymentPage/>}/>
+      <Route path='/productpage' element={<ProductPage/>}/>
      </Routes>
     </>
   )
