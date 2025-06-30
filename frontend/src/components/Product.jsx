@@ -132,7 +132,7 @@ const Product = () => {
         </div>
       </div>
 
-      <div className="mt-12 w-full border rounded-2xl p-6 mb-10">
+      <div className="mt-12 w-full  rounded-2xl p-6 mb-10 ">
         <h2 className="text-2xl font-semibold mb-6">Rating & Reviews</h2>
         <div className="flex  lg:flex-row items-start lg:items-center gap-10 ">
 
