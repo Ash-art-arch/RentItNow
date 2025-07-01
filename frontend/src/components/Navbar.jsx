@@ -35,14 +35,14 @@ const Navbar = () => {
           className="w-5 h-5 cursor-pointer"
           onClick={toggleSearch}
         />
+<Link to="/cart">
+  <img
+    src={cartIcon}
+    alt="Cart"
+    className="w-6 h-6"
+  />
+</Link>
 
-<Link to={"/cart"}>
-        <img
-          src={cartIcon}
-          alt="Cart"
-          className="w-6 h-6"
-        />
-       </Link> 
       </div>
     </nav>
   );
