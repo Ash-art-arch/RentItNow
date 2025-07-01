@@ -4,7 +4,7 @@ import {Routes,Route} from "react-router-dom"
 import LandingPage from './pages/LandingPage'
 
 import SignUpUser from './components/SignupUser'
-import SignUpSeller from './components/SignupSeller'
+
 import Login from './components/Login'
 
 import Cart from './pages/Cart'
@@ -19,8 +19,7 @@ function App() {
     <>
      <Routes>
       <Route path='/login' element={<Login/>} />
-      <Route path='/signupSeller' element={<SignUpSeller/>} />
-      <Route path='/signupUser' element={<SignUpUser/>} />
+      <Route path='/signup' element={<SignUpUser/>} />
       
 
       <Route path='/' element={<LandingPage/>}/>

@@ -1,8 +1,18 @@
 import React from 'react';
 import heroImage from "../assets/HeroImage.svg";
 import Button from '../components/Button';
+import { useNavigate } from 'react-router-dom';
 
 export const HeroSection = () => {
+  const navigate = useNavigate()
+  const handleListButton = ()=>{
+    console.log("Clicked")
+    navigate('/signUp?role=Seller')
+  }
+  const handleBrowseButton = ()=>{
+
+    navigate('/signUp?role=Buyer')
+  }
   const firstStyle = {
     width: "16rem",
     height: "4rem",
@@ -42,8 +52,8 @@ export const HeroSection = () => {
         </h4>
 
         <div className="mt-8 flex flex-col md:flex-row gap-4 md:gap-8 items-center">
-          <Button text={"Browse Items"} style={firstStyle} />
-          <Button text={"List Items"} style={secondStyle} />
+          <Button text={"Browse Items"} style={firstStyle} Click={handleBrowseButton}/>
+          <Button text={"List Items"} style={secondStyle} Click={handleListButton}/>
         </div>
       </div>
 

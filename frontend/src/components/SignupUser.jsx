@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './design.css'; 
 import loginImage from '../assets/login.png'; 
 import googleImage from "../assets/google.png";
 const SignUpUser = () => {
+  const [role, setRole] = useState("Buyer")
+  useEffect(()=>{
+    const urlParams = new URLSearchParams(window.location.search);
+    const role = urlParams.get('role');
+    setRole(role)
+  })
   return (
     <div className="signup">
       <div className="left">
@@ -12,7 +18,7 @@ const SignUpUser = () => {
       <div className="right">
         <div id="ti">
         <h1 className="title">
-          Sign up <span className="dot">.</span><h1 id="se">(As User)</h1>
+          Sign up <span className="dot">.</span><h1 id="se">(As {role} )</h1>
          
         </h1>
         
