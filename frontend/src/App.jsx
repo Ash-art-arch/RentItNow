@@ -1,16 +1,13 @@
 import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
 import './App.css'
 import {Routes,Route} from "react-router-dom"
 import LandingPage from './pages/LandingPage'
-
-import SignUpUser from './components/SignupUser'
-import SignUpSeller from './components/SignupSeller'
-import Login from './components/Login'
-
 import Cart from './pages/Cart'
 import PaymentPage from './pages/PaymentPage'
 import ProductPage from './pages/ProductPage'
-import CategoriesPAge from './pages/CategoriesPAge'
+import CategoriesPage from './pages/CategoriesPAge'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -18,16 +15,11 @@ function App() {
   return (
     <>
      <Routes>
-      <Route path='/login' element={<Login/>} />
-      <Route path='/signupSeller' element={<SignUpSeller/>} />
-      <Route path='/signupUser' element={<SignUpUser/>} />
-      
-
       <Route path='/' element={<LandingPage/>}/>
 <Route path='/cart' element={<Cart />} />
 <Route path='/cart/payment' element={<PaymentPage />} />
 <Route path='/productpage' element={<ProductPage />} />
-<Route path='/categories' element={<CategoriesPAge />} />
+<Route path='/categories' element={<CategoriesPage />} />
 
      </Routes>
     </>
