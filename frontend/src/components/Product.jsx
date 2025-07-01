@@ -9,13 +9,13 @@ import box from "/src/assets/product/box.png"
 import coupon from "/src/assets/product/coupon.png"
 import calendar from "/src/assets/product/calendar.png"
 import delivery from "/src/assets/product/delivery-truck.png"
+import Rating from "../components/Rating"
 
 
 const Product = () => {
   const images = [head1, head2, head3, head4];
   const [mainImage, setMainImage] = useState(images[0]);
   const [liked, setLiked] = useState(false);
-  const rating = 5;
 
   return (
     <div>
@@ -50,22 +50,10 @@ const Product = () => {
           <p className="text-sm text-gray-500 mb-4">Order in 02h 30m 25s to get next day delivery</p>
 
 
-          <div className="flex items-center gap-1 mb-4 ">
-
-            {[...Array(5)].map((_, index) => {
-              const full = index + 1 <= Math.floor(rating);
-              const half = index + 0.5 === rating;
-
-              return full ? (
-                <Star key={index} className="text-yellow-400 fill-yellow-400 w-5 h-5" />
-              ) : half ? (
-                <StarHalf key={index} className="text-yellow-400 fill-yellow-400 w-5 h-5" />
-              ) : (
-                <StarOff key={index} className="text-gray-300 w-5 h-5" />
-              );
-            })}
-            <span className="ml-2 text-sm text-gray-600">({rating})</span>
+          <div className="mb-4">
+            <Rating rating={4.5} />
           </div>
+
 
           <div className="flex justify-around border-1 rounded-2xl py-9">
 
@@ -193,11 +181,10 @@ const Product = () => {
                   />
                   <div>
                     <p className="font-medium">Alex Mathio</p>
-                    <div className="flex text-yellow-400 text-sm">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-yellow-400" />
-                      ))}
+                    <div className="mt-1">
+                      <Rating rating={5} />
                     </div>
+
                   </div>
                 </div>
                 <p className="text-xs text-gray-400">13 Oct 2024</p>
@@ -218,11 +205,10 @@ const Product = () => {
                   />
                   <div>
                     <p className="font-medium">Alex Mathio</p>
-                    <div className="flex text-yellow-400 text-sm">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-yellow-400" />
-                      ))}
+                    <div className="mt-1">
+                      <Rating rating={5} />
                     </div>
+
                   </div>
                 </div>
                 <p className="text-xs text-gray-400">13 Oct 2024</p>
@@ -238,83 +224,74 @@ const Product = () => {
       </div>
 
 
-<div className="mt-16 mb-10 ml-10 mr-10">
-  <h2 className="text-2xl font-semibold mb-6">You might also like</h2>
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
-    {[
-      {
-        name: "Polo with Contrast Trims",
-        price: "$212",
-        old: "$242",
-        discount: "20%",
-        img: "/src/assets/product/h-1.avif",
-        rating: 4.0,
-      },
-      {
-        name: "Gradient Graphic T-shirt",
-        price: "$145",
-        img: "/src/assets/product/h-2.avif",
-        rating: 3.5,
-      },
-      {
-        name: "Polo with Tipping Details",
-        price: "$180",
-        img: "/src/assets/product/h-4.avif",
-        rating: 4.5,
-      },
-      {
-        name: "Striped Jacket",
-        price: "$120",
-        old: "$240",
-        discount: "50%",
-        img: "/src/assets/product/h-5.avif",
-        rating: 5.0,
-      },
-    ].map((item, i) => (
-    <div key={i} className="rounded-xl border border-gray-300 bg-white p-4 shadow-sm transition">
- <div className="h-60 flex items-center justify-center bg-white rounded-xl overflow-hidden mb-4">
-  <img
-    src={item.img}
-    alt={item.name}
-    className="h-[500px w-full]"
-  />
+      <div className="mt-16 mb-10 ml-10 mr-10">
+        <h2 className="text-2xl font-semibold mb-6">You might also like</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
+          {[
+            {
+              name: "Polo with Contrast Trims",
+              price: "$212",
+              old: "$242",
+              discount: "20%",
+              img: "/src/assets/product/h-1.avif",
+              rating: 4.0,
+            },
+            {
+              name: "Gradient Graphic T-shirt",
+              price: "$145",
+              img: "/src/assets/product/h-2.avif",
+              rating: 3.5,
+            },
+            {
+              name: "Polo with Tipping Details",
+              price: "$180",
+              img: "/src/assets/product/h-4.avif",
+              rating: 4.5,
+            },
+            {
+              name: "Striped Jacket",
+              price: "$120",
+              old: "$240",
+              discount: "50%",
+              img: "/src/assets/product/h-5.avif",
+              rating: 5.0,
+            },
+          ].map((item, i) => (
+            <div key={i} className="rounded-xl border border-gray-300 bg-white p-4 shadow-sm transition">
+              <div className="h-60 flex items-center justify-center bg-white rounded-xl overflow-hidden mb-4">
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  className="h-[500px w-full]"
+                />
 
 
-  </div>
+              </div>
 
-  <h3 className="font-medium text-base text-gray-800">{item.name}</h3>
+              <h3 className="font-medium text-base text-gray-800">{item.name}</h3>
 
-  <div className="flex items-center gap-1 mt-1">
-    {[...Array(5)].map((_, j) =>
-      j + 1 <= Math.floor(item.rating) ? (
-        <Star key={j} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-      ) : item.rating % 1 !== 0 && j < item.rating ? (
-        <StarHalf key={j} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-      ) : (
-        <StarOff key={j} className="w-4 h-4 text-gray-300" />
-      )
-    )}
-    <span className="text-sm text-gray-500 ml-1">({item.rating})</span>
-  </div>
+              <div className="mt-1">
+                <Rating rating={item.rating} />
+              </div>
 
-  <div className="mt-2">
-    <span className="font-bold text-black">{item.price}</span>
-    {item.old && (
-      <>
-        <span className="line-through text-sm ml-2 text-gray-400">
-          {item.old}
-        </span>
-        <span className="ml-2 text-red-500 text-sm font-semibold">
-          -{item.discount}
-        </span>
-      </>
-    )}
-  </div>
-</div>
+              <div className="mt-2">
+                <span className="font-bold text-black">{item.price}</span>
+                {item.old && (
+                  <>
+                    <span className="line-through text-sm ml-2 text-gray-400">
+                      {item.old}
+                    </span>
+                    <span className="ml-2 text-red-500 text-sm font-semibold">
+                      -{item.discount}
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
 
-    ))}
-  </div>
-</div>
+          ))}
+        </div>
+      </div>
 
 
     </div>
