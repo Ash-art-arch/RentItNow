@@ -29,10 +29,7 @@ const SignUpUser = () => {
               <label htmlFor="name">Name</label>
               <input type="text" id="name" placeholder="Name" />
             </div>
-            <div className="input-group">
-              <label htmlFor="username">Username</label>
-              <input type="text" id="username" placeholder="Username" />
-            </div>
+           
         
 
           <div className="input-group">
@@ -50,19 +47,8 @@ const SignUpUser = () => {
             <label htmlFor="password">Password</label>
             <input type="password" id="password" placeholder="Password" />
           </div>
-<div className="input-group">
-            <label htmlFor="address">Address</label>
-            <input type="address" id="address" placeholder="Address" />
-          </div>  
-            <div className="input-group">
-            <label htmlFor="gender">Gender</label>
-             <select id="gender" name="gender">
-    <option value="" id="op">Select Gender</option>
-    <option value="female">Female</option>
-    <option value="male">Male</option>
-    <option value="other">Other</option>
-    </select>
-          </div>
+ 
+           
      </div>  
           <button type="submit" className="signup-button">Sign up</button>
           <div className="social-login">

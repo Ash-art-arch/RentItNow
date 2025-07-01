@@ -11,6 +11,12 @@ import Cart from './pages/Cart'
 import PaymentPage from './pages/PaymentPage'
 import ProductPage from './pages/ProductPage'
 import CategoriesPAge from './pages/CategoriesPAge'
+<<<<<<< HEAD
+=======
+import PaymentPage from './pages/PaymentPage'
+import ProductPage from './pages/ProductPage'
+
+>>>>>>> sampriti
 
 function App() {
   const [count, setCount] = useState(0)
