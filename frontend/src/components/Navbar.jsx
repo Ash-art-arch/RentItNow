@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
- 
+
   const toggleSearch = () => {
     setShowSearch(!showSearch);
   };
@@ -31,22 +31,17 @@ const Navbar = () => {
         )}
         <img
           src={searchIcon}
-          alt="search"
+          alt="Search"
           className="w-5 h-5 cursor-pointer"
           onClick={toggleSearch}
         />
-<Link to="/cart">
-  <img
-    src={cartIcon}
-    alt="Cart"
-    className="your-optional-class"
-  />
-</Link>
-
-          alt="Cart"
-          className="w-6 h-6"
-        />
-       </Link> 
+        <Link to="/cart">
+          <img
+            src={cartIcon}
+            alt="Cart"
+            className="w-6 h-6"
+          />
+        </Link>
       </div>
     </nav>
   );
