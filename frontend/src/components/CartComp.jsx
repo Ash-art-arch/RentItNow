@@ -29,8 +29,8 @@ const CartComp = () => {
   ];
 
   return (
-    <div className="min-h-screen p-8" style={{ backgroundColor: "rgba(0, 0, 0, 0.85)"}}>
-      <div className="grid grid-cols-[3fr_1.3fr] gap-8 bg-white rounded-md shadow p-6 mt-4 ">
+    <div className="min-h-screen  p-8" style={{ backgroundColor: "rgba(0, 0, 0, 0.85)"}}>
+      <div className="grid grid-cols-[3fr_1.3fr]  gap-8 bg-white rounded-md shadow p-6 mt-20 ">
         
         <div>
           <div className="grid grid-cols-[270px_1.5fr_1fr_1fr_40px] items-center text-gray-500 font-semibold text-sm border-b pb-4 mb-4">

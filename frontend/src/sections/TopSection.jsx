@@ -21,7 +21,7 @@ const TopSection = () => {
         Explore our top rental categories, including Cameras & Photography, Electronics & Gadgets, Home Appliances, Furniture, and Vehicles to meet all your needs with flexibility and affordability.
       </p>
 
-      <div className="mt-10 md:mt-20 flex flex-wrap gap-10 justify-center">
+      <div className="mt-10 md:mt-20 w-full flex flex-wrap gap-20 justify-center">
         <Card />
         <Card />
         <Card />
