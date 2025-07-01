@@ -33,7 +33,7 @@ export const HeroSection = () => {
     >
       <div className="absolute inset-0 bg-[rgba(0,0,0,0.53)]"></div>
 
-      <div className="relative z-10 flex flex-col items-center mt-20 md:mt-30 px-4  text-center">
+      <div className="relative z-10 flex flex-col items-center mt-10 md:mt-15 px-4  text-center">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight max-w-2xl">
           Smart Living Starts with Smart Renting
         </h1>
