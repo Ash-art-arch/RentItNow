@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import searchIcon from '../assets/Navbar/search.png';
+import cartIcon from '../assets/Navbar/Cart.png';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
-
+ 
   const toggleSearch = () => {
     setShowSearch(!showSearch);
   };
@@ -28,18 +30,19 @@ const Navbar = () => {
           />
         )}
         <img
-          src="./src/assets/Navbar/search.png"
+          src={searchIcon}
           alt="search"
           className="w-5 h-5 cursor-pointer"
           onClick={toggleSearch}
         />
-       <Link to={"/cart"}>
-       <img
-          src="./src/assets/Navbar/Cart.png"
-          alt="Cart"
-          className="w-6 h-6"
-        />
-       </Link> 
+<Link to="/cart">
+  <img
+    src={cartIcon}
+    alt="Cart"
+    className="w-6 h-6"
+  />
+</Link>
+
       </div>
     </nav>
   );
