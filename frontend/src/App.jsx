@@ -22,6 +22,7 @@ import CategoriesPAge from './pages/CategoriesPAge'
 import PaymentPage from './pages/PaymentPage'
 import ProductPage from './pages/ProductPage'
 
+
 function App() {
   const [count, setCount] = useState(0)
 
