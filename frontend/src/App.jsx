@@ -7,7 +7,7 @@ import LandingPage from './pages/LandingPage'
 import Cart from './pages/Cart'
 import PaymentPage from './pages/PaymentPage'
 import ProductPage from './pages/ProductPage'
-import CategoriesPage from './pages/CategoriesPage'
+import CategoriesPAge from './pages/CategoriesPAge'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -19,7 +19,7 @@ function App() {
 <Route path='/cart' element={<Cart />} />
 <Route path='/cart/payment' element={<PaymentPage />} />
 <Route path='/productpage' element={<ProductPage />} />
-<Route path='/categories' element={<CategoriesPage />} />
+<Route path='/categories' element={<CategoriesPAge />} />
 
      </Routes>
     </>

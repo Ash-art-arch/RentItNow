@@ -18,8 +18,6 @@ const LandingPage = () => {
   <Testimonial />
   <Footer />
 </div>
-
-    </div>
   );
 };
 

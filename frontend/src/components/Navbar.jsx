@@ -39,14 +39,10 @@ const Navbar = () => {
   <img
     src={cartIcon}
     alt="Cart"
-    className="your-optional-class"
+    className="w-6 h-6"
   />
 </Link>
 
-          alt="Cart"
-          className="w-6 h-6"
-        />
-       </Link> 
       </div>
     </nav>
   );
