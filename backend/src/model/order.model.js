@@ -29,7 +29,23 @@ const orderSchema = mongoose.Schema({
         type:String,
         enum:["Pending","Approved","Complete","Cancelled"],
         default:"Pending"
-    }
+    },
+    deliverableAddress:{
+        street:String,
+        city:String,
+        state:String,
+        pincode:Number,
+        country:String
+    },
+    paymentInfo:{
+        id:String,
+        status:String
+    },
+    isPaid:{
+        type:Boolean,
+        default:false
+    },
+    paidAt:Date
 },{timestamps:true})
 
 const orderModel = mongoose.model("Order",orderSchema)
