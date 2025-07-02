@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import Card from '../components/Card';
 
 const TopSection = () => {
+  const [category,setCategory] = useState([])
+  useEffect(()=>{
+    const fetchCategories = async ()=>{
+      const response =await fetch("http://localhost:5000/api/categories",{
+        method:"GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      const data =await response.json()
+      setCategory(data)
+    }
+    fetchCategories()
+  },[])
+  console.log(category)
   const firstStyle = {
     border: "1px solid rgba(0,0,0,0.5)",
     padding: "1.2rem",
@@ -22,9 +37,11 @@ const TopSection = () => {
       </p>
 
       <div className="mt-10 md:mt-20 w-full flex flex-wrap gap-20 justify-center">
-        <Card />
-        <Card />
-        <Card />
+      {
+       category&& category.map((item)=>{
+          return <Card key={item._id} item={item} />
+        })
+      }
       </div>
     </div>
   );
