@@ -3,8 +3,6 @@ import searchIcon from '../assets/Navbar/search.png';
 import cartIcon from '../assets/Navbar/Cart.png';
 import { Link } from 'react-router-dom';
 
-import searchIcon from '../assets/Navbar/search.png';
-import cartIcon from '../assets/Navbar/Cart.png';
 const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
  

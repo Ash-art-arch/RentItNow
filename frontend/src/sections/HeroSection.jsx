@@ -41,7 +41,7 @@ export const HeroSection = () => {
       className="w-full h-screen bg-center bg-no-repeat bg-cover relative flex items-center justify-center md:items-start text-white font-[Petrona]"
       style={{ backgroundImage: `url(${heroImage})` }}
     >
-      <div className="absolute inset-0 bg-[rgba(0,0,0,0.53)]"></div>
+      <div className="absolute inset-0 bg-[rgba(0,0,0,0.63)]"></div>
 
       <div className="relative z-10 flex flex-col items-center mt-10 md:mt-15 px-4  text-center">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight max-w-2xl">
