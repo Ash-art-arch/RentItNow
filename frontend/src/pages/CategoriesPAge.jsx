@@ -1,17 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
-import category from "../assets/category.svg"
+import categoryImage from "../assets/category.svg"
 import Sidebar from './Sidebar'
 import CategoryCard from '../components/CategoryCard'
+import { data } from 'react-router-dom'
 const CategoriesPAge = () => {
+  const [category, setCategory] = useState([])
+  useEffect(() => {
+    const id = window.location.search.split("=")[1];
+    console.log(id)
+    const fetchCategory=async () => {
+      const response = await fetch(`http://localhost:5000/api/categories/${id}`,{
+        method:'get',
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+       const data =await response.json()
+    setCategory(data)
+      }
+      fetchCategory()
+  },[])
+  console.log(category)
   return (
 
     <div className='w-full h-full'>
     <Navbar/>
-    <div className='w-full h-[30vh] bg-cover bg-no-repeat bg-center  flex items-center justify-center relative' style={{backgroundImage:`url(${category})`}}>
+    <div className='w-full h-[30vh] bg-cover bg-no-repeat bg-center  flex items-center justify-center relative' style={{backgroundImage:`url(${category.headerImage})`}}>
     <div className='absolute  inset-0 bg-[rgba(0,0,0,0.67)] z-10'></div>
     <h1 className='text-3xl md:text-7xl text-white z-10 font-bold font-[Outfit]'>
-        Hardware Tools
+      {category.name}  
     </h1>
     </div>
     <div className='w-full flex'>
