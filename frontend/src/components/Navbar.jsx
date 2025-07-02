@@ -46,11 +46,6 @@ const Navbar = () => {
 
 
 </div>
-      
-<<<<<<< HEAD
-=======
-
->>>>>>> 22cfde6 (item add)
     </nav>
   );
 };
