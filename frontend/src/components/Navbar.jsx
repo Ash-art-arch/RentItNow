@@ -35,6 +35,7 @@ const Navbar = () => {
           className="w-5 h-5 cursor-pointer"
           onClick={toggleSearch}
         />
+<<<<<<< HEAD
         <Link to="/cart">
           <img
             src={cartIcon}
@@ -43,6 +44,19 @@ const Navbar = () => {
           />
         </Link>
       </div>
+=======
+
+<Link to="/cart">
+  <img
+    src={cartIcon}
+    alt="Cart"
+    className="w-6 h-6"
+  />
+</Link>
+
+
+</div>
+>>>>>>> nabadeep
     </nav>
   );
 };

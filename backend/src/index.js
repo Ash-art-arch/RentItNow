@@ -5,15 +5,19 @@ const userRouter = require("./routes/user.route");
 const cookieParser= require("cookie-parser")
 const { default: mongoose } = require("mongoose");
 const categoryRouter = require("./routes/categories.route");
-
+const itemRouter = require("./routes/items.route");
 dotenv.config();
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials:true
+}))
 app.use(cookieParser())
 app.use(express.json())
 
 app.use('/api/user',userRouter)
 app.use('/api/categories',categoryRouter)
+app.use('/api/items',itemRouter)
 
 app.listen(5000,()=>{
     console.log("Server Running At port 5000")
