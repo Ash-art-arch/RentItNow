@@ -5,7 +5,7 @@ import Sidebar from './Sidebar'
 import CategoryCard from '../components/CategoryCard'
 import { data } from 'react-router-dom'
 const CategoriesPAge = () => {
-  const [category, setCategory] = useState([])
+  const [category, setCategory] = useState(null)
   useEffect(() => {
     const id = window.location.search.split("=")[1];
     console.log(id)
@@ -19,17 +19,19 @@ const CategoriesPAge = () => {
        const data =await response.json()
     setCategory(data)
       }
-      fetchCategory()
+      if(id){
+        fetchCategory()
+      }
   },[])
   console.log(category)
   return (
 
     <div className='w-full h-full'>
     <Navbar/>
-    <div className='w-full h-[30vh] bg-cover bg-no-repeat bg-center  flex items-center justify-center relative' style={{backgroundImage:`url(${category.headerImage})`}}>
+    <div className='w-full h-[40vh] bg-cover bg-no-repeat bg-center  flex items-center justify-center relative object-top' style={{backgroundImage:`url(${category?.headerImage||categoryImage})`}}>
     <div className='absolute  inset-0 bg-[rgba(0,0,0,0.67)] z-10'></div>
     <h1 className='text-3xl md:text-7xl text-white z-10 font-bold font-[Outfit]'>
-      {category.name}  
+      {category?category.name:"All Products"}  
     </h1>
     </div>
     <div className='w-full flex'>

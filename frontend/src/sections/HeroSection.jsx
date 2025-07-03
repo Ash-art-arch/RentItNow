@@ -1,17 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import heroImage from "../assets/HeroImage.svg";
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
+import { userContext } from '../providers/userProviders';
 
 export const HeroSection = () => {
   const navigate = useNavigate()
+  const {user} = useContext(userContext)
   const handleListButton = ()=>{
     console.log("Clicked")
-    navigate('/signUp?role=Seller')
+    if(!user){
+      navigate('/signUp?role=Seller')
+    }
+    else{
+      navigate('/')
+    }
   }
   const handleBrowseButton = ()=>{
 
-    navigate('/signUp?role=Buyer')
+    if(!user){
+      navigate('/signUp?role=Buyer')
+    }
+    else{
+      navigate('/categories')
+    }
   }
   const firstStyle = {
     width: "16rem",
