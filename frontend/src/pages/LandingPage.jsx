@@ -18,6 +18,11 @@ const LandingPage = () => {
   <Testimonial />
   <Footer />
 </div>
+<<<<<<< HEAD
+
+    
+=======
+>>>>>>> nabadeep
   );
 };
 

@@ -9,13 +9,20 @@ import box from "/src/assets/product/box.png"
 import coupon from "/src/assets/product/coupon.png"
 import calendar from "/src/assets/product/calendar.png"
 import delivery from "/src/assets/product/delivery-truck.png"
+<<<<<<< HEAD
+import Rating from "../components/Rating"
+=======
+>>>>>>> 0284b99 ( productPage submit)
 
 
 const Product = () => {
   const images = [head1, head2, head3, head4];
   const [mainImage, setMainImage] = useState(images[0]);
   const [liked, setLiked] = useState(false);
+<<<<<<< HEAD
+=======
   const rating = 5;
+>>>>>>> 0284b99 ( productPage submit)
 
   return (
     <div>
@@ -50,6 +57,12 @@ const Product = () => {
           <p className="text-sm text-gray-500 mb-4">Order in 02h 30m 25s to get next day delivery</p>
 
 
+<<<<<<< HEAD
+          <div className="mb-4">
+            <Rating rating={4.5} />
+          </div>
+
+=======
           <div className="flex items-center gap-1 mb-4 ">
 
             {[...Array(5)].map((_, index) => {
@@ -66,6 +79,7 @@ const Product = () => {
             })}
             <span className="ml-2 text-sm text-gray-600">({rating})</span>
           </div>
+>>>>>>> 0284b99 ( productPage submit)
 
           <div className="flex justify-around border-1 rounded-2xl py-9">
 
@@ -132,7 +146,15 @@ const Product = () => {
         </div>
       </div>
 
+<<<<<<< HEAD
+<<<<<<< HEAD
       <div className="mt-12 w-full  rounded-2xl p-6 mb-10 ">
+=======
+      <div className="mt-12 w-full border rounded-2xl p-6 mb-10">
+>>>>>>> 0284b99 ( productPage submit)
+=======
+      <div className="mt-12 w-full  rounded-2xl p-6 mb-10 ">
+>>>>>>> 9c5f0c4 ( productPage submit)
         <h2 className="text-2xl font-semibold mb-6">Rating & Reviews</h2>
         <div className="flex  lg:flex-row items-start lg:items-center gap-10 ">
 
@@ -193,11 +215,18 @@ const Product = () => {
                   />
                   <div>
                     <p className="font-medium">Alex Mathio</p>
+<<<<<<< HEAD
+                    <div className="mt-1">
+                      <Rating rating={5} />
+                    </div>
+
+=======
                     <div className="flex text-yellow-400 text-sm">
                       {[...Array(5)].map((_, i) => (
                         <Star key={i} className="w-4 h-4 fill-yellow-400" />
                       ))}
                     </div>
+>>>>>>> 0284b99 ( productPage submit)
                   </div>
                 </div>
                 <p className="text-xs text-gray-400">13 Oct 2024</p>
@@ -218,11 +247,18 @@ const Product = () => {
                   />
                   <div>
                     <p className="font-medium">Alex Mathio</p>
+<<<<<<< HEAD
+                    <div className="mt-1">
+                      <Rating rating={5} />
+                    </div>
+
+=======
                     <div className="flex text-yellow-400 text-sm">
                       {[...Array(5)].map((_, i) => (
                         <Star key={i} className="w-4 h-4 fill-yellow-400" />
                       ))}
                     </div>
+>>>>>>> 0284b99 ( productPage submit)
                   </div>
                 </div>
                 <p className="text-xs text-gray-400">13 Oct 2024</p>
@@ -238,6 +274,76 @@ const Product = () => {
       </div>
 
 
+<<<<<<< HEAD
+      <div className="mt-16 mb-10 ml-10 mr-10">
+        <h2 className="text-2xl font-semibold mb-6">You might also like</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
+          {[
+            {
+              name: "Polo with Contrast Trims",
+              price: "$212",
+              old: "$242",
+              discount: "20%",
+              img: "/src/assets/product/h-1.avif",
+              rating: 4.0,
+            },
+            {
+              name: "Gradient Graphic T-shirt",
+              price: "$145",
+              img: "/src/assets/product/h-2.avif",
+              rating: 3.5,
+            },
+            {
+              name: "Polo with Tipping Details",
+              price: "$180",
+              img: "/src/assets/product/h-4.avif",
+              rating: 4.5,
+            },
+            {
+              name: "Striped Jacket",
+              price: "$120",
+              old: "$240",
+              discount: "50%",
+              img: "/src/assets/product/h-5.avif",
+              rating: 5.0,
+            },
+          ].map((item, i) => (
+            <div key={i} className="rounded-xl border border-gray-300 bg-white p-4 shadow-sm transition">
+              <div className="h-60 flex items-center justify-center bg-white rounded-xl overflow-hidden mb-4">
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  className="h-[500px w-full]"
+                />
+
+
+              </div>
+
+              <h3 className="font-medium text-base text-gray-800">{item.name}</h3>
+
+              <div className="mt-1">
+                <Rating rating={item.rating} />
+              </div>
+
+              <div className="mt-2">
+                <span className="font-bold text-black">{item.price}</span>
+                {item.old && (
+                  <>
+                    <span className="line-through text-sm ml-2 text-gray-400">
+                      {item.old}
+                    </span>
+                    <span className="ml-2 text-red-500 text-sm font-semibold">
+                      -{item.discount}
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
+
+          ))}
+        </div>
+      </div>
+=======
 <div className="mt-16 mb-10 ml-10 mr-10">
   <h2 className="text-2xl font-semibold mb-6">You might also like</h2>
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
@@ -315,6 +421,7 @@ const Product = () => {
     ))}
   </div>
 </div>
+>>>>>>> 0284b99 ( productPage submit)
 
 
     </div>

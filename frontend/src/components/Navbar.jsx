@@ -50,7 +50,7 @@ const Navbar = () => {
         )}
         <img
           src={searchIcon}
-          alt="search"
+          alt="Search"
           className="w-5 h-5 cursor-pointer"
           onClick={toggleSearch}
         />
@@ -61,6 +61,7 @@ const Navbar = () => {
           user?<div className="w-10 h-10 rounded-full bg-[#ffffff]"></div>:<Button text={"Login"} style={firstStyle} Click={CLick}/>
 }
       </div>
+
     </nav>
   );
 };
