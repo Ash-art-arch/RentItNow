@@ -29,13 +29,6 @@ function App() {
     <>
      <Routes>
 
-      <Route path='/login' element={<Login/>} />
-      
-      <Route path='/signupUser' element={<SignUpUser/>} />
-      
-
-
-
       <Route path='/' element={<LandingPage/>}/>
 <Route path='/cart' element={<Cart />} />
 <Route path='/cart/payment' element={<PaymentPage />} />
