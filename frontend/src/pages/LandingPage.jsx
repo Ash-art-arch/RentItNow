@@ -18,12 +18,8 @@ const LandingPage = () => {
   <Testimonial />
   <Footer />
 </div>
-<<<<<<< HEAD
-
-    
-=======
->>>>>>> nabadeep
   );
+
 };
 
 export default LandingPage;
