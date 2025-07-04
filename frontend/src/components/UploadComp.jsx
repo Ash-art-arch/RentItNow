@@ -21,15 +21,49 @@ const UploadComp = () => {
   const removePhoto = (index) => {
     setPhotos((prev) => prev.filter((_, i) => i !== index));
   };
+const handleSubmit = async () => {
+  if (!termsAccepted) {
+    alert("Please accept the terms and conditions.");
+    return;
+  }
 
-  const handleSubmit = () => {
-    if (!termsAccepted) {
-      alert("Please accept the terms and conditions.");
-      return;
+
+
+  const formData = new FormData();
+  formData.append("name", productName);
+  formData.append("category", category);
+  formData.append("description", description);
+  formData.append("price", price);
+  formData.append("available", "true");
+  formData.append("ratings", "0");
+
+  photos.forEach((photo) => {
+    formData.append("items", photo);
+  });
+
+  try {
+    const res = await fetch("http://localhost:5000/api/items/add", {
+      method: "POST",
+     
+      credentials: "include", 
+      body: formData,
+     
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Product uploaded successfully!");
+    } else {
+      alert(data.message || "Upload failed");
     }
-   
-    console.log({ productName, category, description, price, discount, about });
-  };
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong");
+  }
+};
+
+
 
   return (
     <div className="min-h-screen bg-white p-8">
@@ -64,7 +98,7 @@ const UploadComp = () => {
                 <option value="">Select Category</option>
                 <option value="Furniture">Furniture</option>
                 <option value="Tools">Tools</option>
-                <option value="Electronics">Electronics</option>
+                <option value="6863c1bc5c31a23b5f926eb4">Electronics</option>
                 <option value="Clothes">Clothes</option>
               </select>
             </div>
