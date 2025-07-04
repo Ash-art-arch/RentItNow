@@ -36,7 +36,7 @@ exports.createItem = async (req, res) => {
       category: req.body.category, 
       description: req.body.description,
       available: req.body.available === "true",
-      owner: req.body.owner, 
+      owner: req.user.id, 
       ratings: req.body.ratings || 0,
       images: imageUrls,
     });

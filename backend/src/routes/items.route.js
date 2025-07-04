@@ -11,10 +11,19 @@ const upload = multer({ storage });
 
 
 router.post(
-  "/add",protectedRoute,
+  "/add",
+  protectedRoute,
   upload.fields([{ name: "items", maxCount: 5 }]),
-  itemController.createItem
+  async (req, res) => {
+    if (!req.user || req.user.role !== "Seller") {
+      return res.status(403).json({ message: "Only sellers can add items" });
+    }
+
+     itemController.createItem(req, res);
+  }
+  
 );
+
 
 
 router.get("/", itemController.getAllItems);
