@@ -1,52 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import {Routes,Route} from "react-router-dom"
-import LandingPage from './pages/LandingPage'
-
-
-import SignUpUser from './components/SignupUser'
-
-import Login from './components/Login'
-
-
-import Cart from './pages/Cart'
-
-import Login from './components/Login'
-import SignupUser  from './components/SignupUser'
-
-
-
-import CategoriesPAge from './pages/CategoriesPAge'
-import PaymentPage from './pages/PaymentPage'
-import ProductPage from './pages/ProductPage'
+import { useContext, useEffect } from 'react';
+import './App.css';
+import { Routes, Route } from "react-router-dom";
+import LandingPage from './pages/LandingPage';
+import SignUpUser from './components/SignupUser';
+import Login from './components/Login';
+import Cart from './pages/Cart';
+import PaymentPage from './pages/PaymentPage';
+import ProductPage from './pages/ProductPage';
+import CategoriesPage from './pages/CategoriesPAge';
+import { userContext } from './providers/userProviders';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { user, setUser } = useContext(userContext);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const response = await fetch("http://localhost:5000/api/user/profile", {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (data.error) {
+        console.log("Token invalid or expired. Logging out.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setUser(null);
+      } else {
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+    };
+
+    if (!user) {
+      fetchProfile();
+    }
+  }, [user, setUser]);
 
   return (
     <>
-     <Routes>
-
-      <Route path='/login' element={<Login/>} />
-      
-      <Route path='/signupUser' element={<SignUpUser/>} />
-      
-
-
-
-      <Route path='/' element={<LandingPage/>}/>
-<Route path='/cart' element={<Cart />} />
-<Route path='/cart/payment' element={<PaymentPage />} />
-<Route path='/productpage' element={<ProductPage />} />
-<Route path='/categories' element={<CategoriesPAge />} />
-<Route path='/login' element={<Login/>} />
-<Route path='/signupUser' element={<SignupUser/>} />
-
-     </Routes>
+      <Routes>
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<SignUpUser />} />
+        <Route path='/' element={<LandingPage />} />
+        <Route path='/cart' element={<Cart />} />
+        <Route path='/cart/payment' element={<PaymentPage />} />
+        <Route path='/productpage' element={<ProductPage />} />
+        <Route path='/categories' element={<CategoriesPage />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

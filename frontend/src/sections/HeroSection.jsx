@@ -1,17 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import heroImage from "../assets/HeroImage.svg";
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
+import { userContext } from '../providers/userProviders';
 
 export const HeroSection = () => {
   const navigate = useNavigate()
+  const {user} = useContext(userContext)
   const handleListButton = ()=>{
     console.log("Clicked")
-    navigate('/signUp?role=Seller')
+    if(!user){
+      navigate('/signUp?role=Seller')
+    }
+    else{
+      navigate('/')
+    }
   }
   const handleBrowseButton = ()=>{
 
-    navigate('/signUp?role=Buyer')
+    if(!user){
+      navigate('/signUp?role=Buyer')
+    }
+    else{
+      navigate('/categories')
+    }
   }
   const firstStyle = {
     width: "16rem",
@@ -43,7 +55,7 @@ export const HeroSection = () => {
     >
       <div className="absolute inset-0 bg-[rgba(0,0,0,0.63)]"></div>
 
-      <div className="relative z-10 flex flex-col items-center mt-10 md:mt-15 px-4  text-center">
+      <div className="relative z-10 flex flex-col items-center mt-10 md:mt-30 px-4  text-center">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight max-w-2xl">
           Smart Living Starts with Smart Renting
         </h1>
