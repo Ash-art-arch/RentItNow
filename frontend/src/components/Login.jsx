@@ -1,8 +1,37 @@
 import React from 'react';
 import './design.css'; 
+import {useState} from 'react';
+import axios from 'axios';
 import loginImage from '../assets/login.png'; 
 import googleImage from "../assets/google.png";
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+ 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/login", {
+        email,
+        password
+      });
+
+      const {user, token} = res.data.user;
+
+     
+      localStorage.setItem("userId", user._id);
+      localStorage.setItem('tpken', token);
+
+      
+      alert("Login successful!");
+    } catch (err) {
+      alert("Login failed. Please check your credentials.");
+      console.log(err);
+    }
+  };
+
   return (
     <div className="signup">
       <div className="left">

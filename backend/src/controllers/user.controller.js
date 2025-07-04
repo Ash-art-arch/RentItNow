@@ -59,11 +59,13 @@ const loginHandler = async (req,res)=>{
     res.json({
       message:"Login success",
       user:{
+        _id: user.id,
         name:user.name,
         email:user.email,
         phoneNo:user.phoneNo,
         role:user.role
       },
+      token: token
     })
   }
   catch(e){

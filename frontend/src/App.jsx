@@ -4,6 +4,8 @@ import {Routes,Route} from "react-router-dom"
 import LandingPage from './pages/LandingPage'
 
 import SignUpUser from './components/SignupUser'
+import {Provider} from 'react-redux';
+import store from './Features/store';
 
 import Login from './components/Login'
 

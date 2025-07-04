@@ -1,33 +1,19 @@
 import React from "react";
-
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, increaseQty, decreaseQty, removeItem } from "../Features/cartReducer";
+import {syncCartToBackend} from "../utils/syncCart";
 const CartComp = () => {
-  const cartItems = [
-    {
-      id: 1,
-      title: "Breathable skin sport vest",
-      size: "Size S",
-      color: "Color: Pink",
-      price: 39.0,
-      image: "./src/assets/Cart/camera.jpg"
-    },
-    {
-      id: 2,
-      title: "Breathable skin sport vest",
-      size: "Size S",
-      color: "Color: Red",
-      price: 39.0,
-      image: "/src/assets/Cart/camera.jpg"
-    },
-    {
-      id: 3,
-      title: "Breathable skin sport vest",
-      size: "Size S",
-      color: "Color: Black",
-      price: 39.0,
-      image: "/src/assets/Cart/camera.jpg"
+  const dispatch = useDispatch();
+  
+ const cartItems = useSelector((state) => state.cart.items);
+const totalPrice = useSelector((state) => state.cart.totalPrice);
+const userId = localStorage.getItem("userId");
+useEffect(() => {
+    if (userId && cartItems.length > 0) {
+      syncCartToBackend(userId, cartItems);
     }
-  ];
-
+  }, [cartItems, userId]);
   return (
     <div className="min-h-screen  p-8" style={{ backgroundColor: "rgba(0, 0, 0, 0.85)"}}>
       <div className="grid grid-cols-[3fr_1.3fr]  gap-8 bg-white rounded-md shadow p-6 mt-20 ">
@@ -59,14 +45,16 @@ const CartComp = () => {
               </div>
 
               <div className="flex items-center gap-2">
-                <button className="w-8 h-8 bg-[#FFE500] text-black rounded-full text-sm font-bold flex items-center justify-center">+</button>
-                <span className="border px-4 py-[3px] rounded text-center">1</span>
-                <button className="w-8 h-8 bg-black text-white rounded-full text-sm font-bold flex items-center justify-center">-</button>
+                <button className="w-8 h-8 bg-[#FFE500] text-black rounded-full text-sm font-bold flex items-center justify-center"onClick={() => dispatch(increaseQty(item.id))}
+>+</button>
+                <span className="border px-4 py-[3px] rounded text-center">{item.quantity}</span>
+                <button className="w-8 h-8 bg-black text-white rounded-full text-sm font-bold flex items-center justify-center" onClick={() => dispatch(decreaseQty(item.id))}
+>-</button>
               </div>
 
               <div className="font-medium">${item.price.toFixed(2)}</div>
 
-              <button className="text-red-500 text-xl hover:underline">×</button>
+              <button className="text-red-500 text-xl hover:underline"  onClick={() => dispatch(removeItem(item.id))}>×</button>
             </div>
           ))}
         </div>
@@ -77,8 +65,8 @@ const CartComp = () => {
 
           <div className="text-sm text-gray-700 mb-2 space-y-1">
             <div className="flex justify-between">
-              <span>Subtotal</span>
-              <span>$117.00</span>
+              <span>Subtotal : </span>
+              <span>{totalPrice}</span>
             </div>
             <div className="flex justify-between">
               <span>Shipping</span>
@@ -90,7 +78,7 @@ const CartComp = () => {
 
           <div className="flex justify-between text-lg font-bold mb-4">
             <span>Total</span>
-            <span>$122.00</span>
+            <span>{totalPrice + 5}</span>
           </div>
 
           <button className="w-full bg-black text-white py-2 rounded hover:bg-gray-900 mb-2">
