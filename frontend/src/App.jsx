@@ -58,9 +58,9 @@ function App() {
         <Route path='/cart/payment' element={<PaymentPage />} />
         <Route path='/productpage' element={<ProductPage />} />
         <Route path='/categories' element={<CategoriesPage />} />
-         <Route path='/dashboard' element={user.role==="Seller"?<Dashboard />:""} />
-         <Route path='/productupload' element={user.role==="Seller"?<ProductUpload />:""} />
-          <Route path='/customerresponse' element={user.role==="Seller"?<CustomerResponse/>:""} />
+         <Route path='/dashboard' element={user?.role==="Seller"?<Dashboard />:""} />
+         <Route path='/productupload' element={user?.role==="Seller"?<ProductUpload />:""} />
+          <Route path='/customerresponse' element={user?.role==="Seller"?<CustomerResponse/>:""} />
           <Route path='/settings' element={<Settings/>}/>
       </Routes>
     </>
