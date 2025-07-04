@@ -9,7 +9,10 @@ import PaymentPage from './pages/PaymentPage';
 import ProductPage from './pages/ProductPage';
 import CategoriesPage from './pages/CategoriesPAge';
 import { userContext } from './providers/userProviders';
-
+import Dashboard from './pages/Dashboard.jsx';
+import ProductUpload from'./pages/ProductUpload.jsx';
+import CustomerResponse from './pages/CustomerResponse.jsx'
+import Settings from './pages/Settings.jsx'
 function App() {
   const { user, setUser } = useContext(userContext);
 
@@ -55,6 +58,10 @@ function App() {
         <Route path='/cart/payment' element={<PaymentPage />} />
         <Route path='/productpage' element={<ProductPage />} />
         <Route path='/categories' element={<CategoriesPage />} />
+         <Route path='/dashboard' element={<Dashboard />} />
+         <Route path='/productupload' element={<ProductUpload />} />
+          <Route path='/customerresponse' element={<CustomerResponse/>} />
+          <Route path='/settings' element={<Settings/>}/>
       </Routes>
     </>
   );
