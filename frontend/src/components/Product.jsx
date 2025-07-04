@@ -263,12 +263,8 @@ const Product = () => {
                 <span className="font-bold text-black">{item.price}</span>
                 {item.old && (
                   <>
-                    <span className="line-through text-sm ml-2 text-gray-400">
-                      {item.old}
-                    </span>
-                    <span className="ml-2 text-red-500 text-sm font-semibold">
-                      -{item.discount}
-                    </span>
+                    <span className="line-through text-sm ml-2 text-gray-400">{item.old}</span>
+                    <span className="ml-2 text-red-500 text-sm font-semibold">-{item.discount}</span>
                   </>
                 )}
               </div>
