@@ -17,14 +17,16 @@ const Login = () => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials:"include",
       body: JSON.stringify({ email, password }),
     });
   const data = await response.json();
-  if(data.error){
-    alert(data.error)
+  if(!response.ok){
+    alert("Login Unsuccesful")
   }
   else{
     setUser(data.user)
+    console.log("Login Done")
     localStorage.setItem("user",JSON.stringify(data.user))
     navigate("/")
   }

@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import './App.css';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from './pages/LandingPage';
 import SignUpUser from './components/SignupUser';
 import Login from './components/Login';
@@ -18,21 +18,19 @@ function App() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
+      console.log("Reached Here")
       const response = await fetch("http://localhost:5000/api/user/profile", {
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
         },
+        credentials:"include"
       });
 
       const data = await response.json();
       console.log(data);
 
-      if (data.error) {
+      if (!response.ok) {
         console.log("Token invalid or expired. Logging out.");
         localStorage.removeItem("token");
         localStorage.removeItem("user");
@@ -43,10 +41,8 @@ function App() {
       }
     };
 
-    if (!user) {
-      fetchProfile();
-    }
-  }, [user, setUser]);
+    fetchProfile()
+  }, []);
 
   return (
     <>
@@ -58,9 +54,9 @@ function App() {
         <Route path='/cart/payment' element={<PaymentPage />} />
         <Route path='/productpage' element={<ProductPage />} />
         <Route path='/categories' element={<CategoriesPage />} />
-         <Route path='/dashboard' element={user?.role==="Seller"?<Dashboard />:""} />
-         <Route path='/productupload' element={user?.role==="Seller"?<ProductUpload />:""} />
-          <Route path='/customerresponse' element={user?.role==="Seller"?<CustomerResponse/>:""} />
+         <Route path='/dashboard' element={user?.role==="Seller"?<Dashboard />:<Navigate to={'/signup?role=Seller'}/>} />
+         <Route path='/productupload' element={user?.role==="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
+          <Route path='/customerresponse' element={user?.role==="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'}/>} />
           <Route path='/settings' element={<Settings/>}/>
       </Routes>
     </>

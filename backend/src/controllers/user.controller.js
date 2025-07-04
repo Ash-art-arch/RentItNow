@@ -56,7 +56,7 @@ const loginHandler = async (req,res)=>{
     }
     const token = jwt.sign({id:user._id,name:user.name,email:user.email,phoneNo:user.phoneNo,role:user.role},process.env.JWT_SECRET,{expiresIn:'2d'})
     res.cookie("token",token)
-    res.json({
+    return res.json({
       message:"Login success",
       user:{
         name:user.name,

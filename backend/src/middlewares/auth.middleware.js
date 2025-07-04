@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken")
 const protectedRoute = (req, res, next) => {
     const token = req.cookies.token||req.headers.authorization;
     if(!token){
-        res.status(401).json("No Token Found")
+        return res.status(401).json("No Token Found")
     }
     try{    
         const user= jwt.verify(token,process.env.JWT_SECRET)
