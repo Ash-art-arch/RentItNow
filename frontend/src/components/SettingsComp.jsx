@@ -6,7 +6,9 @@ const SettingsComp = () => {
     email: "dg@example.com",
     phone: "9876548964",
   });
+
   const [profilePic, setProfilePic] = useState(null);
+
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -22,6 +24,7 @@ const SettingsComp = () => {
   };
 
   const handleLogout = () => {
+   
     alert("You have been logged out.");
   };
 
@@ -31,10 +34,12 @@ const SettingsComp = () => {
     <div className="min-h-screen bg-gray-100 p-6 md:p-12">
       <div className="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg space-y-8">
         <h1 className="text-3xl font-bold text-gray-800">Settings</h1>
+
+        
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex items-center space-x-6">
             <img
-              src={profilePic ||"src/assets/profile.png" }
+              src={profilePic ||   "src/assets/profile.png" }
               className="w-24 h-24 rounded-full object-cover border"
             />
             <input
@@ -42,8 +47,10 @@ const SettingsComp = () => {
               accept="image/*"
               onChange={handleProfilePicChange}
               className="text-sm text-gray-600"
-            />      
+            />
+              
           </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">Name</label>
             <input
@@ -54,6 +61,7 @@ const SettingsComp = () => {
               className="w-full p-3 mt-1 border border-gray-300 rounded-md"
             />
           </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">Email</label>
             <input
@@ -64,6 +72,7 @@ const SettingsComp = () => {
               className="w-full p-3 mt-1 border border-gray-300 rounded-md"
             />
           </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">Phone</label>
             <input
@@ -75,6 +84,7 @@ const SettingsComp = () => {
               className="w-full p-3 mt-1 border border-gray-300 rounded-md"
             />
           </div>
+
           <button
             type="submit"
             className="w-full bg-black text-white py-3 rounded-md font-semibold cursor-pointer"
@@ -82,16 +92,23 @@ const SettingsComp = () => {
             Save Changes
           </button>
         </form>
-      <div className="pt-8 border-t space-y-4">
+
+   
+        <div className="pt-8 border-t space-y-4">
+        
+
           <button
             onClick={handleLogout}
             className="w-full bg-yellow-300 hover:bg-yellow-500 text-gray-500 py-3 rounded-md font-semibold"
           >
             Logout
-          </button> 
+          </button>
+
+         
         </div>
       </div>
     </div>
   );
 };
+
 export default SettingsComp;
