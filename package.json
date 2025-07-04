@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@react-google-maps/api": "^2.20.7",
+    "google-maps-react": "^2.0.6",
+    "lucide-react": "^0.525.0"
+  }
+}

@@ -1,8 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import arrow from '../assets/arrow.svg';
 import ItemCard from '../components/ItemCard';
 
 const FeaturedSection = () => {
+  const [items,setItems]  = useState([])
+  const [filteredItems,setFilteredItem] = useState([])
+  useEffect(()=>{
+    const fetchItems = async()=>{
+      const response = await fetch("http://localhost:5000/api/items",{
+        method:"GET",
+        headers:{
+          "content-type":"Application/json"
+        }
+      })
+      const data =await response.json()
+      setItems(data)
+      setFilteredItem(data.filter(it => it.ratings > 3))
+    }
+    
+    fetchItems()
+  },[])
+  console.log("Items=>",filteredItems)
   return (
     <div className="w-full min-h-screen bg-[rgba(0,0,0,0.69)] rounded-t-3xl md:rounded-t-[5rem] px-4 md:px-20 py-10 md:py-20 relative">
       
@@ -19,10 +37,11 @@ const FeaturedSection = () => {
       </div>
 
       <div className="flex flex-wrap justify-center gap-10">
-        <ItemCard />
-        <ItemCard />
-        <ItemCard />
-    
+        {
+          filteredItems&&filteredItems.map((item)=>{
+            return(<ItemCard item={item} key={item._id}/>)
+          })
+        }
       </div>
     </div>
   );

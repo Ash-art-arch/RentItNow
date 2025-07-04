@@ -9,16 +9,17 @@ import Footer from "../components/Footer";
 
 const LandingPage = () => {
   return (
-    <div className="w-screen min-h-screen ">
-      <Navbar />
-      <HeroSection />
-      <TopSection />
-      <FeaturedSection />
-      <StatsSection />
-      <Testimonial/>
-      <Footer/>
-    </div>
+<div className="w-screen min-h-screen ">
+  <Navbar />
+  <HeroSection />
+  <TopSection />
+  <FeaturedSection />
+  <StatsSection />
+  <Testimonial />
+  <Footer />
+</div>
   );
+
 };
 
 export default LandingPage;

@@ -1,8 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './design.css'; 
 import loginImage from '../assets/login.png'; 
 import googleImage from "../assets/google.png";
+import { useNavigate } from 'react-router-dom';
 const SignUpUser = () => {
+  const [role, setRole] = useState("Buyer")
+  const [ name,setName] = useState("")
+  const [email,setEmail] = useState("")
+  const [password,setPassword] = useState("")
+  const [phoneNo,setPhoneNo] = useState("")
+  const navigate = useNavigate()
+  useEffect(()=>{
+    const urlParams = new URLSearchParams(window.location.search);
+    const role = urlParams.get('role');
+    setRole(role)
+  })
+  const handleSubmit=async(e)=>{
+    e.preventDefault()
+    const response = await fetch("http://localhost:5000/api/user/signup",{
+      method:"POST",
+      headers:{
+        "content-type":"application/json"
+      },
+      body:JSON.stringify({
+        name,
+        email,
+        password,
+        phoneNo,
+        role
+      })
+    })
+    const data = await response.json()
+    console.log(data)
+    if(data.error){
+      alert(data.error)
+    }
+    else{
+      navigate("/login")
+    }
+  }
   return (
     <div className="signup">
       <div className="left">
@@ -12,34 +48,34 @@ const SignUpUser = () => {
       <div className="right">
         <div id="ti">
         <h1 className="title">
-          Sign up <span className="dot">.</span><h1 id="se">(As User)</h1>
+          Sign up <span className="dot">.</span><h1 id="se">(As {role} )</h1>
          
         </h1>
         
 </div>
-        <form className="form1">
+        <form className="form1" onSubmit={handleSubmit}>
           <div className="input1">
             <div className="input-group">
               <label htmlFor="name">Name</label>
-              <input type="text" id="name" placeholder="Name" />
+              <input type="text" id="name" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
            
         
 
           <div className="input-group">
             <label htmlFor="email">Email</label>
-            <input type="email" id="email" placeholder="Email" />
+            <input type="email" id="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
           </div>
 
           <div className="input-group">
             <label htmlFor="phone">Phone Number</label>
-            <input type="phone" id="phone" placeholder="Phone Number" />
+            <input type="phone" id="phone" placeholder="Phone Number" value={phoneNo} onChange={(e)=>setPhoneNo(e.target.value)}/>
           </div>
       
 
           <div className="input-group">
             <label htmlFor="password">Password</label>
-            <input type="password" id="password" placeholder="Password" />
+            <input type="password" id="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
           </div>
  
            

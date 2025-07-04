@@ -5,7 +5,7 @@ const protectedRoute = require("../middlewares/auth.middleware")
 
 const userRouter = express.Router()
 
-userRouter.post('/signin',signInHandler)
+userRouter.post('/signup',signInHandler)
 userRouter.post('/login',loginHandler)
 userRouter.get('/profile',protectedRoute,(req,res)=>{
     if(req.user){

@@ -1,37 +1,36 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import './design.css'; 
 import {useState} from 'react';
 import axios from 'axios';
 import loginImage from '../assets/login.png'; 
 import googleImage from "../assets/google.png";
+import { userContext } from '../providers/userProviders';
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
- 
-  const handleLogin = async (e) => {
+  const {setUser} = useContext(userContext)
+  const navigate = useNavigate()
+  const handleLogin=async(e)=>{
     e.preventDefault();
-
-    try {
-      const res = await axios.post("http://localhost:5000/api/login", {
-        email,
-        password
-      });
-
-      const {user, token} = res.data.user;
-
-     
-      localStorage.setItem("userId", user._id);
-      localStorage.setItem('tpken', token);
-
-      
-      alert("Login successful!");
-    } catch (err) {
-      alert("Login failed. Please check your credentials.");
-      console.log(err);
-    }
-  };
-
+    
+    const response = await fetch('http://localhost:5000/api/user/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+  const data = await response.json();
+  if(data.error){
+    alert(data.error)
+  }
+  else{
+    setUser(data.user)
+    localStorage.setItem("user",JSON.stringify(data.user))
+    navigate("/")
+  }
+  }
   return (
     <div className="signup">
       <div className="left">
@@ -43,21 +42,21 @@ const Login = () => {
           Login <span className="dot">.</span>
         </h1>
 
-        <form className="form1">
+        <form className="form1" onSubmit={handleLogin}>
           <div className="input1">
            
            
 
           <div className="input-group">
             <label htmlFor="email">Email</label>
-            <input type="email" id="email" placeholder="Email" />
+            <input type="email" id="email" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
           </div>
 
          
 
           <div className="input-group">
             <label htmlFor="password">Password</label>
-            <input type="password" id="password" placeholder="Password" />
+            <input type="password" id="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
           </div>
  
             
