@@ -51,7 +51,7 @@ function App() {
   
   if(loading){
     return(
-      <div>Loading .....</div>
+      <Loader/>
     )
   }
 

@@ -9,7 +9,7 @@ export const HeroSection = () => {
   const {user} = useContext(userContext)
   const handleListButton = ()=>{
     console.log("Clicked")
-    if(!user && user.role!=="Seller"){
+    if(!user || user.role!=="Seller"){
       navigate('/signUp?role=Seller')
     }
     else{
