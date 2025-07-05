@@ -7,7 +7,7 @@ import calendar from "/src/assets/product/calendar.png";
 import delivery from "/src/assets/product/delivery-truck.png";
 import Rating from "../components/Rating";
 import Footer from "./Footer";
-
+import Loader from "./Loader";
 const Product = () => {
   const [mainImage, setMainImage] = useState(null);
   const [liked, setLiked] = useState(false);
@@ -60,9 +60,10 @@ const Product = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p>Loading...</p>
-      </div>
+      <div className='w-screen h-screen flex items-center justify-center bg-black'>
+      <Loader/>
+
+    </div>
     );
   }
 
