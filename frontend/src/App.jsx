@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';w
 import './App.css';
 import { Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from './pages/LandingPage';
@@ -13,7 +13,6 @@ import Dashboard from './pages/Dashboard.jsx';
 import ProductUpload from'./pages/ProductUpload.jsx';
 import CustomerResponse from './pages/CustomerResponse.jsx'
 import Settings from './pages/Settings.jsx'
-import Loader from './components/Loader.jsx';
 function App() {
   const { user, setUser } = useContext(userContext);
   const [loading, setLoading] = useState(true);
@@ -66,11 +65,10 @@ function App() {
         <Route path='/cart/payment' element={<PaymentPage />} />
         <Route path='/productpage' element={<ProductPage />} />
         <Route path='/categories' element={<CategoriesPage />} />
-         <Route path='/dashboard' element={user?.role=="Seller"?<Dashboard />:<Navigate to={'/signup?role=Seller'}/>} />
-         <Route path='/productupload' element={user?.role=="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
-          <Route path='/customerresponse' element={user?.role=="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'}/>} />
-          <Route path='/settings' element={<Settings/>}/>
-          <Route path='/Loader' element={<Loader/>}/>
+        <Route path='/dashboard' element={user?.role=="Seller"?<Dashboard />:<Navigate to={'/signup?role=Seller'}/>} />
+        <Route path='/productupload' element={user?.role=="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
+        <Route path='/customerresponse' element={user?.role=="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'}/>} />
+        <Route path='/settings' element={<Settings/>}/>
       </Routes>
     </>
   );
