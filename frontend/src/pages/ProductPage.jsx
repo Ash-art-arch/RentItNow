@@ -10,6 +10,7 @@ const ProductPage = () => {
         <Product/>
        
     </div>
+
   )
 }
 
