@@ -96,10 +96,10 @@ const handleSubmit = async () => {
                 onChange={(e) => setCategory(e.target.value)}
               >
                 <option value="">Select Category</option>
-                <option value="Furniture">Furniture</option>
-                <option value="Tools">Tools</option>
+                <option value="6863c2e45c31a23b5f926ec2">Furniture</option>
+                <option value="6863c25c5c31a23b5f926ebc">Tools</option>
                 <option value="6863c1bc5c31a23b5f926eb4">Electronics</option>
-                <option value="Clothes">Clothes</option>
+                <option value="6863c2195c31a23b5f926eb8">Clothes</option>
               </select>
             </div>
 
