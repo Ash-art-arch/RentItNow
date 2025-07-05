@@ -6,6 +6,7 @@ import coupon from "/src/assets/product/coupon.png";
 import calendar from "/src/assets/product/calendar.png";
 import delivery from "/src/assets/product/delivery-truck.png";
 import Rating from "../components/Rating";
+import Footer from "./Footer";
 
 const Product = () => {
   const [mainImage, setMainImage] = useState(null);
@@ -66,7 +67,8 @@ const Product = () => {
   }
 
   return (
-    <div>
+    <>
+    <div className="mt-12">
       {/* Product Images and Details */}
       <div className="min-h-screen bg-white p-8 flex flex-col lg:flex-row gap-10">
         <div>
@@ -273,6 +275,8 @@ const Product = () => {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 
