@@ -7,7 +7,7 @@ import Button from "./Button";
 
 const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
-  const { user } = useContext(userContext);
+  const { user ,setUser} = useContext(userContext);
   const navigate = useNavigate();
   const firstStyle ={
     padding:' 0.25rem .75rem',
@@ -19,12 +19,22 @@ const Navbar = () => {
   const CLick = ()=>{
     navigate('/login')
   }
+  const handleLogout=async()=>{
+    const response = await fetch("http://localhost:5000/api/user/logout",{
+      method:"post",
+      credentials:"include"
+    })
+    if(response.ok){
+      setUser(null)
+      localStorage.removeItem("user")
+    }
+  }
   const toggleSearch = () => {
     setShowSearch(!showSearch);
   };
 
   return (
-    <nav className="flex justify-between items-center px-6 md:px-10 py-4 text-white bg-transparent absolute top-0 z-50 w-full">
+    <nav className="flex justify-between items-center px-6 md:px-10 py-4 text-white bg-[rgba(0,0,0,0.3)] absolute top-0 z-50 w-full">
       <div className="text-2xl font-bold">RentItNow</div>
 
       {/* Desktop Links */}
@@ -38,6 +48,9 @@ const Navbar = () => {
         <a href="#contact" className="hover:text-gray-300">
           Contact
         </a>
+        {
+          user?.role==="Seller"?<a href="/dashboard">Dashboard</a>:""
+        }
       </div>
 
       <div className="flex items-center space-x-4">
@@ -59,6 +72,8 @@ const Navbar = () => {
         </Link>
         {
           user?<div className="w-10 h-10 rounded-full bg-[#ffffff]"></div>:<Button text={"Login"} style={firstStyle} Click={CLick}/>
+} {
+  user&&<Button text={"Logout"} style={firstStyle} Click={handleLogout}/>
 }
       </div>
 
