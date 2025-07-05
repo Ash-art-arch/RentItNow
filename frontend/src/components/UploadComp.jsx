@@ -207,11 +207,11 @@ const handleSubmit = async () => {
             </div>
 
             <div className="flex justify-end gap-4 pt-4">
-              <button className="bg-red-600 text-white px-6 py-2 rounded-full cursor-pointer">
+              <button className="bg-red-600 text-white px-6 py-2 rounded-full cursor-pointer shadow-2xs hover:bg-red-400" >
                 Cancel
               </button>
               <button
-                className="bg-yellow-400 text-black px-6 py-2 rounded-full cursor-pointer"
+                className="bg-yellow-400 text-black px-6 py-2 rounded-full cursor-pointer shadow-2xs hover:bg-yellow-300"
                 onClick={handleSubmit}
               >
                 Upload Product

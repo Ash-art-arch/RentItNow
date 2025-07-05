@@ -1,5 +1,6 @@
 const Item = require("../model/items.model");
 const cloudinary = require("cloudinary").v2;
+const User=require("../model/user.model")
 
 
 const streamUpload = (buffer) => {
@@ -42,6 +43,7 @@ exports.createItem = async (req, res) => {
     });
 
     const savedItem = await item.save();
+    await  User.findByIdAndUpdate(req.user.id, {$push:{itemsListed:savedItem._id}});
 
     res.status(201).json({
       message: "Item created successfully",
