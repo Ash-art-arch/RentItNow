@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import {
   LineChart,
   Line,
@@ -9,30 +10,29 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { name: "Jan", revenue: 2400 },
-  { name: "Feb", revenue: 1398 },
-  { name: "Mar", revenue: 9800 },
-  { name: "Apr", revenue: 3908 },
-  { name: "May", revenue: 4800 },
-  { name: "Jun", revenue: 3800 },
-  { name: "Jul", revenue: 4300 },
-  { name: "Aug", revenue: 4900 },
-  { name: "Sep", revenue: 6700 },
-];
-
 const RevenueChart = () => {
   const [showOptions, setShowOptions] = useState(false);
+  const [revenueData, setRevenueData] = useState([]);
 
   const toggleDropdown = () => {
     setShowOptions((prev) => !prev);
   };
 
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/stats/monthly-revenue")
+      .then((res) => setRevenueData(res.data))
+      .catch((err) => console.error("Failed to fetch revenue data:", err));
+  }, []);
+
+  const totalRevenue = revenueData.reduce((acc, cur) => acc + cur.revenue, 0);
+
   return (
     <div className="bg-white p-5 rounded-2xl shadow-md relative h-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
         <div>
-          <h2 className="text-xl font-semibold text-blue-800">$35.8K</h2>
+          <h2 className="text-xl font-semibold text-blue-800">
+            ${totalRevenue.toLocaleString()}
+          </h2>
           <p className="text-sm text-black">Overall Revenue</p>
         </div>
         <div className="relative">
@@ -57,7 +57,7 @@ const RevenueChart = () => {
 
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
+          <LineChart data={revenueData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />

@@ -1,4 +1,19 @@
-const StatsCard = () => (
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+const StatsCard = () => {
+  const [stats, setStats] = useState({
+    totalSales: 0,
+    totalUsers: 0,
+    totalProfit: 0,
+  });
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/stats/dashboard").then((res) => {
+      setStats(res.data);
+    });
+  }, []);
+  return (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
     <div className="bg-white p-5 rounded-2xl shadow-md">
       <div className="text-sm text-green-600 font-semibold">+2.3%</div>
@@ -17,5 +32,6 @@ const StatsCard = () => (
     </div>
   </div>
 );
+};
 
 export default StatsCard;
