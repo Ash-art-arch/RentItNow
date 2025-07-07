@@ -31,6 +31,7 @@ const ItemCard = ({ item }) => {
           src={item.images[0]}
           alt={item.name}
           className='w-full h-64 object-cover transition-transform duration-300 hover:scale-110'
+          onClick={handleCardClick}
         />
         <div>
         <button

@@ -33,7 +33,7 @@ const ServiceStats = () => {
 
   return (
     <div className="bg-gray-50 p-5 rounded-2xl shadow-md w-full h-full">
-      <LoadScript googleMapsApiKey="AIzaSyAuhQlUxjva9zuvptCq4VVp1LlrQ5hwJoA">
+    <LoadScript googleMapsApiKey={import.meta.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}

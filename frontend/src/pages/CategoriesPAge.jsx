@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import categoryImage from "../assets/category.svg"
 import Sidebar from './Sidebar'
 import CategoryCard from '../components/CategoryCard'
+import Loader from '../components/Loader'
 
 const CategoriesPage = () => {
   const [category, setCategory] = useState(null)
@@ -53,7 +54,12 @@ const CategoriesPage = () => {
   }, [sortOption, items])
 
   if (loading) {
-    return <div className='text-center text-xl p-20'>Loading...</div>
+    return(
+      <div className='w-screen h-screen flex items-center justify-center bg-black'>
+        <Loader/>
+
+      </div>
+    ) 
   }
 
   return (

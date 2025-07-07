@@ -9,11 +9,11 @@ export const HeroSection = () => {
   const {user} = useContext(userContext)
   const handleListButton = ()=>{
     console.log("Clicked")
-    if(!user){
+    if(!user || user.role!=="Seller"){
       navigate('/signUp?role=Seller')
     }
     else{
-      navigate('/')
+      navigate('/productupload')
     }
   }
   const handleBrowseButton = ()=>{

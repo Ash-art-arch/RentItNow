@@ -1,6 +1,6 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './App.css';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from './pages/LandingPage';
 import SignUpUser from './components/SignupUser';
 import {Provider} from 'react-redux';
@@ -16,40 +16,48 @@ import Dashboard from './pages/Dashboard.jsx';
 import ProductUpload from'./pages/ProductUpload.jsx';
 import CustomerResponse from './pages/CustomerResponse.jsx'
 import Settings from './pages/Settings.jsx'
+import Loader from './components/Loader.jsx';
 function App() {
   const { user, setUser } = useContext(userContext);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const response = await fetch("http://localhost:5000/api/user/profile", {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-      });
-
-      const data = await response.json();
-      console.log(data);
-
-      if (data.error) {
-        console.log("Token invalid or expired. Logging out.");
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+      try {
+        console.log("Fetching user profile...");
+        const response = await fetch("http://localhost:5000/api/user/profile", {
+          method: "get",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include"
+        });
+        const data = await response.json();
+        console.log(data);
+  
+        if (!response.ok) {
+          console.log("Token invalid or expired. Logging out.");
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          setUser(null);
+        } else {
+          setUser(data.user);
+          localStorage.setItem("user", JSON.stringify(data.user));
+        }
+      } catch (error) {
+        console.log("Profile fetch failed:", error);
         setUser(null);
-      } else {
-        setUser(data.user);
-        localStorage.setItem("user", JSON.stringify(data.user));
+      } finally {
+        setLoading(false);
       }
     };
-
-    if (!user) {
-      fetchProfile();
-    }
-  }, [user, setUser]);
+  
+    fetchProfile();
+  }, [setUser]);
+  
+  if(loading){
+    return(
+      <Loader/>
+    )
+  }
 
   return (
     <>
@@ -61,10 +69,11 @@ function App() {
         <Route path='/cart/payment' element={<PaymentPage />} />
         <Route path='/productpage' element={<ProductPage />} />
         <Route path='/categories' element={<CategoriesPage />} />
-         <Route path='/dashboard' element={<Dashboard />} />
-         <Route path='/productupload' element={<ProductUpload />} />
-          <Route path='/customerresponse' element={<CustomerResponse/>} />
+         <Route path='/dashboard' element={user?.role=="Seller"?<Dashboard />:<Navigate to={'/signup?role=Seller'}/>} />
+         <Route path='/productupload' element={user?.role=="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
+          <Route path='/customerresponse' element={user?.role=="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'}/>} />
           <Route path='/settings' element={<Settings/>}/>
+          <Route path='/Loader' element={<Loader/>}/>
       </Routes>
     </>
   );

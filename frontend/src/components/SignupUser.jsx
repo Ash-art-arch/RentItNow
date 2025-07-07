@@ -13,6 +13,9 @@ const SignUpUser = () => {
   useEffect(()=>{
     const urlParams = new URLSearchParams(window.location.search);
     const role = urlParams.get('role');
+    if(role===null) {
+      setRole("Buyer")
+    }
     setRole(role)
   })
   const handleSubmit=async(e)=>{

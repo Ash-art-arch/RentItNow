@@ -21,15 +21,49 @@ const UploadComp = () => {
   const removePhoto = (index) => {
     setPhotos((prev) => prev.filter((_, i) => i !== index));
   };
+const handleSubmit = async () => {
+  if (!termsAccepted) {
+    alert("Please accept the terms and conditions.");
+    return;
+  }
 
-  const handleSubmit = () => {
-    if (!termsAccepted) {
-      alert("Please accept the terms and conditions.");
-      return;
+
+
+  const formData = new FormData();
+  formData.append("name", productName);
+  formData.append("category", category);
+  formData.append("description", description);
+  formData.append("price", price);
+  formData.append("available", "true");
+  formData.append("ratings", "0");
+
+  photos.forEach((photo) => {
+    formData.append("items", photo);
+  });
+
+  try {
+    const res = await fetch("http://localhost:5000/api/items/add", {
+      method: "POST",
+     
+      credentials: "include", 
+      body: formData,
+     
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Product uploaded successfully!");
+    } else {
+      alert(data.message || "Upload failed");
     }
-   
-    console.log({ productName, category, description, price, discount, about });
-  };
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong");
+  }
+};
+
+
 
   return (
     <div className="min-h-screen bg-white p-8">
@@ -62,10 +96,10 @@ const UploadComp = () => {
                 onChange={(e) => setCategory(e.target.value)}
               >
                 <option value="">Select Category</option>
-                <option value="Furniture">Furniture</option>
-                <option value="Tools">Tools</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Clothes">Clothes</option>
+                <option value="6863c2e45c31a23b5f926ec2">Furniture</option>
+                <option value="6863c25c5c31a23b5f926ebc">Tools</option>
+                <option value="6863c1bc5c31a23b5f926eb4">Electronics</option>
+                <option value="6863c2195c31a23b5f926eb8">Clothes</option>
               </select>
             </div>
 
@@ -173,11 +207,11 @@ const UploadComp = () => {
             </div>
 
             <div className="flex justify-end gap-4 pt-4">
-              <button className="bg-red-600 text-white px-6 py-2 rounded-full cursor-pointer">
+              <button className="bg-red-600 text-white px-6 py-2 rounded-full cursor-pointer shadow-2xs hover:bg-red-400" >
                 Cancel
               </button>
               <button
-                className="bg-yellow-400 text-black px-6 py-2 rounded-full cursor-pointer"
+                className="bg-yellow-400 text-black px-6 py-2 rounded-full cursor-pointer shadow-2xs hover:bg-yellow-300"
                 onClick={handleSubmit}
               >
                 Upload Product
