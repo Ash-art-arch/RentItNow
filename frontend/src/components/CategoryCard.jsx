@@ -1,15 +1,29 @@
 import React from 'react';
 import Button from './Button';
 import { Link } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { addToCart } from '../Features/cartReducer';
 const CategoryCard = ({ item }) => {
+   const dispatch = useDispatch();
+   const handleAddToCart = () => {
+    console.log("adding to cart ", item);
+       dispatch(addToCart({
+         id: item._id,                    
+         title: item.name,
+         size: "Default Size",              
+         color: "Default Color",            
+         price: item.price,
+         image: item.images[0],
+       }));
+     };
   const firstStyle = {
     padding: "0.75rem 1.5rem",
     backgroundColor: "#262626",
     color: "white",
     borderRadius: ".5rem",
   };
-
+   
   const priceFormatted = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(item.price);
 
   return (
@@ -34,7 +48,7 @@ const CategoryCard = ({ item }) => {
 
       <div className='flex items-center justify-between mt-2 px-4 pb-4 gap-10'>
         <p className='text-gray-800 font-medium'>{priceFormatted}</p>
-        <Button text={"Add To Cart"} style={firstStyle} />
+        <Button  text={"Add To Cart"} style={firstStyle}  Click={handleAddToCart} />
       </div>
     </div>
   );

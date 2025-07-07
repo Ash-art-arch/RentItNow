@@ -7,13 +7,17 @@ import calendar from "/src/assets/product/calendar.png";
 import delivery from "/src/assets/product/delivery-truck.png";
 import Rating from "../components/Rating";
 import Footer from "./Footer";
-import Loader from "./Loader";
+import Loader from "./Loader";import { useDispatch } from "react-redux";
+import { addToCart } from "../Features/cartReducer"; 
+
 const Product = () => {
   const [mainImage, setMainImage] = useState(null);
   const [liked, setLiked] = useState(false);
   const rating = 5;
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     const id = window.location.search.split("=")[1];
@@ -66,7 +70,18 @@ const Product = () => {
     </div>
     );
   }
+const handleAddToCart = () => {
+  if (!item) return;
 
+  dispatch(addToCart({
+    id: item._id,
+    title: item.name,
+    price: item.price,
+    image: item.images[0],
+    color: "Color: Default", 
+    size: "Size: Default",   
+}));
+};
   return (
     <>
     <div className="mt-12">
@@ -139,7 +154,7 @@ const Product = () => {
           </div>
 
           <div className="flex gap-4">
-            <button className="mt-6 bg-black text-white px-6 py-3 rounded-full font-medium w-full hover:bg-gray-800">
+            <button onClick={handleAddToCart} className="mt-6 bg-black text-white px-6 py-3 rounded-full font-medium w-full hover:bg-gray-800">
               Add to Cart
             </button>
             <button

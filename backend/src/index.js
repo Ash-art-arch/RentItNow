@@ -5,7 +5,8 @@ const userRouter = require("./routes/user.route");
 const cookieParser= require("cookie-parser")
 const { default: mongoose } = require("mongoose");
 const categoryRouter = require("./routes/categories.route");
-const cartRoute = require("./routes/cart.route");const itemRouter = require("./routes/items.route");
+const cartRoute = require("./routes/cart.route");
+const itemRouter = require("./routes/items.route");
 dotenv.config();
 const app = express()
 app.use(cors({

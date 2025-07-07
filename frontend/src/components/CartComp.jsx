@@ -1,17 +1,61 @@
 import React from "react";
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, increaseQty, decreaseQty, removeItem } from "../Features/cartReducer";
+import { addToCart, increaseQty, decreaseQty, removeItem ,clearCart} from "../Features/cartReducer";
 import {syncCartToBackend} from "../utils/syncCart";
+import {loadCartFromBackend} from "../utils/loadCart";
 const CartComp = () => {
   const dispatch = useDispatch();
   
  const cartItems = useSelector((state) => state.cart.items);
 const totalPrice = useSelector((state) => state.cart.totalPrice);
+
+useEffect(() => {
+  console.log(" Redux cart items in CartComp:", cartItems);
+}, [cartItems]);
+
 const userId = localStorage.getItem("userId");
+  useEffect(() => {
+  const fetchCart = async () => {
+    if (userId) {
+          
+      try {
+        const backendCart = await loadCartFromBackend(userId);
+        
+console.log("Cart fetched from backend:", backendCart);
+        backendCart.forEach(item => {
+          if (item) {
+            dispatch(addToCart({
+              id: item.item._id || item.item,
+              title: item.item.name || "Product",
+              size: "Default Size",
+              color: "Default Color",
+              price: item.item.price || 0,
+              image: item.item.images?.[0] || "",
+              quantity: item.quantity || 1
+            }));
+            console.log(
+              "Item Added"
+            )
+          }
+        });
+        
+      } catch (e) {
+        console.error("Cart loading failed:", e.message);
+      }
+    }
+  };
+  fetchCart();
+}, [userId, dispatch]);
+console.log("Cart Items=>",cartItems)
 useEffect(() => {
     if (userId && cartItems.length > 0) {
-      syncCartToBackend(userId, cartItems);
+      const formattedCart  = cartItems.map((item) => ({
+        item: item.id ,
+        quantity: item.quantity,
+      }));
+      console.log("sync to backend", formattedCart);
+      syncCartToBackend(userId, formattedCart);
     }
   }, [cartItems, userId]);
   return (
@@ -27,7 +71,7 @@ useEffect(() => {
             <h3>Remove</h3>
           </div>
 
-          {cartItems.map((item) => (
+          {cartItems&&cartItems.map((item) => (
             <div
               key={item.id}
               className="grid grid-cols-[200px_1.5fr_1fr_1fr_40px] items-center gap-10 py-4 border-b "
