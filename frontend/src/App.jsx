@@ -115,18 +115,17 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUpUser />} />
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/cart/payment" element={<PaymentPage />} />
-        <Route path="/productpage" element={<ProductPage />} />
-        <Route path="/categories" element={<CategoriesPage />} />
-        <Route path="/dashboard" element={user?.role=="Seller"?<Dashboard />:<Navigate to={'/signup?role=Seller'}/>} />
-        <Route path="/productupload" element={user?.role=="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
-        <Route path="/customerresponse" element={user?.role=="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'} />} />
-        <Route path="/settings" element={<Settings />} />
-    
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<SignUpUser />} />
+        <Route path='/' element={<LandingPage />} />
+        <Route path='/cart' element={<Cart />} />
+        <Route path='/cart/payment' element={<PaymentPage />} />
+        <Route path='/productpage' element={<ProductPage />} />
+        <Route path='/categories' element={<CategoriesPage />} />
+        <Route path='/dashboard' element={user?.role=="Seller"?<Dashboard />:<Navigate to={'/signup?role=Seller'}/>} />
+        <Route path='/productupload' element={user?.role=="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
+        <Route path='/customerresponse' element={user?.role=="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'}/>} />
+        <Route path='/settings' element={<Settings/>}/>
       </Routes>
     </>
   );
