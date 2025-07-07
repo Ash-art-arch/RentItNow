@@ -7,7 +7,7 @@ import calendar from "/src/assets/product/calendar.png";
 import delivery from "/src/assets/product/delivery-truck.png";
 import Rating from "../components/Rating";
 import Footer from "./Footer";
-import Loader from "./Loader";import { useDispatch } from "react-redux";
+import Loader from "./Loader";import { useDispatch,useSelector } from "react-redux";
 import { addToCart } from "../Features/cartReducer"; 
 
 const Product = () => {
@@ -17,8 +17,8 @@ const Product = () => {
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-
-
+const [uploading ,setUploading] = useState(true)
+  const cartItems = useSelector((state)=>state.item)
   useEffect(() => {
     const id = window.location.search.split("=")[1];
     const fetchItems = async () => {
@@ -72,7 +72,7 @@ const Product = () => {
   }
 const handleAddToCart = () => {
   if (!item) return;
-
+  console.log(item._id)
   dispatch(addToCart({
     id: item._id,
     title: item.name,
@@ -81,6 +81,12 @@ const handleAddToCart = () => {
     color: "Color: Default", 
     size: "Size: Default",   
 }));
+const formattedCart  = cartItems.map((item) => ({
+  item: item.id ,
+  quantity: item.quantity,
+}));
+console.log("sync to backend", formattedCart);
+syncCartToBackend(userId, formattedCart);
 };
   return (
     <>

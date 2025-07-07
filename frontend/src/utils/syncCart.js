@@ -1,11 +1,12 @@
 import axios from "axios"
 export const syncCartToBackend = async (userId, reduxCartItems) => {
   try {
+    
     const cartPayload = reduxCartItems.map(item => ({
-      item: item.id, 
+      item: item.item, 
       quantity: item.quantity
     }));
-
+    console.log(cartPayload)
    const response =  await fetch(`http://localhost:5000/api/cart/${userId}`, {
     method: "POST",
     headers: {

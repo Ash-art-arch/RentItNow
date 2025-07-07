@@ -1,20 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, increaseQty, decreaseQty, removeItem ,clearCart} from "../Features/cartReducer";
 import {syncCartToBackend} from "../utils/syncCart";
 import {loadCartFromBackend} from "../utils/loadCart";
+import { userContext } from "../providers/userProviders";
 const CartComp = () => {
   const dispatch = useDispatch();
   
  const cartItems = useSelector((state) => state.cart.items);
 const totalPrice = useSelector((state) => state.cart.totalPrice);
-
+  const {user} = useContext(userContext)
 useEffect(() => {
-  console.log(" Redux cart items in CartComp:", cartItems);
+  console.log(" Redux cart items in CartComp:",cartItems);
 }, [cartItems]);
 
-const userId = localStorage.getItem("userId");
+const userId = user.id
+console.log(userId)
+console.log("UserID",userId)
   useEffect(() => {
   const fetchCart = async () => {
     if (userId) {
@@ -50,12 +53,15 @@ console.log("Cart fetched from backend:", backendCart);
 console.log("Cart Items=>",cartItems)
 useEffect(() => {
     if (userId && cartItems.length > 0) {
+      console.log("Reached Here")
+
       const formattedCart  = cartItems.map((item) => ({
         item: item.id ,
         quantity: item.quantity,
       }));
       console.log("sync to backend", formattedCart);
       syncCartToBackend(userId, formattedCart);
+      
     }
   }, [cartItems, userId]);
   return (
