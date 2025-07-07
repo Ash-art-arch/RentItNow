@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';w
+import { useContext, useEffect, useState } from 'react';
 import './App.css';
 import { Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from './pages/LandingPage';
@@ -13,6 +13,7 @@ import Dashboard from './pages/Dashboard.jsx';
 import ProductUpload from'./pages/ProductUpload.jsx';
 import CustomerResponse from './pages/CustomerResponse.jsx'
 import Settings from './pages/Settings.jsx'
+import Loader from './components/Loader';
 function App() {
   const { user, setUser } = useContext(userContext);
   const [loading, setLoading] = useState(true);
