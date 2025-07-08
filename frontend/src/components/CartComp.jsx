@@ -5,7 +5,8 @@ import { addToCart, increaseQty, decreaseQty, removeItem ,clearCart} from "../Fe
 import {syncCartToBackend} from "../utils/syncCart";
 import {loadCartFromBackend} from "../utils/loadCart";
 import { userContext } from "../providers/userProviders";
-const CartComp = () => {
+import { useNavigate } from "react-router-dom";
+const  CartComp = () => {
   const dispatch = useDispatch();
   
  const cartItems = useSelector((state) => state.cart.items);
@@ -26,6 +27,7 @@ console.log("UserID",userId)
         const backendCart = await loadCartFromBackend(userId);
         
 console.log("Cart fetched from backend:", backendCart);
+dispatch(clearCart())
         backendCart.forEach(item => {
           if (item) {
             dispatch(addToCart({
@@ -64,6 +66,10 @@ useEffect(() => {
       
     }
   }, [cartItems, userId]);
+  const navigate = useNavigate()
+  const handleCheckout=()=>{
+        navigate('/cart/payment')
+  }
   return (
     <div className="min-h-screen  p-8" style={{ backgroundColor: "rgba(0, 0, 0, 0.85)"}}>
       <div className="grid grid-cols-[3fr_1.3fr]  gap-8 bg-white rounded-md shadow p-6 mt-20 ">
@@ -131,7 +137,7 @@ useEffect(() => {
             <span>{totalPrice + 5}</span>
           </div>
 
-          <button className="w-full bg-black text-white py-2 rounded hover:bg-gray-900 mb-2">
+          <button className="w-full bg-black text-white py-2 rounded hover:bg-gray-900 mb-2" onClick={handleCheckout}>
             CHECK OUT
           </button>
 

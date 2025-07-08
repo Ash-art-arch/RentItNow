@@ -35,7 +35,7 @@ const SignUpUser = () => {
     })
     const data = await response.json()
     console.log(data)
-    if(data.error){
+    if(!response.ok){
       alert(data.error)
     }
     else{
