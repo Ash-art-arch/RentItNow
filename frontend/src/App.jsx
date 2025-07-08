@@ -13,6 +13,7 @@ import Dashboard from './pages/Dashboard.jsx';
 import ProductUpload from'./pages/ProductUpload.jsx';
 import CustomerResponse from './pages/CustomerResponse.jsx'
 import Settings from './pages/Settings.jsx'
+import ProductEdit from './pages/ProductEdit.jsx';
 function App() {
   const { user, setUser } = useContext(userContext);
 
@@ -62,6 +63,8 @@ function App() {
          <Route path='/productupload' element={<ProductUpload />} />
           <Route path='/customerresponse' element={<CustomerResponse/>} />
           <Route path='/settings' element={<Settings/>}/>
+          <Route path = '/productedit'element={<ProductEdit/>}/>
+           <Route path='/productedit/productupload' element={<ProductUpload />} />
       </Routes>
     </>
   );

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Menu, X, Home, Package, MessageSquare, Settings } from "lucide-react";
+import { Menu, X, Home, Package, MessageSquare, Settings, Package2, PackagePlusIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import Dashboard from "../pages/Dashboard";
 const DashboardHeader = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -56,28 +57,39 @@ const DashboardHeader = () => {
           </div>
           <ul className="p-6 space-y-6">
             <li className="flex items-center gap-3 hover:text-yellow-400 cursor-pointer">
-              <Link to="/Dashboard" className="flex items-center gap-3">
+              <Link to="/" className="flex items-center gap-3">
               <Home size={20} />
+              Home
+              </Link>
+            </li>
+             <li className="flex items-center gap-3 hover:text-yellow-400 cursor-pointer">
+              <Link to="/Dashboard" className="flex items-center gap-3">
+            <Home size={20} />
               Dashboard
               </Link>
             </li>
-          <li className="flex items-center gap-3 hover:text-yellow-400 cursor-pointer">
+            <li className="flex items-center gap-3 hover:text-yellow-400 cursor-pointer">
               <Link to="/ProductUpload" className="flex items-center gap-3">
               <Package size={20} />
               My Products
               </Link>
             </li>
             <li className="flex items-center gap-3 hover:text-yellow-400 cursor-pointer">
-              <Link to='/customerresponse' className="flex item-center gap-3">
+              <Link to='/productedit' className="flex item-center gap-3">
+              <PackagePlusIcon size={20} />
+              Edit Product
+              </Link>
+            </li>
+             <li className="flex items-center gap-3 hover:text-yellow-400 cursor-pointer">
+              <Link to='#feedback' className="flex item-center gap-3">
               <MessageSquare size={20} />
-              Customer Responses
+              Feedback
               </Link>
             </li>
             <li className="flex items-center gap-3 hover:text-yellow-400 cursor-pointer">
               <Link to='/settings' className="flex item-center gap-3">
               <Settings size={20} />
-              Settings</Link>
-              
+              Settings</Link>    
             </li>
           </ul>
         </div>

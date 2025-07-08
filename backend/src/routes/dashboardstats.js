@@ -1,9 +1,15 @@
-const express = require("express");
-const router = express.Router();
-const Order = require("../model/order.model");
-const User = require("../model/user.model"); 
 
-router.get("/dashboard", async (req, res) => {
+const { Router } = require("express");
+const { createOrderHandler, getDashboardStatsHandler } = require("../controllers/dashboard.controller.js");
+
+
+const dashboardRouter = Router();
+
+dashboardRouter.post("/order", createOrderHandler);
+dashboardRouter.get("/dashboard", getDashboardStatsHandler);
+
+module.exports = dashboardRouter;
+/*router.get("/dashboard", async (req, res) => {
   try {
     //const orders = await Order.find({ status: { $in: ["Approved", "Complete"] } });
     const orders = await Order.find();
@@ -25,3 +31,16 @@ router.get("/dashboard", async (req, res) => {
 });
 
 module.exports = router;
+
+const { Router } = require("express");
+const { createOrderHandler, getDashboardStatsHandler } = require("../controller/dashboardController.js");
+
+const dashboardRouter = Router();
+
+dashboardRouter.post("/order", createOrderHandler); // store data from frontend
+dashboardRouter.get("/dashboard", getDashboardStatsHandler); // fetch for stats card
+
+module.exports = dashboardRouter;*/
+// dashboardstats.js
+
+

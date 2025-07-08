@@ -1,10 +1,9 @@
-import DashboardHeader from "../components/DashboardHeader"
-
+import Navbar from "../components/Navbar"
 import CustomerResponseComp from "../components/CustomerResponseComp"
 const CustomerResponse = () => {
   return (
     <div>
-      <DashboardHeader/>
+      <Navbar/>
       <CustomerResponseComp/>
     
     </div>
