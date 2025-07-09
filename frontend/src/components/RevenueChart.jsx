@@ -62,7 +62,7 @@ const data = [
 
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={revenueData}>
+          <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />

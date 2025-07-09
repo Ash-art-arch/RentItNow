@@ -83,13 +83,16 @@ exports.getItemById = async (req, res) => {
 
 exports.getSellerItems = async (req, res) => {
   try {
-    const sellerId = req.user._id; 
-    const items = await Item.find({ owner: sellerId }) 
+    const sellerId = req.user.id;
+    console.log("Fetching items for seller:", sellerId); 
+    const items = await Item.find({ owner: sellerId })
       .populate("category", "name")
       .populate("owner", "name email");
 
+    console.log("Items fetched:", items); 
     res.status(200).json(items);
   } catch (err) {
+    console.error("Error in getSellerItems:", err);
     res.status(500).json({ error: err.message });
   }
 };

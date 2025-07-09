@@ -14,10 +14,9 @@ const Editproduct = () => {
   const fetchSellerItems = async () => {
     try {
       const res = await axios.get('/api/items/my-items', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+  withCredentials: true,
+});
+
 
       console.log("Fetched items from backend:", res.data);
         if (!Array.isArray(res.data)) {
@@ -31,7 +30,7 @@ const Editproduct = () => {
         price: `$${item.price}`,
         likes: item.likes || '0',
         status: item.status || 'Active',
-        image: item.imageUrl || 'src/assets/cam.png',
+        image: item.images[0] || 'src/assets/cam.png',
       }));
 
       setProducts(formattedItems);
