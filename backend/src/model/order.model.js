@@ -5,9 +5,9 @@ const orderSchema = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
     },
-    itemId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Items"
+    items:{
+        type:Array,
+        required:true
     },
     startDate:{
         type:Date,
@@ -17,10 +17,10 @@ const orderSchema = mongoose.Schema({
         type:Date,
         required:true
     },
-    sellerId:{
+    sellerId:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
-    },
+    }],
     totalPrice:{
         type:Number,
         required:true
@@ -39,14 +39,14 @@ const orderSchema = mongoose.Schema({
     },
     paymentInfo:{
         id:String,
-        status:String
     },
     isPaid:{
         type:Boolean,
         default:false
     },
-    paidAt:Date
+    paidDate:Date
 },{timestamps:true})
+
 
 const orderModel = mongoose.model("Order",orderSchema)
 

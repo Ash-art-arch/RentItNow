@@ -9,7 +9,6 @@ import PaymentPage from './pages/PaymentPage';
 import ProductPage from './pages/ProductPage';
 import CategoriesPage from './pages/CategoriesPAge';
 import Dashboard from './pages/Dashboard.jsx';
-<<<<<<< HEAD
 import ProductUpload from './pages/ProductUpload.jsx';
 import CustomerResponse from './pages/CustomerResponse.jsx';
 import Settings from './pages/Settings.jsx';
@@ -20,12 +19,6 @@ import { addToCart } from './Features/cartReducer';
 import { loadCartFromBackend } from './utils/loadCart';
 
 
-=======
-import ProductUpload from'./pages/ProductUpload.jsx';
-import CustomerResponse from './pages/CustomerResponse.jsx'
-import Settings from './pages/Settings.jsx'
-import Loader from './components/Loader';
->>>>>>> ea2da2736773c0627313b9d6e2cb825712225345
 function App() {
   const { user, setUser } = useContext(userContext);
   const [loading, setLoading] = useState(true);
@@ -133,6 +126,7 @@ function App() {
         <Route path='/productupload' element={user?.role=="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/customerresponse' element={user?.role=="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/settings' element={<Settings/>}/>
+        <Route path='/success' element={<div>Success</div>}/>
       </Routes>
     </>
   );

@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { addToCart, clearCart, } from "../Features/cartReducer";
 import {  userContext } from "../providers/userProviders";
 import { loadCartFromBackend } from "../utils/loadCart";
+import { useNavigate } from "react-router-dom";
 const Payment = () => {
   const [State, setState] = useState(1);
   const [submit, setSubmit] = useState(false);
@@ -14,6 +15,16 @@ const dispatch = useDispatch()
   const totalPrice = useSelector((state)=>state.cart.totalPrice)
   const { user } = useContext(userContext)
   const userId = user.id
+  const [street,setStreet] = useState("")
+  const [city,setCity] = useState("")
+  const [country,setCountry] = useState("")
+  const [stateName,setStateName] = useState("")
+  const [startDate,setStartDate]  = useState("")
+  const [endDate,setEndDate]  = useState("")
+
+  const [pincode,setPinCode] = useState(null);
+  const [method,setMethod] = useState("stripe")
+ const navigate = useNavigate()
   useEffect(() => {
     const fetchCart = async () => {
       if (userId) {
@@ -47,6 +58,51 @@ const dispatch = useDispatch()
     };
     fetchCart();
   }, [userId, dispatch]);
+
+
+const handlePayment=async ()=>{
+  const userData ={
+    userId:userId,
+    items:cartItems,
+    startDate:startDate,
+    endDate:endDate,
+    address:{
+      street,
+      city,
+      stateName, 
+      pincode,
+      country   
+    },
+    totalPrice:totalPrice
+  }
+  console.log("userData =>",userData)
+  switch(method){
+    case "stripe":
+      const response = await fetch("http://localhost:5000/api/order/paymentStripe",{
+        method:"post",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body:JSON.stringify(userData),
+        credentials:"include" 
+      })
+      const data =await response.json()
+      if(data.success){
+        const {session_url} = data
+        window.location.replace(session_url)
+      }
+      else{
+        alert(data.error)
+      }
+  
+  }
+}
+
+
+
+
+
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 text-gray-800 font-sans">
       <div className="w-full lg:w-2/3 p-6 sm:p-8 md:p-10 lg:p-12 bg-stone-200">
@@ -65,26 +121,26 @@ const dispatch = useDispatch()
           >
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <input type="text" required placeholder="Address" className="w-full sm:w-2/3 border-b p-2 outline-none" />
+              <input type="text" required placeholder="Address" className="w-full sm:w-2/3 border-b p-2 outline-none" value={street} onChange={(e)=>{setStreet(e.target.value)}}/>
               <input type="text" placeholder="Apt, suite, etc. (optional)" className="w-full sm:w-1/3 border-b p-2 outline-none" />
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <input type="text" required placeholder="City" className="w-full sm:w-1/3 border-b p-2 outline-none" />
-              <input type="text" required placeholder="Country" className="w-full sm:w-1/3 border-b p-2 outline-none" />
-              <input type="text" required placeholder="State" className="w-full sm:w-1/3 border-b p-2 outline-none" />
+              <input type="text" required placeholder="City" className="w-full sm:w-1/3 border-b p-2 outline-none" value={city} onChange={(e)=>{setCity(e.target.value)}}/>
+              <input type="text" required placeholder="Country" className="w-full sm:w-1/3 border-b p-2 outline-none" value={country} onChange={(e)=>{setCountry(e.target.value)}}/>
+              <input type="text" required placeholder="State" className="w-full sm:w-1/3 border-b p-2 outline-none" value={stateName} onChange={(e)=>{setStateName(e.target.value)}}/>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <input type="text" required placeholder="Zip Code" className="w-full sm:w-1/3 border-b p-2 outline-none" />
+              <input type="text" required placeholder="Zip Code" className="w-full sm:w-1/3 border-b p-2 outline-none" value={pincode} onChange={(e)=>{setPinCode(e.target.value)}} />
               <input type="email" required placeholder="Email" className="w-full sm:w-1/3 border-b p-2 outline-none" />
               <input type="text" required placeholder="Phone" className="w-full sm:w-1/3 border-b p-2 outline-none" />
             </div>
             <div className="flex flex-col sm:flex-row gap-4 items-center">
               <label htmlFor="startDate">Start Date</label>
-              <input type="date" required placeholder="Start Date" className="w-full sm:w-1/3 border-b p-2 outline-none" />
+              <input type="date" required placeholder="Start Date" className="w-full sm:w-1/3 border-b p-2 outline-none" value={startDate} onChange={(e)=>{setStartDate(e.target.value)}}/>
               <label htmlFor="startDate">End Date</label>
-              <input type="date" required placeholder="End Date" className="w-full sm:w-1/3 border-b p-2 outline-none" />
+              <input type="date" required placeholder="End Date" className="w-full sm:w-1/3 border-b p-2 outline-none" value={endDate} onChange={(e)=>{setEndDate(e.target.value)}} />
             </div>
             <p className="text-sm text-gray-500 mt-4">
               Your privacy is important to us. We will only contact you if there is an issue with your order.
@@ -127,10 +183,10 @@ const dispatch = useDispatch()
             <div>
               <p className="text-sm font-semibold text-gray-700 mb-2">Or pay with:</p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="flex-1 border h-[60px] rounded-xl flex justify-center items-center hover:bg-gray-100 transition">
+                <button className="flex-1 border h-[60px] rounded-xl flex justify-center items-center hover:bg-gray-100 transition" onClick={(e)=>{setMethod("stripe")}}>
                   <img src={upi} alt="UPI" className="h-[40px] w-[40px]" />
                 </button>
-                <button className="flex-1 border h-[60px] rounded-xl flex justify-center items-center hover:bg-gray-100 transition">
+                <button className="flex-1 border h-[60px] rounded-xl flex justify-center items-center hover:bg-gray-100 transition" onClick={(e)=>{setMethod("razorpay")}}>
                   <img src={gpay} alt="GPay" className="h-[30px] w-[60px]" />
                 </button>
               </div>
@@ -139,6 +195,7 @@ const dispatch = useDispatch()
             <button
               type="submit"
               className="w-full bg-black text-white py-3 rounded-xl hover:bg-neutral-700 transition mt-4"
+              onClick={handlePayment}
             >
               CONTINUE TO REVIEW
             </button>

@@ -8,6 +8,7 @@ const categoryRouter = require("./routes/categories.route");
 const cartRoute = require("./routes/cart.route");
 const itemRouter = require("./routes/items.route");
 const dashboardRouter = require( "./routes/dashboardstats.js");
+const orderRouter = require("./routes/order.route.js");
 dotenv.config();
 const app = express()
 app.use(cors({
@@ -22,6 +23,7 @@ app.use('/api/categories',categoryRouter)
 app.use('/api/cart', cartRoute)
 app.use('/api/items',itemRouter)
 app.use('/api/dashboard',dashboardRouter)
+app.use('/api/order',orderRouter)
 
 app.listen(5000,()=>{
     console.log("Server Running At port 5000")

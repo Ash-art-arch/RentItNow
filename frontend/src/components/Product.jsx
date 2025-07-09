@@ -19,6 +19,11 @@ const Product = () => {
   const dispatch = useDispatch();
 const [uploading ,setUploading] = useState(true)
   const cartItems = useSelector((state)=>state.item)
+
+
+
+
+
   useEffect(() => {
     const id = window.location.search.split("=")[1];
     const fetchItems = async () => {
