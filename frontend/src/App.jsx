@@ -14,6 +14,7 @@ import ProductUpload from'./pages/ProductUpload.jsx';
 import CustomerResponse from './pages/CustomerResponse.jsx'
 import Settings from './pages/Settings.jsx'
 import Loader from './components/Loader';
+import Success from './pages/SuccessPage.jsx';
 function App() {
   const { user, setUser } = useContext(userContext);
   const [loading, setLoading] = useState(true);
@@ -70,6 +71,7 @@ function App() {
         <Route path='/productupload' element={user?.role=="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/customerresponse' element={user?.role=="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/settings' element={<Settings/>}/>
+        <Route path='/Success' element={<Success/>}/>
       </Routes>
     </>
   );
