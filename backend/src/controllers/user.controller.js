@@ -36,7 +36,7 @@ const signInHandler=async (req,res)=>{
 
 const loginHandler = async (req,res)=>{
   const {email,password} = req.body
-  if(!email&&!password){
+  if(!email || !password){
     res.status(400).json({
       message:"Please provide email and password"
     })
@@ -59,16 +59,18 @@ const loginHandler = async (req,res)=>{
     return res.json({
       message:"Login success",
       user:{
+        _id: user.id,
         name:user.name,
         email:user.email,
         phoneNo:user.phoneNo,
         role:user.role
       },
+      token: token
     })
   }
   catch(e){
-    console.log(e)
-    res.status(500).json({
+    console.log(e);
+    return res.status(500).json({
       message:"Server error"
     })
   }

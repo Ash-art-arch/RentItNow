@@ -1,5 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import './design.css'; 
+import {useState} from 'react';
+import axios from 'axios';
 import loginImage from '../assets/login.png'; 
 import googleImage from "../assets/google.png";
 import { userContext } from '../providers/userProviders';
@@ -21,6 +23,7 @@ const Login = () => {
       body: JSON.stringify({ email, password }),
     });
   const data = await response.json();
+    console.log("Login response:", data);
   if(!response.ok){
     alert("Login Unsuccesful")
   }
@@ -28,6 +31,7 @@ const Login = () => {
     setUser(data.user)
     console.log("Login Done")
     localStorage.setItem("user",JSON.stringify(data.user))
+    localStorage.setItem("userId", data.user._id)
     navigate("/")
   }
   }

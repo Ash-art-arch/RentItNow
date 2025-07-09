@@ -1,11 +1,24 @@
 import React, { useState } from 'react';
 import Button from './Button';
 import Rating from './Rating';
+import {useDispatch} from 'react-redux';
+import { addToCart } from '../Features/cartReducer';
 import { useNavigate } from 'react-router-dom';
 import {FaHeart,FaRegHeart} from 'react-icons/fa'
 const ItemCard = ({ item }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isWishlisted,setIsWishlisted] = useState(false)
+  const handleAddToCart = () => {
+    dispatch(addToCart({
+      id: item._id,                    
+      title: item.name,
+      size: "Default Size",              
+      color: "Default Color",            
+      price: item.price,
+      image: item.images[0],
+    }));
+  };
   const handleCardClick = () => {
     navigate(`/productpage?id=${item._id}`);
   };
@@ -65,7 +78,7 @@ const ItemCard = ({ item }) => {
       </p>
       <div className='w-full mt-4 flex flex-row md:flex-row  justify-between items-center gap-2 md:gap-4 p-2'>
         <Button text={"Rent It"} style={firstStyle} />
-        <Button text={"Add to Cart"} style={firstStyle} />
+        <Button text={"Add to Cart"} style={firstStyle} Click={handleAddToCart} />
       </div>
     </div>
   );

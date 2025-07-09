@@ -4,13 +4,16 @@ import './index.css'
 import App from './App.jsx'
 import {BrowserRouter} from "react-router-dom"
 import 'remixicon/fonts/remixicon.css'
+import {Provider} from 'react-redux';
+import store from './Features/store';
 import {UserProvider} from './providers/userProviders.jsx'
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
     <UserProvider>
     <BrowserRouter>
+    <Provider store = {store}>
     <App />
+    </Provider>
     </BrowserRouter>
     </UserProvider>
-  </StrictMode>,
-)
+
+);

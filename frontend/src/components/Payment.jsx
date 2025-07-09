@@ -1,39 +1,52 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import upi from "/src/assets/Cart/UPI.webp";
 import gpay from "/src/assets/Cart/G-pay.png";
-
+import {useDispatch, useSelector} from 'react-redux'
+import { addToCart, clearCart, } from "../Features/cartReducer";
+import {  userContext } from "../providers/userProviders";
+import { loadCartFromBackend } from "../utils/loadCart";
 const Payment = () => {
   const [State, setState] = useState(1);
   const [submit, setSubmit] = useState(false);
-
-  const cartItems = [
-    {
-      id: 1,
-      title: "Breathable skin sport vest",
-      size: "Size S",
-      color: "Color: Pink",
-      price: 39.0,
-      image: "/src/assets/Cart/camera.jpg",
-    },
-    {
-      id: 2,
-      title: "Breathable skin sport vest",
-      size: "Size S",
-      color: "Color: Red",
-      price: 39.0,
-      image: "/src/assets/Cart/camera.jpg",
-    },
-    {
-      id: 3,
-      title: "Breathable skin sport vest",
-      size: "Size S",
-      color: "Color: Black",
-      price: 39.0,
-      image: "/src/assets/Cart/camera.jpg",
-    },
-  ];
-
+const dispatch = useDispatch()
+  const cartItems = useSelector((state)=>state.cart.items)
+  const totalPrice = useSelector((state)=>state.cart.totalPrice)
+  const { user } = useContext(userContext)
+  const userId = user.id
+  useEffect(() => {
+    const fetchCart = async () => {
+      if (userId) {
+            
+        try {
+          const backendCart = await loadCartFromBackend(userId);
+          
+  console.log("Cart fetched from backend:", backendCart);
+  dispatch(clearCart())
+          backendCart.forEach(item => {
+            if (item) {
+              dispatch(addToCart({
+                id: item.item._id || item.item,
+                title: item.item.name || "Product",
+                size: "Default Size",
+                color: "Default Color",
+                price: item.item.price || 0,
+                image: item.item.images?.[0] || "",
+                quantity: item.quantity || 1
+              }));
+              console.log(
+                "Item Added"
+              )
+            }
+          });
+          
+        } catch (e) {
+          console.error("Cart loading failed:", e.message);
+        }
+      }
+    };
+    fetchCart();
+  }, [userId, dispatch]);
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 text-gray-800 font-sans">
       <div className="w-full lg:w-2/3 p-6 sm:p-8 md:p-10 lg:p-12 bg-stone-200">
@@ -50,10 +63,6 @@ const Payment = () => {
               setSubmit(true);
             }}
           >
-            <div className="flex flex-col sm:flex-row gap-4">
-              <input type="text" required placeholder="First Name" className="w-full sm:w-1/2 border-b p-2 outline-none" />
-              <input type="text" required placeholder="Last Name" className="w-full sm:w-1/2 border-b p-2 outline-none" />
-            </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <input type="text" required placeholder="Address" className="w-full sm:w-2/3 border-b p-2 outline-none" />
@@ -71,7 +80,12 @@ const Payment = () => {
               <input type="email" required placeholder="Email" className="w-full sm:w-1/3 border-b p-2 outline-none" />
               <input type="text" required placeholder="Phone" className="w-full sm:w-1/3 border-b p-2 outline-none" />
             </div>
-
+            <div className="flex flex-col sm:flex-row gap-4 items-center">
+              <label htmlFor="startDate">Start Date</label>
+              <input type="date" required placeholder="Start Date" className="w-full sm:w-1/3 border-b p-2 outline-none" />
+              <label htmlFor="startDate">End Date</label>
+              <input type="date" required placeholder="End Date" className="w-full sm:w-1/3 border-b p-2 outline-none" />
+            </div>
             <p className="text-sm text-gray-500 mt-4">
               Your privacy is important to us. We will only contact you if there is an issue with your order.
             </p>
@@ -138,15 +152,15 @@ const Payment = () => {
         <h3 className="text-lg font-semibold mb-4">SUMMARY</h3>
         <div className="flex justify-between py-1">
           <span>Subtotal</span>
-          <span>$117</span>
+          <span>{totalPrice}</span>
         </div>
         <div className="flex justify-between py-1 border-b pb-2">
-          <span>International Shipping</span>
-          <span>$10</span>
+          <span>Shipping</span>
+          <span>$5</span>
         </div>
         <div className="flex justify-between font-bold text-xl py-4">
           <span>Total</span>
-          <span>$127</span>
+          <span>{totalPrice+5}</span>
         </div>
         <h4 className="text-md font-semibold mb-4 mt-15">IN YOUR CART</h4>
         <div className="space-y-4">
@@ -161,7 +175,7 @@ const Payment = () => {
                 <h5 className="font-medium text-sm sm:text-base">{item.title}</h5>
                 <p className="text-xs sm:text-sm text-gray-600">{item.color}</p>
                 <p className="text-xs sm:text-sm text-gray-600">
-                  {item.size} | Qty: 1
+                  {`Qty:${item.quantity}`||"Qty:1"} 
                 </p>
                 <p className="text-sm font-semibold">${item.price.toFixed(2)}</p>
               </div>

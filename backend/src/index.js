@@ -5,6 +5,7 @@ const userRouter = require("./routes/user.route");
 const cookieParser= require("cookie-parser")
 const { default: mongoose } = require("mongoose");
 const categoryRouter = require("./routes/categories.route");
+const cartRoute = require("./routes/cart.route");
 const itemRouter = require("./routes/items.route");
 const dashboardRouter = require( "./routes/dashboardstats.js");
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(express.json())
 
 app.use('/api/user',userRouter)
 app.use('/api/categories',categoryRouter)
+app.use('/api/cart', cartRoute)
 app.use('/api/items',itemRouter)
 app.use('/api/dashboard',dashboardRouter)
 

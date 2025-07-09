@@ -8,35 +8,50 @@ import Cart from './pages/Cart';
 import PaymentPage from './pages/PaymentPage';
 import ProductPage from './pages/ProductPage';
 import CategoriesPage from './pages/CategoriesPAge';
-import { userContext } from './providers/userProviders';
 import Dashboard from './pages/Dashboard.jsx';
-import ProductUpload from'./pages/ProductUpload.jsx';
-import CustomerResponse from './pages/CustomerResponse.jsx'
-import Settings from './pages/Settings.jsx'
-import Loader from './components/Loader';
+import ProductUpload from './pages/ProductUpload.jsx';
+import CustomerResponse from './pages/CustomerResponse.jsx';
+import Settings from './pages/Settings.jsx';
+import Loader from'./components/Loader.jsx';
+import { userContext } from './providers/userProviders';
+import { useDispatch } from 'react-redux';
+import { addToCart } from './Features/cartReducer';
+import { loadCartFromBackend } from './utils/loadCart';
 import Success from './pages/SuccessPage.jsx';
+
 function App() {
   const { user, setUser } = useContext(userContext);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
+  
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, [setUser]);
+
+ 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        console.log("Fetching user profile...");
-        const response = await fetch("http://localhost:5000/api/user/profile", {
-          method: "get",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include"
+        const res = await fetch("http://localhost:5000/api/user/profile", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            
+          },
+          credentials:"include"
         });
-        const data = await response.json();
-        console.log(data);
-  
-        if (!response.ok) {
+
+         if (!res.ok) {
           console.log("Token invalid or expired. Logging out.");
           localStorage.removeItem("token");
           localStorage.removeItem("user");
           setUser(null);
         } else {
+          const data = await res.json();
           setUser(data.user);
           localStorage.setItem("user", JSON.stringify(data.user));
         }
@@ -50,13 +65,53 @@ function App() {
   
     fetchProfile();
   }, [setUser]);
-  
+ 
+
+ 
+  useEffect(() => {
+    const loadUserCart = async () => {
+      console.log("user", user);
+      if (!user || !user._id) return;
+
+      try {
+        const cartData = await loadCartFromBackend(user._id);
+        console.log("cartdata", cartData);
+        if (cartData?.length) {
+          cartData.forEach(item => {
+            if (item && item.item)  {
+    console.log("🧩 Dispatching addToCart for item:", {
+      id: item.item._id,
+      title: item.item.name,
+      quantity: item.quantity
+    });
+            
+              dispatch(addToCart({
+                id: item.item._id || item.item,
+                title: item.item.name || "Product",
+                size: "Default Size",
+                color: "Default Color",
+                price: item.item.price || 0,
+                image: item.item.images?.[0] || "",
+                quantity: item.quantity || 1
+              
+              }));
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Failed to load cart on app start:", err.message);
+      }
+    };
+
+    loadUserCart();
+  }, [dispatch, user]);
+
   if(loading){
     return(
-      <Loader/>
+     <Loader/>
     )
   }
-
+  
   return (
     <>
       <Routes>
@@ -78,3 +133,4 @@ function App() {
 }
 
 export default App;
+
