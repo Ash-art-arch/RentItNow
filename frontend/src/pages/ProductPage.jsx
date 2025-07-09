@@ -8,8 +8,9 @@ const ProductPage = () => {
     <div>
         <Navbar/>
         <Product/>
-        <Footer/>
+       
     </div>
+
   )
 }
 

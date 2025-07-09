@@ -1,46 +1,29 @@
-
 const { Router } = require("express");
-const { createOrderHandler, getDashboardStatsHandler } = require("../controllers/dashboard.controller.js");
-
+const {
+  createOrderHandler,
+  getDashboardStatsHandler
+} = require("../controllers/dashboard.controller.js");
+const protectedRoute = require("../middlewares/auth.middleware.js");
 
 const dashboardRouter = Router();
 
-dashboardRouter.post("/order", createOrderHandler);
-dashboardRouter.get("/dashboard", getDashboardStatsHandler);
 
-module.exports = dashboardRouter;
-/*router.get("/dashboard", async (req, res) => {
-  try {
-    //const orders = await Order.find({ status: { $in: ["Approved", "Complete"] } });
-    const orders = await Order.find();
-
-    const totalSales = orders.length;
-
-    const totalProfit = orders.reduce((sum, order) => sum + order.totalPrice * 0.1, 0); 
-    const totalRevenue = orders.reduce((sum, order) => sum + order.totalPrice, 0);
-
-    const renters = await Order.distinct("renterId");
-    const totalUsers = renters.length;
-
-   res.json({ totalSales, totalUsers, totalProfit, totalRevenue });
-    //res.json({totalSales: 12,totalUsers: 5,totalProfit: 3201.98, totalRevenue: 15600});
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server Error" });
+dashboardRouter.post(
+  "/add",
+  protectedRoute,
+  (req, res) => {
+    if (!req.user || req.user.role !== "Seller") {
+      return res.status(403).json({ message: "Only sellers can add items" });
+    }
+    createOrderHandler(req, res);
   }
+);
+
+
+dashboardRouter.get("/get", protectedRoute, (req, res) => {
+  
+  req.query.sellerId = req.user.id;
+  getDashboardStatsHandler(req, res);
 });
 
-module.exports = router;
-
-const { Router } = require("express");
-const { createOrderHandler, getDashboardStatsHandler } = require("../controller/dashboardController.js");
-
-const dashboardRouter = Router();
-
-dashboardRouter.post("/order", createOrderHandler); // store data from frontend
-dashboardRouter.get("/dashboard", getDashboardStatsHandler); // fetch for stats card
-
-module.exports = dashboardRouter;*/
-// dashboardstats.js
-
-
+module.exports = dashboardRouter;

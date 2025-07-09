@@ -10,7 +10,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const RevenueChart = () => {
+
+const RevenueChart = ({totalRevenue}) => {
   const [showOptions, setShowOptions] = useState(false);
   const [revenueData, setRevenueData] = useState([]);
 
@@ -18,21 +19,25 @@ const RevenueChart = () => {
     setShowOptions((prev) => !prev);
   };
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/stats/monthly-revenue")
-      .then((res) => setRevenueData(res.data))
-      .catch((err) => console.error("Failed to fetch revenue data:", err));
-  }, []);
 
-  const totalRevenue = revenueData.reduce((acc, cur) => acc + cur.revenue, 0);
+const data = [
+  { name: "Jan", revenue: totalRevenue * 0.05 },
+  { name: "Feb", revenue: totalRevenue * 0.07 },
+  { name: "Mar", revenue: totalRevenue * 0.08 },
+  { name: "Apr", revenue: totalRevenue * 0.1 },
+  { name: "May", revenue: totalRevenue * 0.1 },
+  { name: "Jun", revenue: totalRevenue * 0.15 },
+  { name: "Jul", revenue: totalRevenue * 0.13 },
+  { name: "Aug", revenue: totalRevenue * 0.1 },
+  { name: "Sep", revenue: totalRevenue * 0.22 },
+];
+
 
   return (
     <div className="bg-white p-5 rounded-2xl shadow-md relative h-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
         <div>
-          <h2 className="text-xl font-semibold text-blue-800">
-            ${totalRevenue.toLocaleString()}
-          </h2>
+          <h2 className="text-xl font-semibold text-blue-800">$ ₹{(totalRevenue || NaN).toLocaleString()}</h2>
           <p className="text-sm text-black">Overall Revenue</p>
         </div>
         <div className="relative">

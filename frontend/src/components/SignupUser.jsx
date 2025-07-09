@@ -13,6 +13,9 @@ const SignUpUser = () => {
   useEffect(()=>{
     const urlParams = new URLSearchParams(window.location.search);
     const role = urlParams.get('role');
+    if(role===null) {
+      setRole("Buyer")
+    }
     setRole(role)
   })
   const handleSubmit=async(e)=>{
@@ -32,7 +35,7 @@ const SignUpUser = () => {
     })
     const data = await response.json()
     console.log(data)
-    if(data.error){
+    if(!response.ok){
       alert(data.error)
     }
     else{
@@ -48,9 +51,11 @@ const SignUpUser = () => {
       <div className="right">
         <div id="ti">
         <h1 className="title">
-          Sign up <span className="dot">.</span><h1 id="se">(As {role} )</h1>
+          Sign up <span className="dot">.</span>
+          </h1>
+          <h1 id="se">(As {role} )</h1>
          
-        </h1>
+        
         
 </div>
         <form className="form1" onSubmit={handleSubmit}>

@@ -1,44 +1,35 @@
-// 🔁 Declare this ONCE, outside the functions
-const orders = [];
+const mongoose = require("mongoose");
+const Order = require("../model/order.model.js");
+
 
 const createOrderHandler = async (req, res) => {
   try {
-    const incomingData = req.body;
+    const {
+      renterId,
+      itemId,
+      sellerId,
+      startDate,
+      endDate,
+      totalPrice,
+      status
+    } = req.body;
 
-    if (Array.isArray(incomingData)) {
-      incomingData.forEach((order, index) => {
-        const { renterId, itemId, sellerId, startDate, endDate, totalPrice, status } = order;
-
-        if (!renterId || !itemId || !sellerId || !startDate || !endDate || !totalPrice) {
-          throw new Error(`Missing required fields in order at index ${index}`);
-        }
-
-        orders.push({
-          id: orders.length + 1,
-          renterId,
-          itemId,
-          sellerId,
-          startDate,
-          endDate,
-          totalPrice,
-          status: status || "Pending",
-          isPaid: true,
-          paidAt: new Date()
-        });
-      });
-
-      return res.status(201).json({ message: "Multiple orders added", total: incomingData.length });
-    }
-
-    // Fallback for single order
-    const { renterId, itemId, sellerId, startDate, endDate, totalPrice, status } = incomingData;
-
+    
     if (!renterId || !itemId || !sellerId || !startDate || !endDate || !totalPrice) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    const order = {
-      id: orders.length + 1,
+    
+    if (
+      !mongoose.Types.ObjectId.isValid(renterId) ||
+      !mongoose.Types.ObjectId.isValid(itemId) ||
+      !mongoose.Types.ObjectId.isValid(sellerId)
+    ) {
+      return res.status(400).json({ message: "Invalid ObjectId format" });
+    }
+
+    
+    const createdOrder = await Order.create({
       renterId,
       itemId,
       sellerId,
@@ -48,29 +39,61 @@ const createOrderHandler = async (req, res) => {
       status: status || "Pending",
       isPaid: true,
       paidAt: new Date()
-    };
+    });
 
-    orders.push(order);
-    res.status(201).json({ message: "Order added", order });
+    res.status(201).json({
+      message: "Order saved to database",
+      order: createdOrder
+    });
 
   } catch (e) {
-    console.error("POST error:", e.message);
-    res.status(500).json({ message: e.message || "Server error" });
+    console.error("Create Order Error:", e);
+    res.status(500).json({
+      message: "Server error",
+      error: e.message
+    });
   }
 };
 
 const getDashboardStatsHandler = async (req, res) => {
   try {
-    // 👇 Will now include ALL orders
-    const valid = orders.filter(o => ["Approved", "Complete"].includes(o.status));
-    const totalSales = valid.length;
-    const totalRevenue = valid.reduce((sum, o) => sum + o.totalPrice, 0);
-    const totalProfit = valid.reduce((sum, o) => sum + o.totalPrice * 0.1, 0);
-    const totalUsers = new Set(valid.map(o => o.renterId)).size;
+    const sellerId = req.query.sellerId;
 
-    res.json({ totalSales, totalUsers, totalProfit, totalRevenue });
+    console.log(sellerId);
+    
+    if (!mongoose.Types.ObjectId.isValid(sellerId)) {
+      return res.status(400).json({ message: "Invalid sellerId" });
+    }
+
+    const validOrders = await Order.find({
+
+      sellerId: new mongoose.Types.ObjectId(sellerId),
+      
+      
+      
+    });
+    console.log(validOrders);
+
+    const totalSales = validOrders.length;
+    const totalRevenue = validOrders.reduce((sum, o) => sum + o.totalPrice, 0);
+    const totalProfit = totalRevenue * 0.1; 
+   const uniqueRenters = new Set(
+  validOrders
+    .filter(o => o.renterId && typeof o.renterId.toString === 'function')
+    .map(o => o.renterId.toString())
+);
+
+    
+
+    res.json({
+      totalSales,
+      totalRevenue,
+      totalProfit,
+      totalUsers: uniqueRenters.size
+    });
+
   } catch (e) {
-    console.error("GET error:", e.message);
+    console.error("Dashboard error:", e);
     res.status(500).json({ message: "Failed to fetch stats" });
   }
 };

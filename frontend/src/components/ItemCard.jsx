@@ -1,47 +1,84 @@
-import React from 'react';
-import camera from '../assets/cards/camera.svg';
+import React, { useState } from 'react';
 import Button from './Button';
 import Rating from './Rating';
+import {useDispatch} from 'react-redux';
+import { addToCart } from '../Features/cartReducer';
 import { useNavigate } from 'react-router-dom';
-
-const ItemCard = ({item}) => {
+import {FaHeart,FaRegHeart} from 'react-icons/fa'
+const ItemCard = ({ item }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isWishlisted,setIsWishlisted] = useState(false)
+  const handleAddToCart = () => {
+    dispatch(addToCart({
+      id: item._id,                    
+      title: item.name,
+      size: "Default Size",              
+      color: "Default Color",            
+      price: item.price,
+      image: item.images[0],
+    }));
+  };
+  const handleCardClick = () => {
+    navigate(`/productpage?id=${item._id}`);
+  };
+  const toggleWishlist=()=>{
+    setIsWishlisted(!isWishlisted)
+  }
   const firstStyle = {
     border: "1px solid #0A3B87",
-    padding: ".5rem",
+    padding: ".5rem 1.2rem",
     borderRadius: "1.2rem",
     color: "#0A3B87",
     cursor: "pointer",
     fontSize: "0.9rem",
     fontWeight: "500"
   };
-  const navigate = useNavigate()
-const handleClick  = ()=>{
-  navigate(`/productpage?id=${item._id}`)
-}
-  return (
-    <div className='w-[15rem]  md:w-[22rem]  bg-[#fbfbfb] rounded-xl px-2 pt-4 flex shadow-lg flex-col mt-10 items-center' onClick={handleClick}>
-      {/* <img src={item.images[0]} alt="camera item" className='w-[5rem] mb-6 md:w-[15rem] object-contain' /> */}
-      <div className='w-full h-[15rem] bg-cover bg-no-repeat bg-center mb-4' style={{backgroundImage:`url(${item.images[0]})`}}>
 
-      </div>
-      <div className='flex items-center w-full justify-between md:pb-5 px-2'>
-        <div className='flex items-center gap-1.5'>
-          <div className='w-5 h-5 md:w-10 md:h-10 rounded-full bg-[#b8b6b6]'></div>
-          <p className='text-sm md:text-xl upp'>{item.owner.name}</p>
-        </div>
+  return (
+    <div className='w-xs mx-auto bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 transform hover:scale-[1.03]'>
+      <div
+        className='relative overflow-hidden cursor-pointer'
+      >
+        <img
+          src={item.images[0]}
+          alt={item.name}
+          className='w-full h-64 object-cover transition-transform duration-300 hover:scale-110'
+          onClick={handleCardClick}
+        />
         <div>
-          <i className="text-lg md:text-2xl text-red-400 ri-heart-line"></i>
+        <button
+            onClick={toggleWishlist}
+            className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors duration-200"
+            aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+          >
+            {isWishlisted ? (
+              <FaHeart className="w-5 h-5 text-red-500" />
+            ) : (
+              <FaRegHeart className="w-5 h-5 text-gray-600" />
+            )}
+          </button>
         </div>
+      </div>
+
+      <div className='flex items-center w-full justify-between md:pb-5 px-2 mt-2'>
+        <div className='flex items-center gap-2'>
+          <div className='w-5 h-5 md:w-10 md:h-10 rounded-full bg-[#b8b6b6]'></div>
+          <p className='text-sm md:text-sm'>{item.owner.name}</p>
+        </div>
+        <Rating rating={item.ratings} size={".4rem"}/>
+      
       </div>
 
       <div className='w-full text-left text-2xl px-4 flex items-center justify-between border-b pb-4 border-[#ccc]'>
-        <h1 className='text-lg md:text-2xl md:font-bold uppercase'>{item.name}</h1>
-        <Rating rating={item.ratings}/>
+        <h1 className='text-lg md:font-bold uppercase truncate'>{item.name}</h1>
       </div>
-
-      <div className='w-full mt-4 flex  md:flex-row justify-between items-center gap-2 md:gap-4 p-2'>
+      <p className="text-sm px-2 text-gray-600 mb-4 line-clamp-3">
+            {item.description}
+      </p>
+      <div className='w-full mt-4 flex flex-row md:flex-row  justify-between items-center gap-2 md:gap-4 p-2'>
         <Button text={"Rent It"} style={firstStyle} />
-        <Button text={"Add to Cart"} style={firstStyle} />
+        <Button text={"Add to Cart"} style={firstStyle} Click={handleAddToCart} />
       </div>
     </div>
   );

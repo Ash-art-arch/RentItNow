@@ -20,6 +20,7 @@ const FeaturedSection = () => {
     
     fetchItems()
   },[])
+ 
   console.log("Items=>",filteredItems)
   return (
     <div className="w-full min-h-screen bg-[rgba(0,0,0,0.69)] rounded-t-3xl md:rounded-t-[5rem] px-4 md:px-20 py-10 md:py-20 relative">
