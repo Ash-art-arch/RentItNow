@@ -12,7 +12,6 @@ const upload = multer({ storage });
 
 router.post(
   "/add",protectedRoute,
-  upload.fields([{ name: "items", maxCount: 5 }]),
   itemController.createItem
 );
 
