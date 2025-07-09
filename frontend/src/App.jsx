@@ -17,7 +17,7 @@ import { userContext } from './providers/userProviders';
 import { useDispatch } from 'react-redux';
 import { addToCart } from './Features/cartReducer';
 import { loadCartFromBackend } from './utils/loadCart';
-
+import Success from './pages/SuccessPage.jsx';
 
 function App() {
   const { user, setUser } = useContext(userContext);
@@ -126,7 +126,7 @@ function App() {
         <Route path='/productupload' element={user?.role=="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/customerresponse' element={user?.role=="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/settings' element={<Settings/>}/>
-        <Route path='/success' element={<div>Success</div>}/>
+        <Route path='/Success' element={<Success/>}/>
       </Routes>
     </>
   );
