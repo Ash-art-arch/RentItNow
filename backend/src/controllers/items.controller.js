@@ -78,7 +78,25 @@ exports.getItemById = async (req, res) => {
   }
 };
 
-exports.updateItem = async (req, res) => {
+
+exports.getSellerItems = async (req, res) => {
+  try {
+    const sellerId = req.user._id; 
+    const items = await Item.find({ owner: sellerId }) 
+      .populate("category", "name")
+      .populate("owner", "name email");
+
+    res.status(200).json(items);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+
+
+
+/*exports.updateItem = async (req, res) => {
   try {
     const updated = await Item.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -89,7 +107,51 @@ exports.updateItem = async (req, res) => {
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
+};*/
+exports.updateItem = async (req, res) => {
+  try {
+    const itemId = req.params.id;
+
+    let existingImages = [];
+    if (req.body.existingImages) {
+      existingImages = JSON.parse(req.body.existingImages);
+    }
+
+    let newImages = [];
+    if (req.files && req.files.items) {
+      const uploaded = await Promise.all(
+        req.files.items.map(file => streamUpload(file.buffer))
+      );
+      newImages = uploaded.map(img => img.secure_url);
+    }
+
+    const updatedData = {
+      name: req.body.name,
+      category: req.body.category,
+      description: req.body.description,
+      price: req.body.price,
+      available: req.body.available === "true",
+      images: [...existingImages, ...newImages], 
+    };
+
+    const updatedItem = await Item.findByIdAndUpdate(itemId, updatedData, {
+      new: true,
+    });
+
+    if (!updatedItem) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    res.status(200).json({
+      message: "Item updated successfully",
+      item: updatedItem,
+    });
+  } catch (err) {
+    console.error("Error updating item:", err);
+    res.status(500).json({ error: err.message });
+  }
 };
+
 
 exports.deleteItem = async (req, res) => {
   try {

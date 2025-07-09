@@ -1,72 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const initialProducts = [
-  {
-    id: 1,
-    name: 'Master the Coding Interview: Data Structures + Algorithms',
-    price: '$200',
-    likes: '32.3k',
-    status: 'Active',
-    image: 'src/assets/cam.png',
-  },
-  {
-    id: 2,
-    name: 'Master the Coding Interview: Data Structures + Algorithms',
-    price: '$800',
-    likes: '32.3k',
-    status: 'Inactive',
-    image: 'src/assets/cam.png',
-  },
-  {
-    id: 3,
-    name: 'Master the Coding Interview: Data Structures + Algorithms',
-    price: '$1200',
-    likes: '32.3k',
-    status: 'Active',
-    image: 'src/assets/cam.png',
-  },
-  {
-    id: 4,
-    name: 'Hammer',
-    price: '$1000',
-    likes: '32.3k',
-    status: 'Active',
-    image: 'src/assets/cam.png',
-  },
-  {
-    id: 5,
-    name: 'Top',
-    price: '$800',
-    likes: '32.3k',
-    status: 'Active',
-    image: 'src/assets/cam.png',
-  },
-  {
-    id: 6,
-    name: 'Laptop',
-    price: '$130',
-    likes: '32.3k',
-    status: 'Inactive',
-    image: 'src/assets/cam.png',
-  },
-  {
-    id: 7,
-    name: 'Tv',
-    price: '$12000',
-    likes: '32.3k',
-    status: 'Inactive',
-    image: 'src/assets/cam.png',
-  },
-];
-
 const Editproduct = () => {
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({ price: 'All', status: 'All', sort: 'Default' });
   const [showModal, setShowModal] = useState(false);
+
+ useEffect(() => {
+  const fetchSellerItems = async () => {
+    try {
+      const res = await axios.get('/api/items/my-items', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      console.log("Fetched items from backend:", res.data);
+        if (!Array.isArray(res.data)) {
+        console.error("Expected an array, but got:", res.data);
+        return;
+      }
+
+      const formattedItems = res.data.map((item) => ({
+        id: item._id,
+        name: item.name,
+        price: `$${item.price}`,
+        likes: item.likes || '0',
+        status: item.status || 'Active',
+        image: item.imageUrl || 'src/assets/cam.png',
+      }));
+
+      setProducts(formattedItems);
+    } catch (error) {
+      console.error('Error fetching seller items:', error);
+    }
+  };
+
+  fetchSellerItems();
+}, []);
 
   const toggleSelection = (id) => {
     setSelectedIds((prev) =>
@@ -87,13 +62,13 @@ const Editproduct = () => {
 
   const getFilteredProducts = () => {
     let filtered = [...products];
-    const parsePrice = (p) => parseFloat(p.price.replace(/[^0-9.]/g, ''));
+    const parsePrice = (p) => parseFloat(p.replace(/[^0-9.]/g, ''));
 
     if (filters.price !== 'All') {
-      if (filters.price === '0-400') filtered = filtered.filter((p) => parsePrice(p) <= 400);
-      else if (filters.price === '400-800') filtered = filtered.filter((p) => parsePrice(p) > 400 && parsePrice(p) <= 800);
-      else if (filters.price === '800-1200') filtered = filtered.filter((p) => parsePrice(p) > 800 && parsePrice(p) <= 1200);
-      else if (filters.price === '1200+') filtered = filtered.filter((p) => parsePrice(p) > 1200);
+      if (filters.price === '0-400') filtered = filtered.filter((p) => parsePrice(p.price) <= 400);
+      else if (filters.price === '400-800') filtered = filtered.filter((p) => parsePrice(p.price) > 400 && parsePrice(p.price) <= 800);
+      else if (filters.price === '800-1200') filtered = filtered.filter((p) => parsePrice(p.price) > 800 && parsePrice(p.price) <= 1200);
+      else if (filters.price === '1200+') filtered = filtered.filter((p) => parsePrice(p.price) > 1200);
     }
 
     if (filters.status !== 'All') {
@@ -101,9 +76,9 @@ const Editproduct = () => {
     }
 
     if (filters.sort === 'low-high') {
-      filtered.sort((a, b) => parsePrice(a) - parsePrice(b));
+      filtered.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
     } else if (filters.sort === 'high-low') {
-      filtered.sort((a, b) => parsePrice(b) - parsePrice(a));
+      filtered.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
     }
 
     if (searchQuery.trim() !== '') {
@@ -118,7 +93,7 @@ const Editproduct = () => {
   const filteredProducts = getFilteredProducts();
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 relative">    
+    <div className="min-h-screen bg-black text-white p-6 relative">
       <div className="bg-white rounded-lg p-4 flex flex-wrap gap-4 items-center justify-between text-black">
         <input
           type="text"
@@ -155,6 +130,7 @@ const Editproduct = () => {
           + Add Product
         </Link>
       </div>
+
       {selectedIds.length > 1 && (
         <div className="flex justify-end mt-2">
           <button
@@ -166,7 +142,6 @@ const Editproduct = () => {
         </div>
       )}
 
- 
       <div className="bg-white rounded-lg mt-4 text-black">
         <table className="w-full text-left table-auto">
           <thead className="border-b">
@@ -229,7 +204,6 @@ const Editproduct = () => {
         </table>
       </div>
 
-      
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-xl w-[90%] max-w-sm text-center text-black">

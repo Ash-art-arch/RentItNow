@@ -12,16 +12,19 @@ const upload = multer({ storage });
 
 router.post(
   "/add",protectedRoute,
+  upload.fields([{ name: "items", maxCount: 5 }]),
   itemController.createItem
 );
 
 
 router.get("/", itemController.getAllItems);
-
+router.get("/my-items",protectedRoute, itemController.getSellerItems);
 router.get("/:id", itemController.getItemById);
 
-router.put("/:id", protectedRoute, itemController.updateItem);
+router.put("/:id", protectedRoute, itemController.updateItem, upload.fields([{ name: "items", maxCount: 5 }]));
 
 router.delete("/del:id", protectedRoute, itemController.deleteItem);
+
+
 
 module.exports = router;
