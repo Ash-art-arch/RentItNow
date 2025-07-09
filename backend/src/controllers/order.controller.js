@@ -2,6 +2,12 @@ const Stripe = require("stripe")
 const itemsModel = require("../model/items.model")
 const orderModel = require("../model/order.model")
 const UserModel = require("../model/user.model")
+const orderRouter = require("../routes/order.route")
+const { get } = require("mongoose")
+const Order = require("../model/order.model.js");
+const Item = require("../model/items.model");
+const mongoose = require("mongoose");
+
 
 const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -90,6 +96,43 @@ const verifyStripe =async (req,res)=>{
     }
 }
 
+const getOrderSummaryHandler = async (req, res) => {
+  try {
+    const userId = req.user.id; // Get user id from authenticated user
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid userId" });
+    }
+
+    const orders = await Order.find({ renterId: userId }).sort({ createdAt: -1 });
+
+    const summary = [];
+
+    for (const order of orders) {
+      for (const item of order.items) {
+        const product = await Item.findById(item.id);
+        if (!product) continue;
+
+        summary.push({
+          orderId: order._id,
+          itemId: product._id,
+          itemName: product.name,
+          price: item.price,
+          startDate: order.startDate,
+          endDate: order.endDate,
+          status: order.status,
+          orderDate: order.createdAt,
+        });
+      }
+    }
+
+    res.json({ success: true, orders: summary });
+  } catch (e) {
+    console.error("Order Summary Error:", e);
+    res.status(500).json({ success: false, message: "Failed to fetch order summary" });
+  }
+};
+
 module.exports = {
-    paymentByStripe,verifyStripe
+    paymentByStripe,verifyStripe,getOrderSummaryHandler
 }
