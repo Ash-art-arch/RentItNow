@@ -178,7 +178,7 @@ const Editproduct = () => {
                 <td className="p-3 text-center">
                   <div className="inline-flex gap-2">
                     <Link
-                      to="/productupload"
+                      to={`/productupload/${prod.id}`}
                       className="bg-yellow-300 text-black px-3 py-1 rounded flex items-center gap-1 text-sm"
                     >
                       <FaEdit /> Edit

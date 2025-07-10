@@ -103,6 +103,7 @@ function App() {
         <Route path='/categories' element={<CategoriesPage />} />
           <Route path = '/productedit'element={<ProductEdit/>}/>
            <Route path='/productedit/productupload' element={<ProductUpload />} />
+           <Route path="/productupload/:id" element={<ProductUpload />} />
         <Route path='/dashboard' element={user?.role=="Seller"?<Dashboard />:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/productupload' element={user?.role=="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/customerresponse' element={user?.role=="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'}/>} />
