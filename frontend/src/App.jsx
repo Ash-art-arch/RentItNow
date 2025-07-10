@@ -19,7 +19,7 @@ import { useDispatch } from 'react-redux';
 import { addToCart } from './Features/cartReducer';
 import { loadCartFromBackend } from './utils/loadCart';
 import Success from './pages/SuccessPage.jsx';
-
+import OrderHistory from './components/OrderHistory.jsx';
 function App() {
   const { user, setUser } = useContext(userContext);
   const [loading, setLoading] = useState(true);
@@ -108,6 +108,7 @@ function App() {
         <Route path='/productupload' element={user?.role=="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/customerresponse' element={user?.role=="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/settings' element={<Settings/>}/>
+        <Route path='/orderhistory' element={<OrderHistory/>}/>
         <Route path='/verify' element={<Success/>}/>
       </Routes>
     </>
