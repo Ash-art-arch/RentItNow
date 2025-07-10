@@ -56,12 +56,7 @@ const DashboardHeader = () => {
             </button>
           </div>
           <ul className="p-6 space-y-6">
-          <li className="flex items-center gap-3 hover:text-yellow-400 cursor-pointer">
-              <Link to="/" className="flex items-center gap-3">
-              <Home size={20} />
-              Home
-              </Link>
-            </li>
+          
             <li className="flex items-center gap-3 hover:text-yellow-400 cursor-pointer">
               <Link to="/" className="flex items-center gap-3">
               <Home size={20} />
