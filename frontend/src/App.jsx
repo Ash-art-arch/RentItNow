@@ -9,9 +9,10 @@ import PaymentPage from './pages/PaymentPage';
 import ProductPage from './pages/ProductPage';
 import CategoriesPage from './pages/CategoriesPAge';
 import Dashboard from './pages/Dashboard.jsx';
-import ProductUpload from './pages/ProductUpload.jsx';
-import CustomerResponse from './pages/CustomerResponse.jsx';
-import Settings from './pages/Settings.jsx';
+import ProductUpload from'./pages/ProductUpload.jsx';
+import CustomerResponse from './pages/CustomerResponse.jsx'
+import Settings from './pages/Settings.jsx'
+import ProductEdit from './pages/ProductEdit.jsx';
 import Loader from'./components/Loader.jsx';
 import { userContext } from './providers/userProviders';
 import { useDispatch } from 'react-redux';
@@ -100,6 +101,8 @@ function App() {
         <Route path='/cart/payment' element={<PaymentPage />} />
         <Route path='/productpage' element={<ProductPage />} />
         <Route path='/categories' element={<CategoriesPage />} />
+          <Route path = '/productedit'element={<ProductEdit/>}/>
+           <Route path='/productedit/productupload' element={<ProductUpload />} />
         <Route path='/dashboard' element={user?.role=="Seller"?<Dashboard />:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/productupload' element={user?.role=="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/customerresponse' element={user?.role=="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'}/>} />

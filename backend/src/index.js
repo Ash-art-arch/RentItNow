@@ -25,6 +25,8 @@ app.use('/api/items',itemRouter)
 app.use('/api/dashboard',dashboardRouter)
 app.use('/api/order',orderRouter)
 
+app.use("/api/stats", dashboardRouter);
+
 app.listen(5000,()=>{
     console.log("Server Running At port 5000")
 })

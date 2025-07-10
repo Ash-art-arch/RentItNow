@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import {
   LineChart,
   Line,
@@ -12,6 +13,7 @@ import {
 
 const RevenueChart = ({totalRevenue}) => {
   const [showOptions, setShowOptions] = useState(false);
+  const [revenueData, setRevenueData] = useState([]);
 
   const toggleDropdown = () => {
     setShowOptions((prev) => !prev);
