@@ -70,17 +70,59 @@ const Product = () => {
     </div>
     );
   }
-const handleAddToCart = () => {
-  if (!item) return;
 
+  function showPopup(message) {
+  const popup = document.createElement("div");
+  popup.textContent = message;
+  popup.className = "fixed top-100 right-160 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg opacity-0 transition-all duration-300 transform -translate-y-2 z-[9999]";
+  document.body.appendChild(popup);
+
+  setTimeout(() => {
+    popup.classList.remove("opacity-0", "-translate-y-2");
+    popup.classList.add("opacity-100", "translate-y-0");
+  }, 10);
+
+  setTimeout(() => {
+    popup.classList.remove("opacity-100", "translate-y-0");
+    popup.classList.add("opacity-0", "-translate-y-2");
+    setTimeout(() => popup.remove(), 300);
+  }, 3000);
+}
+const handleAddToCart = async () => {
+  if (!item) return;
+    
+  const dateInputs = document.querySelectorAll('input[type="date"]');
+  const startDate = dateInputs[0].value;
+  const endDate = dateInputs[1].value;
+   if (!startDate || !endDate) {
+    alert("Please select both start and end dates.");
+    return;
+  }
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/items/availability?itemId=${item._id}&startDate=${startDate}&endDate=${endDate}`);
+    const data = await res.json();
+
+    if (!data.available) {
+      showPopup(`Sorry! Only ${data.availableQty} unit(s) available during the selected dates.`);
+      return;
+    }
   dispatch(addToCart({
     id: item._id,
     title: item.name,
     price: item.price,
     image: item.images[0],
     color: "Color: Default", 
-    size: "Size: Default",   
+    size: "Size: Default", 
+     quantity: 1, // default quantity
+      startDate,
+      endDate  
 }));
+ alert("Item added to cart!");
+  } catch (err) {
+    console.error("Error checking availability:", err.message);
+    alert("Something went wrong while checking availability.");
+  }
 };
   return (
     <>

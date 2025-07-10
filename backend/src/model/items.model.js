@@ -33,7 +33,13 @@ const itemSchema = mongoose.Schema({
     ratings:{
         type:Number,
         default:0
-    }
+    },
+    totalQuantity: {
+    type: Number,
+    required: true,
+    default: 1,
+    min: 1
+  }
 },{timestamps:true})
 
 const itemsModel = mongoose.model("Items",itemSchema)

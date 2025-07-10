@@ -2,7 +2,7 @@ import axios from "axios"
 export const syncCartToBackend = async (userId, reduxCartItems) => {
   try {
     const cartPayload = reduxCartItems.map(item => ({
-      item: item.id, 
+      item: item.item, 
       quantity: item.quantity
     }));
 

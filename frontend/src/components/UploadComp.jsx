@@ -6,6 +6,7 @@ const UploadComp = () => {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [discount, setDiscount] = useState("");
   const [about, setAbout] = useState("");
   const [photos, setPhotos] = useState([]);
@@ -21,47 +22,47 @@ const UploadComp = () => {
   const removePhoto = (index) => {
     setPhotos((prev) => prev.filter((_, i) => i !== index));
   };
-const handleSubmit = async () => {
-  if (!termsAccepted) {
-    alert("Please accept the terms and conditions.");
-    return;
-  }
+  const handleSubmit = async () => {
+    if (!termsAccepted) {
+      alert("Please accept the terms and conditions.");
+      return;
+    }
 
 
 
-  const formData = new FormData();
-  formData.append("name", productName);
-  formData.append("category", category);
-  formData.append("description", description);
-  formData.append("price", price);
-  formData.append("available", "true");
-  formData.append("ratings", "0");
-
-  photos.forEach((photo) => {
-    formData.append("items", photo);
-  });
-
-  try {
-    const res = await fetch("http://localhost:5000/api/items/add", {
-      method: "POST",
-     
-      credentials: "include", 
-      body: formData,
-     
+    const formData = new FormData();
+    formData.append("name", productName);
+    formData.append("category", category);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("available", "true");
+    formData.append("ratings", "0");
+    formData.append("quantity", quantity);
+    photos.forEach((photo) => {
+      formData.append("items", photo);
     });
 
-    const data = await res.json();
+    try {
+      const res = await fetch("http://localhost:5000/api/items/add", {
+        method: "POST",
 
-    if (res.ok) {
-      alert("Product uploaded successfully!");
-    } else {
-      alert(data.message || "Upload failed");
+        credentials: "include",
+        body: formData,
+
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Product uploaded successfully!");
+      } else {
+        alert(data.message || "Upload failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong");
     }
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong");
-  }
-};
+  };
 
 
 
@@ -76,7 +77,7 @@ const handleSubmit = async () => {
         </p>
 
         <div className="grid md:grid-cols-2 gap-6">
-        
+
           <div className="space-y-4">
             <div>
               <label className="block font-medium mb-1">Product Name</label>
@@ -136,9 +137,19 @@ const handleSubmit = async () => {
                 onChange={(e) => setDiscount(e.target.value)}
               />
             </div>
+              <div>
+            <label className="block font-medium mb-1">Quantity</label>
+            <input
+              type="number"
+              className="w-full border px-3 py-2 rounded"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+            />
           </div>
+          </div>
+        
 
-     
+
           <div className="space-y-4">
             <div>
               <label className="block font-medium mb-1">Product Photos</label>
@@ -163,7 +174,7 @@ const handleSubmit = async () => {
                 />
               </div>
 
-       
+
               <div className="flex gap-2 mt-2">
                 {photos.map((file, index) => (
                   <div key={index} className="relative w-16 h-16">

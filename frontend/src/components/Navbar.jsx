@@ -4,8 +4,12 @@ import cartIcon from "../assets/Navbar/Cart.png";
 import { Link, useNavigate } from "react-router-dom";
 import { userContext } from "../providers/userProviders";
 import Button from "./Button";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const cartItems = useSelector((state) => state.cart.items);
+const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
   const [showSearch, setShowSearch] = useState(false);
   const { user ,setUser} = useContext(userContext);
   const navigate = useNavigate();
@@ -69,6 +73,11 @@ const Navbar = () => {
         />
         <Link to="/cart">
           <img src={cartIcon} alt="Cart" className="w-6 h-6" />
+          {totalItems > 0 && (
+    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+      {totalItems}
+    </span>
+  )}
         </Link>
         {
           user?<div className="w-10 h-10 rounded-full bg-[#ffffff]"></div>:<Button text={"Login"} style={firstStyle} Click={CLick}/>
