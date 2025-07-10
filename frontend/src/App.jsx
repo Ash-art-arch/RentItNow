@@ -83,7 +83,10 @@ function App() {
   
   if(loading){
     return(
-     <Loader/>
+      <div className='w-screen h-screen bg-black grid place-content-center'>
+
+        <Loader/>
+      </div>
     )
   }
   
