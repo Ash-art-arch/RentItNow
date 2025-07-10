@@ -61,8 +61,8 @@ const paymentByStripe =async (req,res)=>{
     )
 
     const  session =await stripeInstance.checkout.sessions.create({
-        success_url:`${origin}/verify?sucess=true&orderId=${newOrder._id}`,
-        cancel_url:`${origin}/verify?sucess=false&orderId=${newOrder._id}`,
+        success_url:`${origin}/verify?success=true&orderId=${newOrder._id}`,
+        cancel_url:`${origin}/verify?success=false&orderId=${newOrder._id}`,
         line_items,
         mode:"payment"
     })
@@ -75,9 +75,16 @@ catch(e){
 }
 const verifyStripe =async (req,res)=>{
     const {orderId,success,userId} = req.body
+    console.log(req.body)
     try{if(success==="true"){
         await orderModel.findByIdAndUpdate(orderId,{isPaid:true})
-        await UserModel.findByIdAndUpdate(userId,{cart:[]})
+        console.log("Reached Here")
+        const updatedModel =await UserModel.findByIdAndUpdate(
+            userId,
+            { cart: [] },
+            { new: true } // returns the updated document
+          );
+          console.log(updatedModel)
         res.json({success:true,})
     }
     else{
