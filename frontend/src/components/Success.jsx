@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { userContext } from "../providers/userProviders";
-
+import { useDispatch, useSelector } from "react-redux"
+import { clearCart } from "../Features/cartReducer";
 const Success = () => {
   const [searchParams,setSearchParams] = useSearchParams()
   const {user} = useContext(userContext)
@@ -9,7 +10,8 @@ const Success = () => {
   const orderId = searchParams.get('orderId')
   const userId = user.id
   const navigate = useNavigate()
- const verifyPayment =async ()=>{
+  const dispatch = useDispatch()
+  const verifyPayment =async ()=>{
    try{
     const response = await fetch("http://localhost:5000/api/order/verifyStripe",{
       method:"post",
@@ -25,6 +27,7 @@ const Success = () => {
     })
     const data = await response.json()
     if(data.success){
+      dispatch(clearCart())
       navigate('/')
     }else{
       navigate('/cart')
@@ -36,6 +39,7 @@ const Success = () => {
  }
  useEffect(()=>{
   verifyPayment()
+
  },[])
   const order = {
     id: "123456",

@@ -81,9 +81,16 @@ catch(e){
 }
 const verifyStripe =async (req,res)=>{
     const {orderId,success,userId} = req.body
+    console.log(req.body)
     try{if(success==="true"){
         await orderModel.findByIdAndUpdate(orderId,{isPaid:true})
-        await UserModel.findByIdAndUpdate(userId,{cart:[]})
+        console.log("Reached Here")
+        const updatedModel =await UserModel.findByIdAndUpdate(
+            userId,
+            { cart: [] },
+            { new: true } // returns the updated document
+          );
+          console.log(updatedModel)
         res.json({success:true,})
     }
     else{

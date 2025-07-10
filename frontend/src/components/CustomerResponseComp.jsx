@@ -1,6 +1,6 @@
 const CustomerResponsePage = () => {
   return (
-    <div className="min-h-screen bg-gray-50 p-6 md:p-12 font-[Outfit]">
+    <div className="min-h-screen bg-gray-400 p-6 md:p-12 font-[Outfit]">
       
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Customer Support</h1>
 
