@@ -1,7 +1,42 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { userContext } from "../providers/userProviders";
 
 const Success = () => {
-
+  const [searchParams,setSearchParams] = useSearchParams()
+  const {user} = useContext(userContext)
+  const success = searchParams.get('success')
+  const orderId = searchParams.get('orderId')
+  const userId = user.id
+  const navigate = useNavigate()
+ const verifyPayment =async ()=>{
+   try{
+    const response = await fetch("http://localhost:5000/api/order/verifyStripe",{
+      method:"post",
+      body:JSON.stringify({
+        userId,
+        success,
+        orderId
+      }),
+      headers:{
+        'content-type':'application/json'
+      },
+      credentials:"include"
+    })
+    const data = await response.json()
+    if(data.success){
+      navigate('/')
+    }else{
+      navigate('/cart')
+    }
+   }
+   catch(e){
+    alert(e)
+   }
+ }
+ useEffect(()=>{
+  verifyPayment()
+ },[])
   const order = {
     id: "123456",
     paymentStatus: "Paid",

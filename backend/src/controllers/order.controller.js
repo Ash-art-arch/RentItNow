@@ -67,8 +67,8 @@ const paymentByStripe =async (req,res)=>{
     )
 
     const  session =await stripeInstance.checkout.sessions.create({
-        success_url:`${origin}/verify?sucess=true&orderId=${newOrder._id}`,
-        cancel_url:`${origin}/verify?sucess=false&orderId=${newOrder._id}`,
+        success_url:`${origin}/verify?success=true&orderId=${newOrder._id}`,
+        cancel_url:`${origin}/verify?success=false&orderId=${newOrder._id}`,
         line_items,
         mode:"payment"
     })

@@ -32,21 +32,16 @@ function App() {
     }
   }, [setUser]);
 
- 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileAndCart = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/user/profile", {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            
-          },
-          credentials:"include"
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
         });
-
-         if (!res.ok) {
-          console.log("Token invalid or expired. Logging out.");
+  
+        if (!res.ok) {
           localStorage.removeItem("token");
           localStorage.removeItem("user");
           setUser(null);
@@ -54,6 +49,25 @@ function App() {
           const data = await res.json();
           setUser(data.user);
           localStorage.setItem("user", JSON.stringify(data.user));
+  
+          // Load cart immediately after user is fetched
+          const cartData = await loadCartFromBackend(data.user.id);
+          if (cartData?.length) {
+            cartData.forEach(item => {
+              if (item?.item) {
+                dispatch(addToCart({
+                  id: item.item._id || item.item,
+                  title: item.item.name || "Product",
+                  size: "Default Size",
+                  color: "Default Color",
+                  price: item.item.price || 0,
+                  image: item.item.images?.[0] || "",
+                  quantity: item.quantity || 1
+                }));
+              }
+            });
+          }
+          console.log(cartData)
         }
       } catch (error) {
         console.log("Profile fetch failed:", error);
@@ -63,49 +77,10 @@ function App() {
       }
     };
   
-    fetchProfile();
-  }, [setUser]);
- 
-
- 
-  useEffect(() => {
-    const loadUserCart = async () => {
-      console.log("user", user);
-      if (!user || !user._id) return;
-
-      try {
-        const cartData = await loadCartFromBackend(user._id);
-        console.log("cartdata", cartData);
-        if (cartData?.length) {
-          cartData.forEach(item => {
-            if (item && item.item)  {
-    console.log("🧩 Dispatching addToCart for item:", {
-      id: item.item._id,
-      title: item.item.name,
-      quantity: item.quantity
-    });
-            
-              dispatch(addToCart({
-                id: item.item._id || item.item,
-                title: item.item.name || "Product",
-                size: "Default Size",
-                color: "Default Color",
-                price: item.item.price || 0,
-                image: item.item.images?.[0] || "",
-                quantity: item.quantity || 1
-              
-              }));
-            }
-          });
-        }
-      } catch (err) {
-        console.error("Failed to load cart on app start:", err.message);
-      }
-    };
-
-    loadUserCart();
-  }, [dispatch, user]);
-
+    fetchProfileAndCart();
+  }, [setUser, dispatch]);
+  
+  
   if(loading){
     return(
      <Loader/>
@@ -126,8 +101,8 @@ function App() {
         <Route path='/productupload' element={user?.role=="Seller"?<ProductUpload />:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/customerresponse' element={user?.role=="Seller"?<CustomerResponse/>:<Navigate to={'/signup?role=Seller'}/>} />
         <Route path='/settings' element={<Settings/>}/>
-        <Route path='/Success' element={<Success/>}/>
         <Route path='/orderhistory' element={<OrderHistory/>}/>
+        <Route path='/verify' element={<Success/>}/>
       </Routes>
     </>
   );

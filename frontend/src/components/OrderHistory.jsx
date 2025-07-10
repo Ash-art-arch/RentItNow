@@ -46,6 +46,7 @@ const OrderHistory = () => {
             {/* Order Info */}
             <div className="flex flex-wrap justify-between items-center">
               <div>
+                <img src={order.itemImage} alt="" />
                 <p className="text-gray-700">Order ID: <span className="font-semibold">{order.orderId}</span></p>
                 <p className="text-gray-700">Order Date: <span className="font-semibold">{new Date(order.orderDate).toLocaleDateString()}</span></p>
               </div>
@@ -55,9 +56,9 @@ const OrderHistory = () => {
               </div>
             </div>
 
-            {/* Single Product Info */}
+            
             <div className="flex flex-wrap border-t pt-4">
-              {/* You can add an image later */}
+            
               <div className="flex-1 space-y-1">
                 <h2 className="text-lg font-semibold">{order.itemName}</h2>
                 <p className="text-sm text-gray-600">Size: N/A &nbsp; | &nbsp; Qty: 1</p>
