@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { UploadCloud, X } from "lucide-react";
 
 const UploadComp = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [productName, setProductName] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -10,11 +14,34 @@ const UploadComp = () => {
   const [discount, setDiscount] = useState("");
   const [about, setAbout] = useState("");
   const [photos, setPhotos] = useState([]);
+  const [existingPhotos, setExistingPhotos] = useState([]);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  useEffect(() => {
+    if (id) {
+      fetch(`http://localhost:5000/api/items/${id}`, {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setProductName(data.name);
+          setCategory(data.category?._id || "");
+          setDescription(data.description);
+          setPrice(data.price);
+          setDiscount(data.discount || "");
+          setAbout(data.about || "");
+         const urls = data.images || []; 
+        const formatted = urls.map((img) =>
+          img.startsWith("http") ? img : `http://localhost:5000/${img}`
+        );
+        setExistingPhotos(formatted);
+      })
+      .catch((err) => console.error("Error loading item:", err));
+  }
+  }, [id]);
 
   const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files).filter((file) =>
-      file.size <= 1024 * 1024
+    const files = Array.from(e.target.files).filter(
+      (file) => file.size <= 1024 * 1024
     );
     setPhotos((prev) => [...prev, ...files]);
   };
@@ -22,13 +49,16 @@ const UploadComp = () => {
   const removePhoto = (index) => {
     setPhotos((prev) => prev.filter((_, i) => i !== index));
   };
-  const handleSubmit = async () => {
-    if (!termsAccepted) {
-      alert("Please accept the terms and conditions.");
-      return;
-    }
 
+  const removeExistingPhoto = (index) => {
+    setExistingPhotos((prev) => prev.filter((_, i) => i !== index));
+  };
 
+    const handleSubmit = async () => {
+      if (!termsAccepted) {
+        alert("Please accept the terms and conditions.");
+        return;
+      }
 
     const formData = new FormData();
     formData.append("name", productName);
@@ -37,26 +67,34 @@ const UploadComp = () => {
     formData.append("price", price);
     formData.append("available", "true");
     formData.append("ratings", "0");
-    formData.append("quantity", quantity);
-    photos.forEach((photo) => {
-      formData.append("items", photo);
+     formData.append("quantity", quantity);
+    formData.append("discount", discount);
+    formData.append("about", about);
+
+
+    existingPhotos.forEach((url) => {
+      const relativePath = url.replace("http://localhost:5000/", "");
+      formData.append("existingImages", relativePath);
     });
 
+
+    photos.forEach((photo) => formData.append("items", photo));
+
     try {
-      const res = await fetch("http://localhost:5000/api/items/add", {
-        method: "POST",
-
-        credentials: "include",
-        body: formData,
-
-      });
-
+      const res = await fetch(
+        `http://localhost:5000/api/items/${id ? id : "add"}`,
+        {
+          method: id ? "PUT" : "POST",
+          credentials: "include",
+          body: formData,
+        }
+      );
       const data = await res.json();
-
       if (res.ok) {
-        alert("Product uploaded successfully!");
+        alert(id ? "Product updated successfully!" : "Product uploaded successfully!");
+        navigate("/editproduct");
       } else {
-        alert(data.message || "Upload failed");
+        alert(data.message || "Failed to save");
       }
     } catch (err) {
       console.error(err);
@@ -64,16 +102,13 @@ const UploadComp = () => {
     }
   };
 
-
-
   return (
     <div className="min-h-screen bg-white p-8">
       <h1 className="text-3xl font-bold mb-4">Upload Product</h1>
-
       <div className="border rounded-xl p-6">
         <h2 className="text-2xl font-semibold mb-1">Create Product</h2>
         <p className="text-gray-500 mb-6">
-          design and launch your product with ease and efficiency
+          Design and launch your product with ease and efficiency
         </p>
 
         <div className="grid md:grid-cols-2 gap-6">
@@ -174,8 +209,8 @@ const UploadComp = () => {
                 />
               </div>
 
-
-              <div className="flex gap-2 mt-2">
+  
+              <div className="flex gap-2 mt-2 flex-wrap">
                 {photos.map((file, index) => (
                   <div key={index} className="relative w-16 h-16">
                     <img
@@ -185,6 +220,25 @@ const UploadComp = () => {
                     />
                     <button
                       onClick={() => removePhoto(index)}
+                      className="absolute top-0 right-0 bg-black bg-opacity-70 text-white rounded-full p-0.5"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+         
+              <div className="flex gap-2 mt-2 flex-wrap">
+                {existingPhotos.map((url, index) => (
+                  <div key={index} className="relative w-16 h-16">
+                    <img
+                      src={url}
+                      className="rounded object-cover w-full h-full"
+                      alt="Existing"
+                    />
+                    <button
+                      onClick={() => removeExistingPhoto(index)}
                       className="absolute top-0 right-0 bg-black bg-opacity-70 text-white rounded-full p-0.5"
                     >
                       <X size={14} />
@@ -218,14 +272,17 @@ const UploadComp = () => {
             </div>
 
             <div className="flex justify-end gap-4 pt-4">
-              <button className="bg-red-600 text-white px-6 py-2 rounded-full cursor-pointer shadow-2xs hover:bg-red-400" >
+              <button
+                className="bg-red-600 text-white px-6 py-2 rounded-full"
+                onClick={() => navigate("/editproduct")}
+              >
                 Cancel
               </button>
               <button
-                className="bg-yellow-400 text-black px-6 py-2 rounded-full cursor-pointer shadow-2xs hover:bg-yellow-300"
+                className="bg-yellow-400 text-black px-6 py-2 rounded-full"
                 onClick={handleSubmit}
               >
-                Upload Product
+                {id ? "Update Product" : "Upload Product"}
               </button>
             </div>
           </div>

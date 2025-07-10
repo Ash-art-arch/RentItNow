@@ -7,7 +7,7 @@ import calendar from "/src/assets/product/calendar.png";
 import delivery from "/src/assets/product/delivery-truck.png";
 import Rating from "../components/Rating";
 import Footer from "./Footer";
-import Loader from "./Loader";import { useDispatch } from "react-redux";
+import Loader from "./Loader";import { useDispatch,useSelector } from "react-redux";
 import { addToCart } from "../Features/cartReducer"; 
 
 const Product = () => {
@@ -17,6 +17,11 @@ const Product = () => {
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+const [uploading ,setUploading] = useState(true)
+  const cartItems = useSelector((state)=>state.item)
+
+
+
 
 
   useEffect(() => {
@@ -90,7 +95,7 @@ const Product = () => {
 }
 const handleAddToCart = async () => {
   if (!item) return;
-    
+      console.log(item._id)
   const dateInputs = document.querySelectorAll('input[type="date"]');
   const startDate = dateInputs[0].value;
   const endDate = dateInputs[1].value;
@@ -123,6 +128,12 @@ const handleAddToCart = async () => {
     console.error("Error checking availability:", err.message);
     alert("Something went wrong while checking availability.");
   }
+const formattedCart  = cartItems.map((item) => ({
+  item: item.id ,
+  quantity: item.quantity,
+}));
+console.log("sync to backend", formattedCart);
+syncCartToBackend(userId, formattedCart);
 };
   return (
     <>

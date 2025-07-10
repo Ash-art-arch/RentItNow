@@ -8,6 +8,7 @@ const syncCart = async(req,res) =>{
     const {userId} = req.params;
     const {cart} = req.body;
     try{
+        console.log("Cart=>",cart)
         const user = await UserModel.findById(userId);
         if(!user) return res.status(400).json({message: "user not found"});
         user.cart = cart;

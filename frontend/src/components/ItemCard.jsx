@@ -78,7 +78,7 @@ const ItemCard = ({ item }) => {
       </p>
       <div className='w-full mt-4 flex flex-row md:flex-row  justify-between items-center gap-2 md:gap-4 p-2'>
         <Button text={"Rent It"} style={firstStyle} />
-        <Button text={"Add to Cart"} style={firstStyle} onClick={handleAddToCart} />
+        <Button text={"Add to Cart"} style={firstStyle} Click={handleAddToCart} />
       </div>
     </div>
   );
