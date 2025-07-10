@@ -117,9 +117,25 @@ exports.updateItem = async (req, res) => {
   try {
     const itemId = req.params.id;
 
+    // Parse existing images from the form (sent as JSON string or array)
     let existingImages = [];
     if (req.body.existingImages) {
-      existingImages = JSON.parse(req.body.existingImages);
+      try {
+        const parsed =
+          typeof req.body.existingImages === "string"
+            ? JSON.parse(req.body.existingImages)
+            : req.body.existingImages;
+
+        if (Array.isArray(parsed)) {
+          existingImages = parsed;
+        } else if (typeof parsed === "string") {
+          existingImages = [parsed];
+        } else {
+          return res.status(400).json({ message: "Invalid existingImages format" });
+        }
+      } catch (e) {
+        return res.status(400).json({ message: "Invalid existingImages format" });
+      }
     }
 
     let newImages = [];
@@ -135,8 +151,10 @@ exports.updateItem = async (req, res) => {
       category: req.body.category,
       description: req.body.description,
       price: req.body.price,
+      discount: req.body.discount,
+      about: req.body.about,
       available: req.body.available === "true",
-      images: [...existingImages, ...newImages], 
+      images: [...existingImages, ...newImages],
     };
 
     const updatedItem = await Item.findByIdAndUpdate(itemId, updatedData, {
@@ -156,6 +174,8 @@ exports.updateItem = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
 
 
 exports.deleteItem = async (req, res) => {

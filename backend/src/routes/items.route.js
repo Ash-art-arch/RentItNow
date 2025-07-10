@@ -29,9 +29,13 @@ router.post(
 router.get("/", itemController.getAllItems);
 router.get("/my-items",protectedRoute, itemController.getSellerItems);
 router.get("/:id", itemController.getItemById);
+router.put(
+  "/:id",
+  protectedRoute,
+  upload.fields([{ name: "items", maxCount: 5 }]),
+  itemController.updateItem
+);
 
-router.put("/:id", protectedRoute, itemController.updateItem, upload.fields([{ name: "items", maxCount: 5 }]));
-router.put('/:id', protectedRoute, upload.single('image'), itemController.updateItem);
 
 router.delete("/del:id", protectedRoute, itemController.deleteItem);
 

@@ -90,7 +90,7 @@ const UploadComp = () => {
       const data = await res.json();
       if (res.ok) {
         alert(id ? "Product updated successfully!" : "Product uploaded successfully!");
-        navigate("/editproduct");
+        navigate("/productedit");
       } else {
         alert(data.message || "Failed to save");
       }
