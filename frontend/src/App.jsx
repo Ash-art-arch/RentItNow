@@ -50,8 +50,9 @@ function App() {
           const data = await res.json();
           setUser(data.user);
           localStorage.setItem("user", JSON.stringify(data.user));
-  
+          
           // Load cart immediately after user is fetched
+          console.log("Reached Here")
           const cartData = await loadCartFromBackend(data.user.id);
           if (cartData?.length) {
             cartData.forEach(item => {
@@ -65,12 +66,12 @@ function App() {
                   image: item.item.images?.[0] || "",
                   quantity: item.quantity || 1,
                   startDate: item.startDate || "",   
-  endDate: item.endDate || "" 
+                  endDate: item.endDate || "" 
                 }));
               }
             });
           }
-          console.log(cartData)
+          console.log("Cart Data",cartData)
         }
       } catch (error) {
         console.log("Profile fetch failed:", error);
