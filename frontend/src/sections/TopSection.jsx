@@ -26,7 +26,7 @@ const TopSection = () => {
   };
 
   return (
-    <div className="w-full py-10 px-4 md:px-20 font-[Outfit] select-none">
+    <div className="w-full py-10 px-4 md:px-20 font-[Outfit] select-none ">
       <div className="flex w-full items-center justify-between">
         <h1 className="text-xl md:text-3xl font-bold">Top Categories</h1>
         <Button text={"All Categories"} style={firstStyle} />

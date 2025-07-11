@@ -5,29 +5,77 @@ import box from '../assets/stats/box.svg';
 
 const StatsSection = () => {
   return (
-    <div className="w-full py-10 md:py-20 bg-white">
-      <div className="border-y-2 border-[rgba(0,0,0,0.32)] flex flex-col md:flex-row items-center justify-between gap-10 md:gap-10 md:px-48 py-10">
-        
-        <div className="flex items-center flex-col gap-2">
-          <img src={user} alt="Active Users" className="h-16 md:h-40 aspect-square object-contain" />
-          <h1 className="text-[#0A3B87] text-lg md:text-2xl font-bold font-[Outfit]">35,600+</h1>
-          <h2 className="text-gray-600 text-sm md:text-xl font-[Outfit] font-semibold">Active Users</h2>
-        </div>
 
-        <div className="flex items-center flex-col gap-2">
-          <img src={box} alt="Items Served" className="h-16 md:h-40 aspect-square object-contain" />
-          <h1 className="text-[#0A3B87] text-lg md:text-2xl font-bold font-[Outfit]">3,500+</h1>
-          <h2 className="text-gray-600 text-sm md:text-xl font-[Outfit] font-semibold">Items Served</h2>
-        </div>
-
-        <div className="flex items-center flex-col gap-2">
-          <img src={Map} alt="Sites Covered" className="h-16 md:h-40 aspect-square object-contain" />
-          <h1 className="text-[#0A3B87] text-lg md:text-2xl font-bold font-[Outfit]">300+</h1>
-          <h2 className="text-gray-600 text-sm md:text-xl font-[Outfit] font-semibold">Sites Covered</h2>
-        </div>
-
+   <div className="bg-[#121212] text-white py-12 px-4 md:px-16 h-[600px]">
+    <h1 className='text-3xl md:text-4xl text-white font-bold font-[Outfit] tracking-widest text-center mb-10'>Services</h1>
+  <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6">
+  
+    {/* Right Side Cards */}
+    
+      {/* Card 1 - Highlighted */}
+      <div className="bg-[#1a1a1a] p-5 rounded-xl border border-transparent hover:border-gray-600 transition-all duration-300">
+        <div className="text-3xl mb-4">🚛</div>
+        <h3 className="font-semibold mb-2 text-white text-lg uppercase tracking-wide">
+          Land Freight
+        </h3>
+        <p className="text-sm text-gray-400">
+          Flexible and freight services to meet all your transportation needs, 
+          getting your freight from end to end to its final destination.
+        </p>
       </div>
-    </div>
+
+      {/* Card 2 */}
+      <div className="bg-[#1a1a1a] p-5 rounded-xl border border-transparent hover:border-gray-600 transition-all duration-300">
+        <div className="text-3xl mb-4">🚢</div>
+        <h3 className="font-semibold mb-2 text-white text-lg uppercase tracking-wide">
+          Sea Freight
+        </h3>
+        <p className="text-sm text-gray-400">
+          Secure sea freight solutions for long-haul shipments 
+          with real-time tracking and affordable pricing.
+        </p>
+      </div>
+
+      {/* Card 3 */}
+      <div className="bg-[#1a1a1a] p-5 rounded-xl border border-transparent hover:border-gray-600 transition-all duration-300">
+        <div className="text-3xl mb-4">✈️</div>
+        <h3 className="font-semibold mb-2 text-white text-lg uppercase tracking-wide">
+          Air Freight
+        </h3>
+        <p className="text-sm text-gray-400">
+          Swift air freight services for time-sensitive deliveries, 
+          ensuring global reach with fast clearance.
+        </p>
+      </div>
+
+      {/* Card 4 */}
+      <div className="bg-[#1a1a1a] p-5 rounded-xl border border-transparent hover:border-gray-600 transition-all duration-300">
+        <div className="text-3xl mb-4">📦</div>
+        <h3 className="font-semibold mb-2 text-white text-lg uppercase tracking-wide">
+          Project Cargo
+        </h3>
+        <p className="text-sm text-gray-400">
+          Specialized handling for oversized or heavy cargo 
+          tailored to your unique logistics demands.
+        </p>
+      </div>
+
+      {/* Card 5 */}
+      <div className="bg-[#1a1a1a] p-5 rounded-xl border border-transparent hover:border-gray-600 transition-all duration-300">
+        <div className="text-3xl mb-4">🛳️</div>
+        <h3 className="font-semibold mb-2 text-white text-lg uppercase tracking-wide">
+          Shipping Agency
+        </h3>
+        <p className="text-sm text-gray-400">
+          Complete support for shipping processes, 
+          port clearances, and logistics coordination.
+        </p>
+      </div>
+      
+    
+  </div>
+</div>
+
   );
 };
 

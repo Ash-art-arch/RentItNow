@@ -36,14 +36,12 @@ const ItemCard = ({ item }) => {
   };
 
   return (
-    <div className='w-xs mx-auto bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 transform hover:scale-[1.03]'>
-      <div
-        className='relative overflow-hidden cursor-pointer'
-      >
-        <img
+    <div className="bg-white rounded-xl shadow-md w-[400px] overflow-hidden ">
+    <div className='h-60 w-[350px] justify-center '>
+  <img
           src={item.images[0]}
           alt={item.name}
-          className='w-full h-64 object-cover transition-transform duration-300 hover:scale-110'
+          className='w-full h-60 object-cover transition-transform duration-300 hover:scale-110 ml-6 mt-3 rounded-2xl shadow-xl'
           onClick={handleCardClick}
         />
         <div>
@@ -59,28 +57,52 @@ const ItemCard = ({ item }) => {
             )}
           </button>
         </div>
-      </div>
-
-      <div className='flex items-center w-full justify-between md:pb-5 px-2 mt-2'>
-        <div className='flex items-center gap-2'>
-          <div className='w-5 h-5 md:w-10 md:h-10 rounded-full bg-[#b8b6b6]'></div>
-          <p className='text-sm md:text-sm'>{item.owner.name}</p>
-        </div>
-        <Rating rating={item.ratings} size={".4rem"}/>
-      
-      </div>
-
-      <div className='w-full text-left text-2xl px-4 flex items-center justify-between border-b pb-4 border-[#ccc]'>
-        <h1 className='text-lg md:font-bold uppercase truncate'>{item.name}</h1>
-      </div>
-      <p className="text-sm px-2 text-gray-600 mb-4 line-clamp-3">
-            {item.description}
-      </p>
-      <div className='w-full mt-4 flex flex-row md:flex-row  justify-between items-center gap-2 md:gap-4 p-2'>
-        <Button text={"Rent It"} style={firstStyle} />
-        <Button text={"Add to Cart"} style={firstStyle} Click={handleAddToCart} />
-      </div>
     </div>
+  
+  <div className="p-4">
+    {/* Profile & Like */}
+    <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center gap-2">
+        <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+        <div>
+          <p className="text-sm font-semibold">{item.owner.name}</p>
+        
+        </div>
+      </div>
+     {/* Rating */}
+    <div className="flex items-center gap-1 text-yellow-500 mb-3">
+    <Rating rating={item.ratings} size={".4rem"} />
+      
+    </div>
+
+    </div>
+
+    {/* Title */}
+    <h3 className="text-sm font-bold mb-2">
+      {item.name}
+
+    </h3>
+    <div className='text-sm text-gray-500 mb-2'>
+      {item.description.slice(0, 100)}
+    </div>
+    <hr className='mt-1'/>
+
+    {/* Price */}
+    <div className="flex items-center justify-between mb-3 mt-2">
+      <span className="text-lg font-semibold">${item.price}</span>
+      <span className="text-sm text-gray-500">per day</span>  
+    </div>
+  
+
+   
+    {/* Buy Button */}
+     <div className="flex flex-col sm:flex-row justify-between mt-5 ">
+    <Button text="Rent It"  style={firstStyle} />
+    <Button text="Add to Cart" style={firstStyle} Click={handleAddToCart} />
+  </div>
+  </div>
+</div>
+
   );
 };
 
