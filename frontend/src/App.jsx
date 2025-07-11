@@ -1,25 +1,25 @@
 import { useContext, useEffect, useState } from "react";
 import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
-import LandingPage from "./pages/LandingPage";
-import SignUpUser from "./components/SignupUser";
-import Login from "./components/Login";
-import Cart from "./pages/Cart";
-import PaymentPage from "./pages/PaymentPage";
-import ProductPage from "./pages/ProductPage";
-import CategoriesPage from "./pages/CategoriesPAge";
-import Dashboard from "./pages/Dashboard.jsx";
-import ProductUpload from "./pages/ProductUpload.jsx";
-import CustomerResponse from "./pages/CustomerResponse.jsx";
-import Settings from "./pages/Settings.jsx";
-import ProductEdit from "./pages/ProductEdit.jsx";
-import Loader from "./components/Loader.jsx";
-import { userContext } from "./providers/userProviders";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart, clearCart } from "./Features/cartReducer";
-import { loadCartFromBackend } from "./utils/loadCart";
-import Success from "./pages/SuccessPage.jsx";
-
+import LandingPage from './pages/LandingPage';
+import SignUpUser from './components/SignupUser';
+import Login from './components/Login';
+import Cart from './pages/Cart';
+import PaymentPage from './pages/PaymentPage';
+import ProductPage from './pages/ProductPage';
+import CategoriesPage from './pages/CategoriesPAge';
+import Dashboard from './pages/Dashboard.jsx';
+import ProductUpload from'./pages/ProductUpload.jsx';
+import CustomerResponse from './pages/CustomerResponse.jsx'
+import Settings from './pages/Settings.jsx'
+import ProductEdit from './pages/ProductEdit.jsx';
+import Loader from'./components/Loader.jsx';
+import { userContext } from './providers/userProviders';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, clearCart } from './Features/cartReducer';
+import { loadCartFromBackend } from './utils/loadCart';
+import Success from './pages/SuccessPage.jsx';
+import OrderHistory from './components/OrderHistory.jsx';
 function App() {
   const { user, setUser } = useContext(userContext);
   const [loading, setLoading] = useState(true);
@@ -106,8 +106,13 @@ function App() {
     }
   }, [dispatch, user]);
 
-  if (loading) {
-    return <Loader />;
+  if(loading){
+    return(
+      <div className='w-screen h-screen bg-black grid place-content-center'>
+
+        <Loader/>
+      </div>
+    )
   }
 
   return (

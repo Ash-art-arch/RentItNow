@@ -54,32 +54,36 @@ const CategoriesPage = () => {
   }, [sortOption, items])
 
   if (loading) {
-    return(
+    return (
       <div className='w-screen h-screen flex items-center justify-center bg-black'>
-        <Loader/>
-
+        <Loader />
       </div>
-    ) 
+    )
   }
 
   return (
     <div className='w-full h-full'>
       <Navbar />
-      <div className='w-full h-[40vh] bg-cover bg-no-repeat bg-center flex items-center justify-center relative object-top'
-        style={{ backgroundImage: `url(${category?.headerImage || categoryImage})` }}>
+      <div
+        className='w-full h-[40vh] bg-cover bg-no-repeat bg-center flex items-center justify-center relative object-top'
+        style={{ backgroundImage: `url(${category?.headerImage || categoryImage})` }}
+      >
         <div className='absolute inset-0 bg-[rgba(0,0,0,0.67)] z-10'></div>
-        <h1 className='text-3xl md:text-7xl text-white z-10 font-bold font-[Outfit]'>
+        <h1 className='text-3xl md:text-7xl text-white z-10 font-bold font-[Outfit] text-center px-4'>
           {category ? category.name : "All Products"}
         </h1>
       </div>
 
-      <div className='w-full flex'>
-        <Sidebar />
-        <div className='min-h-[70vh] p-10 w-full'>
-          <div className='flex items-center justify-between w-full'>
-            <span>Showing {filteredItems.length} items</span>
+      <div className='w-full flex flex-col sm:flex-row'>
+        <div className='hidden sm:w-1/3 md:block  md:w-1/5 w-full'>
+          <Sidebar />
+        </div>
+
+        <div className='sm:w-2/3 md:w-3/4 w-full min-h-[70vh] p-4 md:p-8'>
+          <div className='flex flex-col md:flex-row items-start md:items-center justify-between w-full gap-4 mb-6'>
+            <span className='text-sm md:text-base'>Showing {filteredItems.length} items</span>
             <select
-              className='bg-gray-200 p-4 pr-6 rounded'
+              className='bg-gray-200 p-2 md:p-4 pr-4 md:pr-6 rounded text-sm md:text-base'
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
             >
@@ -90,7 +94,7 @@ const CategoriesPage = () => {
             </select>
           </div>
 
-          <div className='p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10'>
             {filteredItems.map((item) => (
               <CategoryCard item={item} key={item._id} />
             ))}

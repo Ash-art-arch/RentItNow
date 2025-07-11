@@ -8,6 +8,7 @@ import {Provider} from 'react-redux';
 import store from './Features/store';
 import {UserProvider} from './providers/userProviders.jsx'
 createRoot(document.getElementById('root')).render(
+  
     <UserProvider>
     <BrowserRouter>
     <Provider store = {store}>
@@ -15,5 +16,5 @@ createRoot(document.getElementById('root')).render(
     </Provider>
     </BrowserRouter>
     </UserProvider>
-
+  
 );

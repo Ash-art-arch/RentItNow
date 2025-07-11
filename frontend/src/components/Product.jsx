@@ -9,8 +9,11 @@ import Rating from "../components/Rating";
 import Footer from "./Footer";
 import Loader from "./Loader";import { useDispatch,useSelector } from "react-redux";
 import { addToCart } from "../Features/cartReducer"; 
+import { useNavigate } from "react-router-dom";
+
 
 const Product = () => {
+  const navigate = useNavigate();
   const [mainImage, setMainImage] = useState(null);
   const [liked, setLiked] = useState(false);
   const rating = 5;
@@ -19,7 +22,8 @@ const Product = () => {
   const dispatch = useDispatch();
 const [uploading ,setUploading] = useState(true)
   const cartItems = useSelector((state)=>state.item)
-
+const [startDate, setStartDate] = useState("");
+const [endDate, setEndDate] = useState("");
 
 
 
@@ -75,23 +79,72 @@ const [uploading ,setUploading] = useState(true)
     </div>
     );
   }
-const handleAddToCart = () => {
+
+  function showPopup(message) {
+  const popup = document.createElement("div");
+  popup.textContent = message;
+  popup.className = "fixed top-100 right-160 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg opacity-0 transition-all duration-300 transform -translate-y-2 z-[9999]";
+  document.body.appendChild(popup);
+
+  setTimeout(() => {
+    popup.classList.remove("opacity-0", "-translate-y-2");
+    popup.classList.add("opacity-100", "translate-y-0");
+  }, 10);
+
+  setTimeout(() => {
+    popup.classList.remove("opacity-100", "translate-y-0");
+    popup.classList.add("opacity-0", "-translate-y-2");
+    setTimeout(() => popup.remove(), 300);
+  }, 3000);
+}
+const handleAddToCart = async () => {
   if (!item) return;
-  console.log(item._id)
+      console.log(item._id)
+ 
+   if (!startDate || !endDate) {
+    alert("Please select both start and end dates.");
+    return;
+  }
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/items/availability?itemId=${item._id}&startDate=${startDate}&endDate=${endDate}`);
+    const data = await res.json();
+
+    if (!data.available) {
+      showPopup(`Sorry! Only ${data.availableQty} unit(s) available during the selected dates.`);
+      return;
+    }
   dispatch(addToCart({
     id: item._id,
     title: item.name,
     price: item.price,
     image: item.images[0],
     color: "Color: Default", 
-    size: "Size: Default",   
+    size: "Size: Default", 
+     quantity: 1, // default quantity
+      startDate,
+      endDate  
 }));
-const formattedCart  = cartItems.map((item) => ({
-  item: item.id ,
-  quantity: item.quantity,
-}));
-console.log("sync to backend", formattedCart);
-syncCartToBackend(userId, formattedCart);
+ alert("Item added to cart!");
+  } catch (err) {
+    console.error("Error checking availability:", err.message);
+    alert("Something went wrong while checking availability.");
+  }
+//const formattedCart  = cartItems.map((item) => ({
+  //item: item.id ,
+ // quantity: item.quantity,
+//}));
+//console.log("sync to backend", formattedCart);
+//syncCartToBackend(userId, formattedCart);
+};
+
+const handleProceedToPayment = () =>{
+  navigate("/cart/payment",{
+    state: {
+      startDate,
+      endDate,
+    },
+  });
 };
   return (
     <>
@@ -156,11 +209,14 @@ syncCartToBackend(userId, formattedCart);
           <div className="flex justify-around rounded-2xl py-9 border">
             <div>
               <h5 className="font-semibold">Start Date</h5>
-              <input type="date" className="border rounded-2xl py-2 px-2" />
+              <input type="date" className="border rounded-2xl py-2 px-2"
+              value={startDate}
+    onChange={(e) => setStartDate(e.target.value)} />
             </div>
             <div>
               <h5 className="font-semibold">End Date</h5>
-              <input type="date" className="border rounded-2xl py-2 px-2" />
+              <input type="date" className="border rounded-2xl py-2 px-2"   value={endDate}
+    onChange={(e) => setEndDate(e.target.value)} />
             </div>
           </div>
 

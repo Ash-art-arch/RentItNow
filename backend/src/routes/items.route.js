@@ -5,7 +5,7 @@ const multer = require("multer");
 const itemController = require("../controllers/items.controller");
 const protectedRoute = require("../middlewares/auth.middleware");
 
-
+const { checkAvailability } = require("../controllers/items.controller");
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
@@ -25,9 +25,8 @@ router.post(
 );
 
 
-
 router.get("/", itemController.getAllItems);
-router.get("/my-items",protectedRoute, itemController.getSellerItems);
+router.get("/availability", itemController.checkAvailability);router.get("/my-items",protectedRoute, itemController.getSellerItems);
 router.get("/:id", itemController.getItemById);
 router.put(
   "/:id",
@@ -37,7 +36,7 @@ router.put(
 );
 
 
-router.delete("/del:id", protectedRoute, itemController.deleteItem);
+router.delete("/del/:id", protectedRoute, itemController.deleteItem);
 
 
 
