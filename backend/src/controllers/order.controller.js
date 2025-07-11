@@ -135,12 +135,14 @@ const getOrderSummaryHandler = async (req, res) => {
     }
 
     const orders = await Order.find({ renterId: userId }).sort({ createdAt: -1 });
-
+    console.log("orders=>",orders)
     const summary = [];
 
     for (const order of orders) {
       for (const item of order.items) {
-        const product = await Item.findById(item.id);
+        console.log("Items=>",item)
+        const product = await Item.findById(item.item);
+        console.log("Product=>",product)
         if (!product) continue;
 
         summary.push({
@@ -155,7 +157,7 @@ const getOrderSummaryHandler = async (req, res) => {
         });
       }
     }
-
+   console.log("summary=>",summary)
     res.json({ success: true, orders: summary });
   } catch (e) {
     console.error("Order Summary Error:", e);
