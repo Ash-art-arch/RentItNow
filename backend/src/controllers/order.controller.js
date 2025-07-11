@@ -36,7 +36,8 @@ const paymentByStripe =async (req,res)=>{
             info:"Stripe"
         },
         isPaid:false,
-        paymentDate:Date.now()
+        paymentDate:Date.now(),
+        
 
     }
 
@@ -53,7 +54,7 @@ const paymentByStripe =async (req,res)=>{
         //},
        // quantity:item.quantity
     //}))
-    const getNumberOfDays = (start, end) => {
+  const getNumberOfDays = (start, end) => {
   const startDate = new Date(start);
   const endDate = new Date(end);
   const diff = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
@@ -113,6 +114,13 @@ const verifyStripe =async (req,res)=>{
             { cart: [] },
             { new: true } // returns the updated document
           );
+          const order =await Order.findById(orderId)
+          console.log(order)
+          for (const item of order.items){
+            const newItem = await Item.findByIdAndUpdate(item.item,{$inc:{totalQuantity:-Number(item.quantity)}},{new:true})
+            console.log(newItem)
+
+          }
           console.log(updatedModel)
         res.json({success:true,})
     }

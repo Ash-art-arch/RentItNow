@@ -15,8 +15,8 @@ import Settings from './pages/Settings.jsx'
 import ProductEdit from './pages/ProductEdit.jsx';
 import Loader from'./components/Loader.jsx';
 import { userContext } from './providers/userProviders';
-import { useDispatch } from 'react-redux';
-import { addToCart } from './Features/cartReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, clearCart } from './Features/cartReducer';
 import { loadCartFromBackend } from './utils/loadCart';
 import Success from './pages/SuccessPage.jsx';
 import OrderHistory from './components/OrderHistory.jsx';
@@ -24,8 +24,7 @@ function App() {
   const { user, setUser } = useContext(userContext);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-
-  
+const cartItem = useSelector((state)=>state.cart.items)
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -34,15 +33,18 @@ function App() {
   }, [setUser]);
 
   useEffect(() => {
-    const fetchProfileAndCart = async () => {
+    const fetchProfile = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/user/profile", {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           credentials: "include",
         });
-  
+
         if (!res.ok) {
+          console.log("Token invalid or expired. Logging out.");
           localStorage.removeItem("token");
           localStorage.removeItem("user");
           setUser(null);
@@ -50,28 +52,6 @@ function App() {
           const data = await res.json();
           setUser(data.user);
           localStorage.setItem("user", JSON.stringify(data.user));
-          
-          // Load cart immediately after user is fetched
-          console.log("Reached Here")
-          const cartData = await loadCartFromBackend(data.user.id);
-          if (cartData?.length) {
-            cartData.forEach(item => {
-              if (item?.item) {
-                dispatch(addToCart({
-                  id: item.item._id || item.item,
-                  title: item.item.name || "Product",
-                  size: "Default Size",
-                  color: "Default Color",
-                  price: item.item.price || 0,
-                  image: item.item.images?.[0] || "",
-                  quantity: item.quantity || 1,
-                  startDate: item.startDate || "",   
-                  endDate: item.endDate || "" 
-                }));
-              }
-            });
-          }
-          console.log("Cart Data",cartData)
         }
       } catch (error) {
         console.log("Profile fetch failed:", error);
@@ -80,11 +60,51 @@ function App() {
         setLoading(false);
       }
     };
-  
-    fetchProfileAndCart();
-  }, [setUser, dispatch]);
-  
-  
+
+    fetchProfile();
+  }, [setUser]);
+
+  useEffect(() => {
+    const loadUserCart = async () => {
+      console.log("user", user);
+      if (!user || !user.id) return;
+
+      try {
+        const cartData = await loadCartFromBackend(user.id);
+        console.log("cartdata", cartData);
+        if (cartData?.length) {
+          dispatch(clearCart())
+          cartData.forEach((item) => {
+            if (item && item.item) {
+              console.log("🧩 Dispatching addToCart for item:", {
+                id: item.item._id,
+                title: item.item.name,
+                quantity: item.quantity,
+              });
+
+              dispatch(
+                addToCart({
+                  id: item.item._id || item.item,
+                  title: item.item.name || "Product",
+                  size: "Default Size",
+                  color: "Default Color",
+                  price: item.item.price || 0,
+                  image: item.item.images?.[0] || "",
+                  quantity: item.quantity || 1,
+                })
+              );
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Failed to load cart on app start:", err.message);
+      }
+    };
+    if (cartItem.length === 0) {
+      loadUserCart();
+    }
+  }, [dispatch, user]);
+
   if(loading){
     return(
       <div className='w-screen h-screen bg-black grid place-content-center'>

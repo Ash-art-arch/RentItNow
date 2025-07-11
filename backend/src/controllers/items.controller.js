@@ -170,36 +170,63 @@ exports.deleteItem = async (req, res) => {
   }
 };
 
-exports.checkAvailability = async(req, res) => {
-    try{
-      const{itemId, startDate, endDate} = req.query;
-      if(!itemId || !startDate || !endDate){
-        return res.status(400).json({message: "Missing required fields"})
-      }
-    
+exports.checkAvailability = async (req, res) => {
+  try {
+    const { itemId, startDate, endDate } = req.query;
 
+    // Validate required fields
+    if (!itemId || !startDate || !endDate) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Parse dates safely
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    if (isNaN(start) || isNaN(end)) {
+      return res.status(400).json({ message: "Invalid dates provided" });
+    }
+
+    // Find bookings that overlap with requested dates
     const bookings = await Order.find({
-      itemId,
-      status: {$ne: "Cancelled"},
-      $or: [
-        {
-          startDate : {$lte: new Date(endDate)},
-          endDate: {$gte: new Date(startDate)},
-        }
-      ]
+      "items.item":itemId,
+      status: { $ne: "Cancelled" },
+      startDate: { $lte: end },
+      endDate: { $gte: start },
     });
 
+    console.log("Bookings found:", bookings.length);
+
+    // If no overlapping bookings, item is fully available
+    if (bookings.length === 0) {
+      const item = await Item.findById(itemId);
+      if (!item) {
+        return res.status(404).json({ message: "Item not found" });
+      }
+
+      return res.status(200).json({
+        available: true,
+      });
+    }
+
+    // Calculate booked quantity from overlapping orders
     const bookedQty = bookings.reduce((acc, order) => acc + order.quantity, 0);
-    const item = await Item.findById(itemId);
-    if(!item) return res.status(404).json({message:"Item not found"})
 
-      const totalQty = item.totalQuantity || 1;
-      const availableQty = totalQty - bookedQty; res.status(200).json({
+    // Get item total quantity
+    const item = await Item.findById(itemId);
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    const totalQty = item.totalQuantity;
+    const availableQty = totalQty - bookedQty;
+
+    // Return availability status
+    return res.status(200).json({
       available: availableQty > 0,
-      availableQty
+      availableQty,
     });
-     } catch (err) {
+  } catch (err) {
     console.error("Availability check failed:", err);
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 };

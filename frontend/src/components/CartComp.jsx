@@ -33,59 +33,10 @@ const CartComp = () => {
 const [cartFetchedOnce, setCartFetchedOnce] = useState(false);
 const [initializing, setInitializing] = useState(true); 
 
-
- 
-  useEffect(() => {
-    const fetchCart = async () => {
-      if (userId && cartItems.length===0 && !skipFetch) {
-        setLoadingCart(true);
-        try {
-          const backendCart = await loadCartFromBackend(userId);
-          console.log("Cart fetched from backend:", backendCart);
-
-          dispatch(clearCart());
-          backendCart.forEach((item) => {
-            if (item) {
-              dispatch(
-                addToCart({
-                  id: item.item._id || item.item,
-                  title: item.item.name || "Product",
-                  size: "Default Size",
-                  color: "Default Color",
-                  price: item.item.price || 0,
-                  image: item.item.images?.[0] || "",
-                  quantity: item.quantity || 1,
-                   startDate: item.startDate || "",   
-  endDate: item.endDate || "" 
-                })
-              );
-            }
-          });
-           setCartFetchedOnce(true);
-        } catch (e) {
-          console.error("Cart loading failed:", e.message);
-        } finally {
-          setLoadingCart(false);
-           setInitializing(false);
-        }
-      }
-    };
-    fetchCart();
-  }, [userId, dispatch, cartFetchedOnce, skipFetch]);
-  useEffect(() => {
-  if (skipFetch) {
-    const timeout = setTimeout(() => setSkipFetch(false), 500); // give redux a moment
-    return () => clearTimeout(timeout);
-  }
-}, [skipFetch]);
-
   useEffect(() => {
     //if (userId && cartItems.length >= 0 && !initializing) {
      if (
-    userId &&
-    cartFetchedOnce &&     
-    !initializing &&
-    !skipFetch &&           
+    userId &&         
     cartItems.length > 0     
   ) {
       const formattedCart = cartItems.map((item) => ({
