@@ -27,42 +27,9 @@ const CartComp = () => {
   console.log("UserID", userId);
   const [loadingCart, setLoadingCart] = useState(false);
 
+ 
   useEffect(() => {
-    const fetchCart = async () => {
-      if (userId && cartItems.length === 0) {
-        setLoadingCart(true);
-        try {
-          const backendCart = await loadCartFromBackend(userId);
-          console.log("Cart fetched from backend:", backendCart);
-
-          dispatch(clearCart());
-          backendCart.forEach((item) => {
-            if (item) {
-              dispatch(
-                addToCart({
-                  id: item.item._id || item.item,
-                  title: item.item.name || "Product",
-                  size: "Default Size",
-                  color: "Default Color",
-                  price: item.item.price || 0,
-                  image: item.item.images?.[0] || "",
-                  quantity: item.quantity || 1,
-                })
-              );
-            }
-          });
-        } catch (e) {
-          console.error("Cart loading failed:", e.message);
-        } finally {
-          setLoadingCart(false);
-        }
-      }
-    };
-    fetchCart();
-  }, [userId, dispatch, cartItems.length]);
-
-  useEffect(() => {
-    if (userId && cartItems.length > 0 && !loadingCart) {
+    if (userId && cartItems.length >= 0 && !loadingCart) {
       const formattedCart = cartItems.map((item) => ({
         item: item.id,
         quantity: item.quantity,
@@ -70,12 +37,16 @@ const CartComp = () => {
       console.log("sync to backend", formattedCart);
       syncCartToBackend(userId, formattedCart);
     }
-  }, [cartItems, userId, loadingCart]);
+  }, [cartItems.length, userId, loadingCart]);
 
   const navigate = useNavigate();
   const handleCheckout = () => {
     navigate("/cart/payment");
   };
+  const handleRemove = (id)=>{
+      dispatch(removeItem(id))
+    
+  }
   return (
     <div
       className="min-h-screen  p-8"
@@ -131,7 +102,7 @@ const CartComp = () => {
 
                 <button
                   className="text-red-500 text-xl hover:underline"
-                  onClick={() => dispatch(removeItem(item.id))}
+                  onClick={()=>handleRemove(item.id)}
                 >
                   ×
                 </button>

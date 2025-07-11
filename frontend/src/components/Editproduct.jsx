@@ -48,10 +48,24 @@ const Editproduct = () => {
     );
   };
 
-  const handleDeleteConfirmed = () => {
-    setProducts((prev) => prev.filter((prod) => !selectedIds.includes(prod.id)));
-    setSelectedIds([]);
-    setShowModal(false);
+  const handleDeleteConfirmed =async () => {
+    try {
+      selectedIds.map(async(id)=>{
+        const response = await fetch(`http://localhost:5000/api/items/del/${id}`,{
+          method:"delete",
+          credentials:"include"
+        })
+        if(response.ok){
+          setProducts((prev) => prev.filter((prod) => !selectedIds.includes(prod.id)));
+          setSelectedIds([]);
+          setShowModal(false);
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
+
+
   };
 
   const handleFilterChange = (e) => {
@@ -185,11 +199,17 @@ const Editproduct = () => {
                     </Link>
                     <button
                       className="text-red-600 hover:text-red-800 text-lg"
-                      onClick={() => {
+                      onClick={async () => {
                         const confirmDelete = window.confirm('Delete this product?');
                         if (confirmDelete) {
-                          setProducts(products.filter((p) => p.id !== prod.id));
-                          setSelectedIds(selectedIds.filter((id) => id !== prod.id));
+                          const response = await fetch(`http://localhost:5000/api/items/del/${prod.id}`,{
+                            method:"delete",
+                            credentials:"include"
+                          })
+                          if(response.ok){
+                            setProducts(products.filter((p) => p.id !== prod.id));
+                            setSelectedIds(selectedIds.filter((id) => id !== prod.id));
+                          }
                         }
                       }}
                     >

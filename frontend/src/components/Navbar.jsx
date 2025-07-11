@@ -51,6 +51,7 @@ const Navbar = () => {
         {
           user?.role==="Seller"?<a href="/dashboard">Dashboard</a>:""
         }
+        <a href="/orderhistory">View Orders</a>
       </div>
 
       <div className="flex items-center space-x-4">
