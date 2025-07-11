@@ -63,7 +63,9 @@ function App() {
                   color: "Default Color",
                   price: item.item.price || 0,
                   image: item.item.images?.[0] || "",
-                  quantity: item.quantity || 1
+                  quantity: item.quantity || 1,
+                  startDate: item.startDate || "",   
+  endDate: item.endDate || "" 
                 }));
               }
             });

@@ -25,10 +25,10 @@ const orderSchema = mongoose.Schema({
         type:Number,
         required:true
     },
-    quantity:{
-        type:Number,
-        required:true
-    },
+   // quantity:{
+     //   type:Number,
+       // required:true
+   // },
     status:{
         type:String,
         enum:["Pending","Approved","Complete","Cancelled"],

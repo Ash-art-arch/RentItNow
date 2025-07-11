@@ -40,9 +40,9 @@ exports.createItem = async (req, res) => {
       owner: req.user.id, 
       ratings: req.body.ratings || 0,
       images: imageUrls,
-       totalQuantity: parseInt(req.body.totalQuantity) || 1
+       totalQuantity: parseInt(req.body.quantity) || 1
     });
-
+    console.log(item);
     const savedItem = await item.save();
     await  User.findByIdAndUpdate(req.user.id, {$push:{itemsListed:savedItem._id}});
 
@@ -173,7 +173,7 @@ exports.deleteItem = async (req, res) => {
 exports.checkAvailability = async(req, res) => {
     try{
       const{itemId, startDate, endDate} = req.query;
-      if(!itemId || !startDate || endDate){
+      if(!itemId || !startDate || !endDate){
         return res.status(400).json({message: "Missing required fields"})
       }
     
@@ -184,12 +184,12 @@ exports.checkAvailability = async(req, res) => {
       $or: [
         {
           startDate : {$lte: new Date(endDate)},
-          enddate: {$gte: new Date(startDate)},
+          endDate: {$gte: new Date(startDate)},
         }
       ]
     });
 
-    const bookedQuanity = bookings.reduce((acc, order) => acc + order.quantity, 0);
+    const bookedQty = bookings.reduce((acc, order) => acc + order.quantity, 0);
     const item = await Item.findById(itemId);
     if(!item) return res.status(404).json({message:"Item not found"})
 

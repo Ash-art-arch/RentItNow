@@ -9,8 +9,11 @@ import Rating from "../components/Rating";
 import Footer from "./Footer";
 import Loader from "./Loader";import { useDispatch,useSelector } from "react-redux";
 import { addToCart } from "../Features/cartReducer"; 
+import { useNavigate } from "react-router-dom";
+
 
 const Product = () => {
+  const navigate = useNavigate();
   const [mainImage, setMainImage] = useState(null);
   const [liked, setLiked] = useState(false);
   const rating = 5;
@@ -19,7 +22,8 @@ const Product = () => {
   const dispatch = useDispatch();
 const [uploading ,setUploading] = useState(true)
   const cartItems = useSelector((state)=>state.item)
-
+const [startDate, setStartDate] = useState("");
+const [endDate, setEndDate] = useState("");
 
 
 
@@ -96,9 +100,7 @@ const [uploading ,setUploading] = useState(true)
 const handleAddToCart = async () => {
   if (!item) return;
       console.log(item._id)
-  const dateInputs = document.querySelectorAll('input[type="date"]');
-  const startDate = dateInputs[0].value;
-  const endDate = dateInputs[1].value;
+ 
    if (!startDate || !endDate) {
     alert("Please select both start and end dates.");
     return;
@@ -128,12 +130,21 @@ const handleAddToCart = async () => {
     console.error("Error checking availability:", err.message);
     alert("Something went wrong while checking availability.");
   }
-const formattedCart  = cartItems.map((item) => ({
-  item: item.id ,
-  quantity: item.quantity,
-}));
-console.log("sync to backend", formattedCart);
-syncCartToBackend(userId, formattedCart);
+//const formattedCart  = cartItems.map((item) => ({
+  //item: item.id ,
+ // quantity: item.quantity,
+//}));
+//console.log("sync to backend", formattedCart);
+//syncCartToBackend(userId, formattedCart);
+};
+
+const handleProceedToPayment = () =>{
+  navigate("/cart/payment",{
+    state: {
+      startDate,
+      endDate,
+    },
+  });
 };
   return (
     <>
@@ -198,11 +209,14 @@ syncCartToBackend(userId, formattedCart);
           <div className="flex justify-around rounded-2xl py-9 border">
             <div>
               <h5 className="font-semibold">Start Date</h5>
-              <input type="date" className="border rounded-2xl py-2 px-2" />
+              <input type="date" className="border rounded-2xl py-2 px-2"
+              value={startDate}
+    onChange={(e) => setStartDate(e.target.value)} />
             </div>
             <div>
               <h5 className="font-semibold">End Date</h5>
-              <input type="date" className="border rounded-2xl py-2 px-2" />
+              <input type="date" className="border rounded-2xl py-2 px-2"   value={endDate}
+    onChange={(e) => setEndDate(e.target.value)} />
             </div>
           </div>
 

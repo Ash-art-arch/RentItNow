@@ -49,11 +49,8 @@ const CategoryCard = ({ item }) => {
 
       <div className='flex items-center justify-between mt-2 px-4 pb-4 gap-10'>
         <p className='text-gray-800 font-medium'>{priceFormatted}</p>
-        <Link
-        to={`/productpage?id=${item._id}`}
-        className='block text-lg  my-2 line-clamp-2 px-4 font-semibold capitalize hover:text-blue-600 transition'
-        aria-label={`View details of ${item.name}`}
-      > <Button  text={"Add To Cart"} style={firstStyle} /> </Link>
+        
+       <Button  text={"Add To Cart"} style={firstStyle} Click={()=>{handleAddToCart}} /> 
        
       </div>
     </div>

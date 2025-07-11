@@ -13,10 +13,13 @@ import { loadCartFromBackend } from "../utils/loadCart";
 import { userContext } from "../providers/userProviders";
 import { useNavigate } from "react-router-dom";
 const CartComp = () => {
+
   const dispatch = useDispatch();
 
   const cartItems = useSelector((state) => state.cart.items);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
+  
+
   const { user } = useContext(userContext);
   useEffect(() => {
     console.log(" Redux cart items in CartComp:", cartItems);
@@ -26,10 +29,14 @@ const CartComp = () => {
   console.log(userId);
   console.log("UserID", userId);
   const [loadingCart, setLoadingCart] = useState(false);
+  const [skipFetch, setSkipFetch] = useState(false);
+const [cartFetchedOnce, setCartFetchedOnce] = useState(false);
+const [initializing, setInitializing] = useState(true); 
+
 
   useEffect(() => {
     const fetchCart = async () => {
-      if (userId && cartItems.length === 0) {
+      if (userId && cartItems.length===0 && !skipFetch) {
         setLoadingCart(true);
         try {
           const backendCart = await loadCartFromBackend(userId);
@@ -47,35 +54,73 @@ const CartComp = () => {
                   price: item.item.price || 0,
                   image: item.item.images?.[0] || "",
                   quantity: item.quantity || 1,
+                   startDate: item.startDate || "",   
+  endDate: item.endDate || "" 
                 })
               );
             }
           });
+           setCartFetchedOnce(true);
         } catch (e) {
           console.error("Cart loading failed:", e.message);
         } finally {
           setLoadingCart(false);
+           setInitializing(false);
         }
       }
     };
     fetchCart();
-  }, [userId, dispatch, cartItems.length]);
+  }, [userId, dispatch, cartFetchedOnce, skipFetch]);
+  useEffect(() => {
+  if (skipFetch) {
+    const timeout = setTimeout(() => setSkipFetch(false), 500); // give redux a moment
+    return () => clearTimeout(timeout);
+  }
+}, [skipFetch]);
 
   useEffect(() => {
-    if (userId && cartItems.length > 0 && !loadingCart) {
+    //if (userId && cartItems.length >= 0 && !initializing) {
+     if (
+    userId &&
+    cartFetchedOnce &&     
+    !initializing &&
+    !skipFetch &&           
+    cartItems.length > 0     
+  ) {
       const formattedCart = cartItems.map((item) => ({
         item: item.id,
         quantity: item.quantity,
+         startDate: item.startDate || "",
+  endDate: item.endDate || ""
+
       }));
       console.log("sync to backend", formattedCart);
       syncCartToBackend(userId, formattedCart);
     }
-  }, [cartItems, userId, loadingCart]);
+  }, [cartItems, userId, initializing, skipFetch, cartFetchedOnce]);
 
   const navigate = useNavigate();
   const handleCheckout = () => {
-    navigate("/cart/payment");
-  };
+  if (cartItems.length === 0) {
+    alert("Your cart is empty.");
+    return;
+  }
+
+  const { startDate, endDate } = cartItems[0]; // assuming all items use the same rental period
+
+  if (!startDate || !endDate) {
+    alert("Start and End dates are missing.");
+    return;
+  }
+
+  navigate("/cart/payment", {
+    state: {
+      startDate,
+      endDate,
+    },
+  });
+};
+
   return (
     <div
       className="min-h-screen  p-8"
@@ -127,11 +172,26 @@ const CartComp = () => {
                   </button>
                 </div>
 
-                <div className="font-medium">${item.price.toFixed(2)}</div>
+                <div className="font-medium"> ${(item.price * (item.quantity || 1)).toFixed(2)}</div>
 
                 <button
                   className="text-red-500 text-xl hover:underline"
-                  onClick={() => dispatch(removeItem(item.id))}
+                  onClick={() => 
+                   {  
+  
+                    dispatch(removeItem(item.id));
+                    setSkipFetch(true); 
+                      const updatedCart = cartItems
+      .filter((i) => i.id !== item.id)
+      .map((i) => ({
+        item: i.id,
+        quantity: i.quantity,
+        startDate: i.startDate || "",
+        endDate: i.endDate || "",
+      }));
+       syncCartToBackend(user.id, updatedCart); 
+  }}
+
                 >
                   ×
                 </button>
@@ -145,7 +205,7 @@ const CartComp = () => {
           <div className="text-sm text-gray-700 mb-2 space-y-1">
             <div className="flex justify-between">
               <span>Subtotal : </span>
-              <span>{totalPrice}</span>
+              <span>{totalPrice.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
               <span>Shipping</span>
@@ -157,7 +217,7 @@ const CartComp = () => {
 
           <div className="flex justify-between text-lg font-bold mb-4">
             <span>Total</span>
-            <span>{totalPrice + 5}</span>
+            <span>{(totalPrice + 5).toFixed(2)}</span>
           </div>
 
           <button

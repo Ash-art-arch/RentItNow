@@ -12,7 +12,7 @@ const paymentByStripe =async (req,res)=>{
     const {userId,items,address,startDate,endDate,totalPrice}  =req.body
     const {origin} = req.headers
     const sellerIds =await Promise.all( items.map(async (item)=>{
-        const product =   await itemsModel.findById(item.id)
+        const product =   await itemsModel.findById(item.item)
         return product.owner
     }))
     console.log(sellerIds)
@@ -25,6 +25,7 @@ const paymentByStripe =async (req,res)=>{
         startDate,
         endDate,
         totalPrice:totalPrice,
+       
         paymentInfo:{
             info:"Stripe"
         },
@@ -36,18 +37,40 @@ const paymentByStripe =async (req,res)=>{
     const newOrder = new orderModel(orderData)
     await newOrder.save()
 
-    const line_items =  items.map((item)=>({
-        price_data : {
-            currency:currency,
-            product_data:{
-                name:item.title
-            },
-            unit_amount:item.price*100
-        },
-        quantity:item.quantity
-    }))
-
-    line_items.push(
+    //const line_items =  items.map((item)=>({
+      //  price_data : {
+        //    currency:currency,
+          //  product_data:{
+            //    name:item.title
+            //},
+            //unit_amount:item.price*100
+        //},
+       // quantity:item.quantity
+    //}))
+    const getNumberOfDays = (start, end) => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  const diff = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+  return Math.max(1, diff);
+};
+  const line_items = items.map((item) => {
+  const price = Number(item.price);
+  const quantity = Number(item.quantity) || 1;
+  const rentalDays = getNumberOfDays(item.startDate, item.endDate);
+  const totalAmount = price * quantity * rentalDays;
+  return {
+    price_data: {
+      currency: currency,
+      product_data: {
+        name: item.title || "Unnamed Product"
+      },
+      unit_amount: Math.round(totalAmount * 100)  
+    },
+    quantity: 1  // Already included quantity in price
+  };
+});  
+  
+  line_items.push(
         {
             price_data : {
                 currency:currency,
