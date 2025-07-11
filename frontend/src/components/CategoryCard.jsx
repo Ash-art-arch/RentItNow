@@ -3,7 +3,6 @@ import Button from './Button';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../Features/cartReducer';
-
 const CategoryCard = ({ item }) => {
   const dispatch = useDispatch();
 

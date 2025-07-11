@@ -10,6 +10,7 @@ const UploadComp = () => {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [discount, setDiscount] = useState("");
   const [about, setAbout] = useState("");
   const [photos, setPhotos] = useState([]);
@@ -53,11 +54,11 @@ const UploadComp = () => {
     setExistingPhotos((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async () => {
-    if (!termsAccepted) {
-      alert("Please accept the terms and conditions.");
-      return;
-    }
+    const handleSubmit = async () => {
+      if (!termsAccepted) {
+        alert("Please accept the terms and conditions.");
+        return;
+      }
 
     const formData = new FormData();
     formData.append("name", productName);
@@ -66,6 +67,7 @@ const UploadComp = () => {
     formData.append("price", price);
     formData.append("available", "true");
     formData.append("ratings", "0");
+     formData.append("quantity", quantity);
     formData.append("discount", discount);
     formData.append("about", about);
 
@@ -90,7 +92,7 @@ const UploadComp = () => {
       const data = await res.json();
       if (res.ok) {
         alert(id ? "Product updated successfully!" : "Product uploaded successfully!");
-        navigate("/editproduct");
+        navigate("/");
       } else {
         alert(data.message || "Failed to save");
       }
@@ -110,6 +112,7 @@ const UploadComp = () => {
         </p>
 
         <div className="grid md:grid-cols-2 gap-6">
+
           <div className="space-y-4">
             <div>
               <label className="block font-medium mb-1">Product Name</label>
@@ -169,7 +172,19 @@ const UploadComp = () => {
                 onChange={(e) => setDiscount(e.target.value)}
               />
             </div>
+              <div>
+            <label className="block font-medium mb-1">Quantity</label>
+            <input
+              type="number"
+              className="w-full border px-3 py-2 rounded"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+            />
           </div>
+          </div>
+        
+
+
           <div className="space-y-4">
             <div>
               <label className="block font-medium mb-1">Product Photos</label>

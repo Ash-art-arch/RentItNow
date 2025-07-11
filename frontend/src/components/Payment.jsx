@@ -7,6 +7,10 @@ import { addToCart, clearCart, } from "../Features/cartReducer";
 import {  userContext } from "../providers/userProviders";
 import { loadCartFromBackend } from "../utils/loadCart";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+
+
 const Payment = () => {
   const [State, setState] = useState(1);
   const [submit, setSubmit] = useState(false);
@@ -21,21 +25,33 @@ const dispatch = useDispatch()
   const [stateName,setStateName] = useState("")
   const [startDate,setStartDate]  = useState("")
   const [endDate,setEndDate]  = useState("")
-
-  const [pincode,setPinCode] = useState(null);
+const location = useLocation();
+const { startDate: selectedStartDate, endDate: selectedEndDate } = location.state || {};
+  const [pincode,setPinCode] = useState("");
   const [method,setMethod] = useState("stripe")
  const navigate = useNavigate()
-  useEffect(() => {
-    const fetchCart = async () => {
-      if (userId) {
-            
-        try {
-          const backendCart = await loadCartFromBackend(userId);
-          
-  console.log("Cart fetched from backend:", backendCart);
-  dispatch(clearCart())
+ useEffect(() => {
+  if (selectedStartDate && selectedEndDate) {
+    setStartDate(selectedStartDate);
+    setEndDate(selectedEndDate);
+  }
+}, [selectedStartDate, selectedEndDate]);
+
+useEffect(() => {
+  const fetchCart = async () => {
+    if (userId && cartItems.length === 0) {
+      try {
+        const backendCart = await loadCartFromBackend(userId);
+        console.log("Cart fetched from backend:", backendCart);
+
+        if (backendCart.length > 0) {
+          dispatch(clearCart());
+
           backendCart.forEach(item => {
             if (item) {
+              const itemStart = item.startDate || selectedStartDate || startDate;
+              const itemEnd = item.endDate || selectedEndDate || endDate;
+
               dispatch(addToCart({
                 id: item.item._id || item.item,
                 title: item.item.name || "Product",
@@ -43,29 +59,38 @@ const dispatch = useDispatch()
                 color: "Default Color",
                 price: item.item.price || 0,
                 image: item.item.images?.[0] || "",
-                quantity: item.quantity || 1
+                quantity: item.quantity || 1,
+                startDate: itemStart || "",
+                endDate: itemEnd || ""
               }));
-              console.log(
-                "Item Added"
-              )
             }
           });
-          
-        } catch (e) {
-          console.error("Cart loading failed:", e.message);
         }
+      } catch (e) {
+        console.error("Cart loading failed:", e.message);
       }
-    };
-    fetchCart();
-  }, [userId, dispatch]);
+    }
+  };
+
+  fetchCart();
+}, [userId, dispatch, cartItems.length]);
 
 
-const handlePayment=async ()=>{
+
+
+const handlePayment = async ()=>{
   const userData ={
     userId:userId,
-    items:cartItems,
-    startDate:startDate,
-    endDate:endDate,
+    items:cartItems.map((item) => ({
+      item: item.id,
+      quantity: Number(item.quantity) && item.quantity > 0 ? Number(item.quantity) : 1, 
+       price: item.price || 0,         
+  title: item.title || "Product",
+    startDate: item.startDate || startDate,
+    endDate: item.endDate || endDate,
+    })),
+   startDate,
+   endDate,
     address:{
       street,
       city,
@@ -74,10 +99,11 @@ const handlePayment=async ()=>{
       country   
     },
     totalPrice:totalPrice
-  }
-  console.log("userData =>",userData)
+  };
+  console.log("userData =>", userData)
   switch(method){
     case "stripe":
+      try{
       const response = await fetch("http://localhost:5000/api/order/paymentStripe",{
         method:"post",
         headers: {
@@ -86,18 +112,27 @@ const handlePayment=async ()=>{
         body:JSON.stringify(userData),
         credentials:"include" 
       })
-      const data =await response.json()
-      if(data.success){
-        const {session_url} = data
-        window.location.replace(session_url)
+      const data =await response.json();
+      console.log("Stripe response ", data);
+      if(data.success && data.session_url){
+        //const {session_url} = data
+        window.location.replace(data.session_url)
       }
       else{
         alert(data.error)
       }
   
   }
+  catch (err) {
+        console.error("Stripe error:", err.message);
+        alert("Payment failed.");
+      }
+break;
+default:
+  alert("Unknown payment method selected");
+  break;
 }
-
+};
 
 
 
@@ -234,7 +269,19 @@ const handlePayment=async ()=>{
                 <p className="text-xs sm:text-sm text-gray-600">
                   {`Qty:${item.quantity}`||"Qty:1"} 
                 </p>
-                <p className="text-sm font-semibold">${item.price.toFixed(2)}</p>
+                {(() => {
+  const rentalDays = Math.max(
+    (new Date(item.endDate) - new Date(item.startDate)) / (1000 * 60 * 60 * 24),
+    1
+  );
+  const total = item.price * item.quantity * rentalDays;
+  return (
+    <p className="text-sm font-semibold">
+      ${total.toFixed(2)} ({rentalDays} day{rentalDays > 1 ? "s" : ""})
+    </p>
+  );
+})()}
+
               </div>
             </div>
           ))}

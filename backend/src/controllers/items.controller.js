@@ -1,7 +1,7 @@
 const Item = require("../model/items.model");
 const cloudinary = require("cloudinary").v2;
-const User=require("../model/user.model")
-
+const User=require("../model/user.model");
+const Order = require("../model/order.model");
 
 const streamUpload = (buffer) => {
   return new Promise((resolve, reject) => {
@@ -18,8 +18,8 @@ const streamUpload = (buffer) => {
 
 exports.createItem = async (req, res) => {
   try {
-    console.log("🧾 Form Data:", req.body);
-    console.log("🖼️ Memory Files:", req.files);
+    console.log(" Form Data:", req.body);
+    console.log("Memory Files:", req.files);
 
     const filesArray = req.files.items || [];
 
@@ -40,8 +40,9 @@ exports.createItem = async (req, res) => {
       owner: req.user.id, 
       ratings: req.body.ratings || 0,
       images: imageUrls,
+       totalQuantity: parseInt(req.body.quantity) || 1
     });
-
+    console.log(item);
     const savedItem = await item.save();
     await  User.findByIdAndUpdate(req.user.id, {$push:{itemsListed:savedItem._id}});
 
@@ -165,6 +166,40 @@ exports.deleteItem = async (req, res) => {
 
     res.status(200).json({ message: "Item deleted successfully" });
   } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.checkAvailability = async(req, res) => {
+    try{
+      const{itemId, startDate, endDate} = req.query;
+      if(!itemId || !startDate || !endDate){
+        return res.status(400).json({message: "Missing required fields"})
+      }
+    
+
+    const bookings = await Order.find({
+      itemId,
+      status: {$ne: "Cancelled"},
+      $or: [
+        {
+          startDate : {$lte: new Date(endDate)},
+          endDate: {$gte: new Date(startDate)},
+        }
+      ]
+    });
+
+    const bookedQty = bookings.reduce((acc, order) => acc + order.quantity, 0);
+    const item = await Item.findById(itemId);
+    if(!item) return res.status(404).json({message:"Item not found"})
+
+      const totalQty = item.totalQuantity || 1;
+      const availableQty = totalQty - bookedQty; res.status(200).json({
+      available: availableQty > 0,
+      availableQty
+    });
+     } catch (err) {
+    console.error("Availability check failed:", err);
     res.status(500).json({ error: err.message });
   }
 };
